@@ -19,13 +19,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Database.BestHour;
+import com.example.annabujak.weather4runners.Database.ChosenHour;
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
 import com.example.annabujak.weather4runners.Database.Preference;
+import com.example.annabujak.weather4runners.Database.User;
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 
 import java.util.Date;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,14 +62,6 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        //TESTY
-        DBWeather4Runners database = new DBWeather4Runners(this);
-        Date current = new Date();
-        BestHour bestHour = new BestHour(current,18);
-        long id = database.addBestHour(bestHour);
-        BestHour actualBestHour = database.getBestHour(id);
-
 
     }
 

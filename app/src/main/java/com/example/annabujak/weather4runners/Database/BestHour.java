@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class BestHour {
 
-    int Id;
+    long Id;
     Date Date;
     int Hour;
 
@@ -27,10 +27,10 @@ public class BestHour {
     public int getHour(){
         return Hour;
     }
-    public void setId(int id){
+    public void setId(long id){
         Id = id;
     }
-    public int getId(){
+    public long getId(){
         return Id;
     }
 }

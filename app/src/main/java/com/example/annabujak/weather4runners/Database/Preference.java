@@ -7,7 +7,7 @@ import com.example.annabujak.weather4runners.Enum.Cloudiness;
  */
 
 public class Preference {
-    private int Id;
+    private long Id;
     private int Temperature = 15;
     private Cloudiness Cloudiness = com.example.annabujak.weather4runners.Enum.Cloudiness.Sunny;
     private int StartHour = 10;
@@ -15,8 +15,7 @@ public class Preference {
 
     public Preference(){
     }
-    public Preference(int _Id, int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour){
-        Id = Id;
+    public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour){
         Temperature =_Temprature;
         Cloudiness = _Cloudiness;
         StartHour = _StartHour;
@@ -44,10 +43,10 @@ public class Preference {
     public int getEndHour(){
         return EndHour;
     }
-    public void setId(int id){
+    public void setId(long id){
         Id = id;
     }
-    public int getId(){
+    public long getId(){
         return Id;
     }
 }

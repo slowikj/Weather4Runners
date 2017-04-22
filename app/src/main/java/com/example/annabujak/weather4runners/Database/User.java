@@ -7,7 +7,7 @@ package com.example.annabujak.weather4runners.Database;
 
 public class User {
 
-    int Id;
+    long Id;
     String Name = "";
     String Surname = "";
 
@@ -27,10 +27,10 @@ public class User {
     public String getSurname(){
         return Surname;
     }
-    public void setId(int id){
+    public void setId(long id){
         Id = id;
     }
-    public int getId(){
+    public long getId(){
         return Id;
     }
 }

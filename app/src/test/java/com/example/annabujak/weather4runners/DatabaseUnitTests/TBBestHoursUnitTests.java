@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertEquals;
  */
 
 public class TBBestHoursUnitTests {
-    BestHour bestHour = new BestHour(0, new Date(), 15);
+    BestHour bestHour = new BestHour(new Date(), 15);
     @Test
     public void setAndGetBestHourUnitTest() throws Exception{
         SimpleDateFormat dateParser = new SimpleDateFormat("dd/MM/yyyy");

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
@@ -20,7 +21,7 @@ import com.facebook.login.widget.LoginButton;
 
 
 public class FacebookLoginActivity extends AppCompatActivity {
-    private TextView info;
+    private TextView passOver;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     DBWeather4Runners database;
@@ -33,8 +34,9 @@ public class FacebookLoginActivity extends AppCompatActivity {
         setContentView(R.layout.facebook_activity);
         database = new DBWeather4Runners(this);
 
-        info = (TextView) findViewById(R.id.info);
+        passOver = (TextView) findViewById(R.id.info);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+
         if(profilExists())
             startMainActivity();
         registerLogin();
@@ -64,15 +66,21 @@ public class FacebookLoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel() {
-                info.setText("Login attempt canceled.");
+            public void onCancel(){
             }
 
             @Override
             public void onError(FacebookException e) {
-                info.setText("Login attempt failed.");
+
             }
         });
+        passOver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMainActivity();
+            }
+        });
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

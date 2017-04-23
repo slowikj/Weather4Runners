@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="facebook_id">1858586351082008</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="facebook_login">Zaloguj się przez facebook</string>
+    <string name="facebook_passOver">Pomiń</string>
 </resources>

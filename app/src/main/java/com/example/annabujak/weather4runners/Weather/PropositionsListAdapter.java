@@ -61,13 +61,13 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     }
 
     @Override
-    public void OnPropositionsChanged(List<WeatherProposition> propositions) {
+    public void onPropositionsChanged(List<WeatherProposition> propositions) {
         this.propositionsList = new ArrayList<>(propositions);
 
         notifyDataSetChanged();
     }
 
-    class PropositionsListViewHolder extends RecyclerView.ViewHolder {
+    public class PropositionsListViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox mCheckbox;
         public TextView name;

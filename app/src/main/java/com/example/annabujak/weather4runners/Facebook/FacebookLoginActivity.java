@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -51,18 +53,26 @@ public class FacebookLoginActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
-    private void addUserData(){
-        Profile profile = Profile.getCurrentProfile();
+    private void addUserData(Profile profile){
         database.addUser(new User(profile.getFirstName(),profile.getLastName()));
         database.close();
     }
     private void registerLogin(){
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            private ProfileTracker mProfileTracker;
             @Override
             public void onSuccess(LoginResult loginResult) {
-                database.clearUser();
-                addUserData();
-                startMainActivity();
+                if (Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                            mProfileTracker.stopTracking();
+                            database.clearUser();
+                            addUserData(profile2);
+                            startMainActivity();
+                        }
+                    };
+                }
             }
 
             @Override

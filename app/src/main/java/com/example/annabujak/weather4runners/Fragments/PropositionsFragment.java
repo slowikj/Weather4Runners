@@ -109,12 +109,8 @@ public class PropositionsFragment extends Fragment {
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        
-
         return rv;
     }
-
-
 
     // TODO subscribe for database changes (this.attachedActivity.subscribeForDBChanges(rv.getAdapter())
     // TODO unsubstribe for ...

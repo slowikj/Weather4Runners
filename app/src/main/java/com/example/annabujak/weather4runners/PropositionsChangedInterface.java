@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface PropositionsChangedInterface {
 
-    void OnPropositionsChanged(List<WeatherProposition> propositions);
+    void onPropositionsChanged(List<WeatherProposition> propositions);
 }

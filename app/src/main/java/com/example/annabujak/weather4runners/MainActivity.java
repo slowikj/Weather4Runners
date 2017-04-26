@@ -1,7 +1,5 @@
 package com.example.annabujak.weather4runners;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,20 +16,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import com.example.annabujak.weather4runners.Database.BestHour;
-import com.example.annabujak.weather4runners.Database.ChosenHour;
-import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
-import com.example.annabujak.weather4runners.Database.Preference;
-import com.example.annabujak.weather4runners.Database.User;
-import com.example.annabujak.weather4runners.Enum.Cloudiness;
-
-import java.util.Date;
-import java.util.List;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements DataActivityInterface {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

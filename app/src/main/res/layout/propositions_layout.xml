@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="2">
+
+        <View/>
+
+        <ImageView
+            android:id="@+id/cloud_weather_image"/>
+
+        <View />
+
+        <View />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/current_date"/>
+
+        <TextView
+            android:id="@+id/short_weather_info"/>
+
+        <View />
+
+    </GridLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_propositions"
+        android:longClickable="true"
+        android:clickable="true">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

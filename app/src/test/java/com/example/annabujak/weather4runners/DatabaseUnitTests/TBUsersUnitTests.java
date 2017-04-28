@@ -1,6 +1,6 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
-import com.example.annabujak.weather4runners.Database.User;
+import com.example.annabujak.weather4runners.Objects.User;
 
 import org.junit.Test;
 

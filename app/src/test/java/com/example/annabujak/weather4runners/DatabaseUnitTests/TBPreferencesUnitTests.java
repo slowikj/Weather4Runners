@@ -1,6 +1,6 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
-import com.example.annabujak.weather4runners.Database.Preference;
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 
 import org.junit.Test;

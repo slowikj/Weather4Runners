@@ -1,10 +1,10 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
-import com.example.annabujak.weather4runners.Database.BestHour;
-import com.example.annabujak.weather4runners.Database.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.BestHour;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
-import com.example.annabujak.weather4runners.Database.Preference;
-import com.example.annabujak.weather4runners.Database.User;
+import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 
 import org.junit.Ignore;

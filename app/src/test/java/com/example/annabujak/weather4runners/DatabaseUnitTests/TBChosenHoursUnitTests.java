@@ -1,7 +1,7 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
 
-import com.example.annabujak.weather4runners.Database.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 
 import org.junit.Test;
 

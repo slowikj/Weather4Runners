@@ -1,6 +1,6 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
-import com.example.annabujak.weather4runners.Database.BestHour;
+import com.example.annabujak.weather4runners.Objects.BestHour;
 
 import org.junit.Test;
 

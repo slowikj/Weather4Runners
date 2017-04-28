@@ -5,4 +5,5 @@ package com.example.annabujak.weather4runners.Database;
  */
 
 public class DBManager {
+    //TODO
 }

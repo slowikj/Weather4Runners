@@ -1,4 +1,4 @@
-package com.example.annabujak.weather4runners.Database;
+package com.example.annabujak.weather4runners.Objects;
 
 
 /**

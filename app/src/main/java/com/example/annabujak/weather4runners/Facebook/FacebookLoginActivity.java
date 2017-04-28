@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
-import com.example.annabujak.weather4runners.Database.User;
+import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.MainActivity;
 import com.example.annabujak.weather4runners.R;
 import com.facebook.CallbackManager;

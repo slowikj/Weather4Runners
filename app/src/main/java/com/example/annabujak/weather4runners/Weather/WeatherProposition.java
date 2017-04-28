@@ -1,5 +1,7 @@
 package com.example.annabujak.weather4runners.Weather;
 
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
@@ -9,31 +11,19 @@ import java.text.SimpleDateFormat;
 
 public class WeatherProposition {
 
-    private Date date;
-    private WeatherInfo weatherInfo;
-    private boolean checked;
+    //Jeżeli zajdzie taka potrzeba, to klase możnaby usunąć i korzystać jedynie z WeatherInfo
+    private WeatherInfo WeatherInfo;
 
-    public WeatherProposition(Date date,
-                              WeatherInfo weatherInfo,
-                              boolean checked) {
-        this.date = date;
-        this.weatherInfo = weatherInfo;
-        this.checked = checked;
+    public WeatherProposition(WeatherInfo weatherInfo,boolean checked) {
+        this.WeatherInfo = weatherInfo;
     }
 
     public String getDateInfo(SimpleDateFormat dateFormat) {
-        return dateFormat.format(this.date);
-    }
-
-    public WeatherInfo getWeatherInfo() {
-        return weatherInfo;
+        return dateFormat.format(this.WeatherInfo.getDate());
     }
 
     public boolean isChecked() {
-        return checked;
+        return WeatherInfo.getIsChecked();
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
 }

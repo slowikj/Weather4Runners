@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.PropositionsChangedInterface;
 import com.example.annabujak.weather4runners.R;
 
@@ -27,7 +28,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     private View.OnClickListener onClickListener;
     private View.OnLongClickListener onLongClickListener;
 
-    private ArrayList<WeatherProposition> propositionsList;
+    private ArrayList<WeatherInfo> propositionsList;
 
     public PropositionsListAdapter(SimpleDateFormat dateFormat,
                                    View.OnClickListener onClickListener,
@@ -48,9 +49,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     @Override
     public void onBindViewHolder(PropositionsListViewHolder holder, int position) {
-        holder.mCheckbox.setChecked(propositionsList.get(position).isChecked());
-        holder.name.setText(propositionsList.get(position).getDateInfo(dateFormat));
-        holder.shortDescription.setText(propositionsList.get(position).getDateInfo(dateFormat));
+        holder.mCheckbox.setChecked(propositionsList.get(position).getIsChecked());
+        holder.name.setText(propositionsList.get(position).getFormattedDate(dateFormat));
+        holder.shortDescription.setText(propositionsList.get(position).getTemperature());
 
         holder.SetTags();
     }
@@ -61,7 +62,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     }
 
     @Override
-    public void onPropositionsChanged(List<WeatherProposition> propositions) {
+    public void onPropositionsChanged(List<WeatherInfo> propositions) {
         this.propositionsList = new ArrayList<>(propositions);
 
         notifyDataSetChanged();

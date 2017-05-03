@@ -35,9 +35,9 @@ public class JSONWeatherDownloader {
     private String apiKey;
 
 
-    public JSONWeatherDownloader(String location, String apiKey, String language) {
+    public JSONWeatherDownloader(String location, String language) {
         this.location = location;
-        this.apiKey = apiKey;
+        this.apiKey = "f1154294b86bd13039f99eb045c81e12";
         this.language = language;
     }
 

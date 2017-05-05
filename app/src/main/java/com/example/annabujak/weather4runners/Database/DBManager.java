@@ -2,6 +2,7 @@ package com.example.annabujak.weather4runners.Database;
 
 import android.content.Context;
 
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
@@ -33,5 +34,9 @@ public class DBManager {
     }
     public List<WeatherInfo> GetWeatherData(){
         return database.getAllWeatherInfos();
+    }
+    public void UpdatePreferences(Preference preference) {
+        database.clearPreferences();
+        database.addPreference(preference);
     }
 }

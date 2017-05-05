@@ -4,10 +4,8 @@ import android.content.Context;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-import com.example.annabujak.weather4runners.Weather.WeatherFilter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by pawel.bujak on 05.05.2017.

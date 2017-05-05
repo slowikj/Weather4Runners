@@ -1,5 +1,6 @@
-package com.example.annabujak.weather4runners.Weather;
+package com.example.annabujak.weather4runners.Weather.Filter;
 
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
@@ -12,34 +13,39 @@ import java.util.List;
 
 public class WeatherFilter {
 
-    private static Double MilisecondsToDays = 1.0/100000000.0;
+    private Double MilisecondsToDays = 1.0/100000000.0;
+    private WeatherAlgorithm Algorithm;
 
-    public static List<WeatherInfo> GetDailyWeather(List<WeatherInfo> weather){
+    public WeatherFilter(int _WeatherPropositions){
+        Algorithm = new WeatherAlgorithm(_WeatherPropositions);
+    }
+
+    public List<WeatherInfo> GetDailyWeather(List<WeatherInfo> weather, Preference preference){
         List<WeatherInfo> dailyWeather = new ArrayList<>();
         for (WeatherInfo w: weather) {
             if(IsWeatherForDay(w)){
                 dailyWeather.add(w);
             }
         }
-        return dailyWeather;
+        return Algorithm.FindBestWeather(weather,preference);
     }
-    private static boolean IsWeatherForDay(WeatherInfo w){
+    private boolean IsWeatherForDay(WeatherInfo w){
         Date now = new Date();
         if(w.getDate().getTime() - now.getTime() < 0)
             return false;
         return (double)(w.getDate().getTime() - now.getTime())*MilisecondsToDays <= 1 ? true : false;
     }
 
-    public static List<WeatherInfo> GetWeeklyWeather(List<WeatherInfo> weather){
+    public List<WeatherInfo> GetWeeklyWeather(List<WeatherInfo> weather, Preference preference){
         List<WeatherInfo> weeklyWeather = new ArrayList<>();
         for (WeatherInfo w: weather) {
             if(IsWeatherForWeek(w)){
                 weeklyWeather.add(w);
             }
         }
-        return weeklyWeather;
+        return Algorithm.FindBestWeather(weather,preference);
     }
-    private static boolean IsWeatherForWeek(WeatherInfo w){
+    private boolean IsWeatherForWeek(WeatherInfo w){
         Date now = new Date();
         Integer DaysInWeek = 7;
         if(w.getDate().getTime() - now.getTime() < 0)

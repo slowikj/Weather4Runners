@@ -24,7 +24,7 @@ public class JSONWeatherParser {
 
         List<WeatherInfo> for3hours = getParsed(jsonArray);
 
-
+        return null; // TODO
     }
 
     private List<WeatherInfo> getParsed(JSONArray jsonArray) throws JSONException {

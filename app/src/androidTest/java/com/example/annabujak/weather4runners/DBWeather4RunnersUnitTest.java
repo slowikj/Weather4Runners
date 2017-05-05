@@ -51,7 +51,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void addPreferenceTest() throws Exception {
-        Preference preference = new Preference(15, Cloudiness.Big,10,18,17,20L);
+        Preference preference = new Preference(15, Cloudiness.Big,10,18,17,20L,22.0);
         database.addPreference(preference);
         Preference actualPreference = database.getPreference(preference.getId());
         assertEquals(15,actualPreference.getTemperature());
@@ -60,6 +60,7 @@ public class DBWeather4RunnersUnitTest {
         assertEquals(17,actualPreference.getHumidity());
         assertEquals(20.0, actualPreference.getPrecipitation());
         assertEquals("Big",actualPreference.getCloudiness().name());
+        assertEquals(22.0,actualPreference.getWindSpeed());
     }
 
     @Test
@@ -166,20 +167,22 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void updatePreferenceTest() throws Exception {
-        Preference preference = new Preference(15,Cloudiness.Big,14,16,19,31L);
+        Preference preference = new Preference(15,Cloudiness.Big,14,16,19,31L,22.0);
         database.addPreference(preference);
         preference.setCloudiness(Cloudiness.Medium);
         preference.setHumidity(21);
+        preference.setWindSpeed(21.0);
         database.updatePreference(preference);
         Preference currentPreference = database.getPreference(preference.getId());
         assertEquals("Medium",currentPreference.getCloudiness().name());
         assertEquals(21,currentPreference.getHumidity());
+        assertEquals(21.0,currentPreference.getWindSpeed());
     }
 
 
     @Test
     public void clearPreferencesTest() throws Exception {
-        Preference preference = new Preference(15,Cloudiness.Big,14,16,19,31L);
+        Preference preference = new Preference(15,Cloudiness.Big,14,16,19,31L,22.0);
         database.clearPreferences();
         database.addPreference(preference);
         assertEquals(1,preference.getId());
@@ -236,7 +239,7 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void addWeatherInfo() throws Exception{
         Date now = new Date();
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0,now);
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0,now,22.0,"Icon","Desc");
         weatherInfo.setIsChecked(true);
         database.addWeatherInfo(weatherInfo);
         WeatherInfo newWeather = database.getWeatherInfo(weatherInfo.getId());
@@ -246,11 +249,14 @@ public class DBWeather4RunnersUnitTest {
         assertEquals(weatherInfo.getDate().toString(),newWeather.getDate().toString());
         assertEquals(weatherInfo.getTemperature(),newWeather.getTemperature());
         assertEquals(weatherInfo.getIsChecked(),true);
+        assertEquals(weatherInfo.getWindSpeed(),22.0);
+        assertEquals("Icon",weatherInfo.getIconName());
+        assertEquals("Desc",weatherInfo.getDescription());
     }
 
     @Test
     public void deleteWatherInfo() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date());
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
         database.addWeatherInfo(weatherInfo);
         database.deleteWeatherInfo(weatherInfo.getId());
         WeatherInfo gotten = database.getWeatherInfo(weatherInfo.getId());
@@ -259,7 +265,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void clearWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date());
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
         database.clearWeatherInfo();
         database.addWeatherInfo(weatherInfo);
         assertEquals(1,weatherInfo.getId());
@@ -267,17 +273,20 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void updateWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date());
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
         database.addWeatherInfo(weatherInfo);
         weatherInfo.setIsChecked(true);
+        weatherInfo.setIconName("NewIcon");
         database.updateWeatherInfo(weatherInfo);
         WeatherInfo currentWeatherInfo = database.getWeatherInfo(weatherInfo.getId());
         assertEquals(true,currentWeatherInfo.getIsChecked());
+        assertEquals(22.0,currentWeatherInfo.getWindSpeed());
+        assertEquals("NewIcon",currentWeatherInfo.getIconName());
     }
 
     @Test
     public void getAllWeatherInfos() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date());
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
         List<WeatherInfo> allWeatherInfos;
         boolean tookAll = false;
 

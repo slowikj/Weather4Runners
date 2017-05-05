@@ -34,20 +34,22 @@ public class JSONWeatherDownloader {
     private String language;
     private String apiKey;
 
-
     public JSONWeatherDownloader(String location, String language) {
+
         this.location = location;
         this.apiKey = "f1154294b86bd13039f99eb045c81e12";
         this.language = language;
     }
 
     public JSONArray getData() throws IOException, MalformedURLException, JSONException {
+
         String response = getResponseFrom(buildURL());
 
         return (new JSONObject(response)).getJSONArray("list");
     }
 
     private URL buildURL() throws MalformedURLException {
+
         Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                 .appendQueryParameter(LOCATION_QUERY, this.location)
                 .appendQueryParameter(LANGUAGE_QUERY, this.language)
@@ -58,19 +60,20 @@ public class JSONWeatherDownloader {
     }
 
     private String getResponseFrom(URL url) throws IOException {
+
         HttpURLConnection connection = getHttpURLConnection(url);
         connection.connect();
 
         try {
             return getReadContentFrom(connection.getInputStream());
-        }
-        finally {
+        } finally {
             connection.disconnect();
         }
     }
 
     @NonNull
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setDoInput(true);
@@ -87,13 +90,12 @@ public class JSONWeatherDownloader {
         try {
             String line;
 
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 res.append(line);
             }
 
             return res.toString();
-        }
-        finally {
+        } finally {
             reader.close();
         }
     }

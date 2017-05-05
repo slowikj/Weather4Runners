@@ -43,6 +43,9 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
     private static final String KEY_HUMIDITY = "humidity";
     private static final String KEY_PRECIPITATION = "precipitation";
     private static final String KEY_IS_CHECKED = "checked";
+    private static final String KEY_WIND_SPEED = "wind";
+    private static final String KEY_ICON = "icon";
+    private static final String KEY_DESCRIPTION = "KEY_DESCRIPTION";
 
     // BEST_HOURS, CHOSEN_HOURS Table - column names
     private static final String KEY_DATE = "date";
@@ -56,7 +59,8 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_PREFERENCES = "CREATE TABLE IF NOT EXISTS "
             + TABLE_PREFERENCES_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TEMPERATURE
             + " INTEGER," + KEY_CLOUDINESS + " INTEGER,"+ KEY_START_HOUR + " INTEGER,"
-            + KEY_END_HOUR + " INTEGER, "+ KEY_HUMIDITY + " INTEGER, "+KEY_PRECIPITATION + " DOUBLE PRECISION"+")";
+            + KEY_END_HOUR + " INTEGER, "+ KEY_HUMIDITY + " INTEGER, "+KEY_PRECIPITATION + " DOUBLE PRECISION, "
+            +KEY_WIND_SPEED + " DOUBLE PRECISION"+")";
 
     private static final String CREATE_TABLE_BEST_HOURS = "CREATE TABLE IF NOT EXISTS "
             + TABLE_BEST_HOURS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE
@@ -73,7 +77,8 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
             + TABLE_WEATHER_INFO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TEMPERATURE
             + " INTEGER," + KEY_HUMIDITY + " INTEGER,"+ KEY_CLOUDINESS + " INTEGER,"
             + KEY_PRECIPITATION + " DOUBLE PRECISION, "+ KEY_DATE
-            + " TEXT, "+KEY_IS_CHECKED + " BOOLEAN"+")";
+            + " TEXT, "+KEY_IS_CHECKED + " BOOLEAN, "+ KEY_WIND_SPEED + " DOUBLE PRECISION, "
+            + KEY_ICON+ " TEXT, "+ KEY_DESCRIPTION+ " TEXT" + ")";
 
     public DBWeather4Runners(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -109,6 +114,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_END_HOUR, preference.getEndHour());
         values.put(KEY_HUMIDITY,preference.getHumidity());
         values.put(KEY_PRECIPITATION,preference.getPrecipitation());
+        values.put(KEY_WIND_SPEED, preference.getWindSpeed());
 
         long id = database.insert(TABLE_PREFERENCES_NAME, null, values);
         preference.setId(id);
@@ -130,6 +136,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         preference.setHours(cursor.getInt(cursor.getColumnIndex(KEY_START_HOUR)),cursor.getInt(cursor.getColumnIndex(KEY_END_HOUR)));
         preference.setHumidity(cursor.getInt(cursor.getColumnIndex(KEY_HUMIDITY)));
         preference.setPrecipitation(cursor.getDouble(cursor.getColumnIndex(KEY_PRECIPITATION)));
+        preference.setWindSpeed(cursor.getDouble(cursor.getColumnIndex(KEY_WIND_SPEED)));
 
         return preference;
     }
@@ -143,6 +150,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_END_HOUR, preference.getEndHour());
         values.put(KEY_HUMIDITY,preference.getHumidity());
         values.put(KEY_PRECIPITATION,preference.getPrecipitation());
+        values.put(KEY_WIND_SPEED, preference.getWindSpeed());
 
         // updating row
         database.update(TABLE_PREFERENCES_NAME, values, KEY_ID + " = ?", new String[] { String.valueOf(preference.getId()) });
@@ -330,6 +338,9 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
         values.put(KEY_DATE, weather.getDate().toString());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
+        values.put(KEY_WIND_SPEED,weather.getWindSpeed());
+        values.put(KEY_ICON,weather.getIconName());
+        values.put(KEY_DESCRIPTION,weather.getDescription());
 
         long id = database.insert(TABLE_WEATHER_INFO, null, values);
         weather.setId(id);
@@ -353,8 +364,11 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         double precipitation =cursor.getDouble(cursor.getColumnIndex(KEY_PRECIPITATION));
         boolean checked = cursor.getInt(cursor.getColumnIndex(KEY_IS_CHECKED)) > 0;
         Date date = new Date(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+        double windSpeed = cursor.getDouble(cursor.getColumnIndex((KEY_WIND_SPEED)));
+        String iconName = cursor.getString(cursor.getColumnIndex(KEY_ICON));
+        String description = cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION));
 
-        WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date);
+        WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date,windSpeed,iconName,description);
 
         weather.setIsChecked(checked);
         weather.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
@@ -380,6 +394,9 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
         values.put(KEY_DATE, weather.getDate().toString());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
+        values.put(KEY_WIND_SPEED,weather.getWindSpeed());
+        values.put(KEY_ICON,weather.getIconName());
+        values.put(KEY_DESCRIPTION,weather.getDescription());
 
         // updating row
         database.update(TABLE_WEATHER_INFO, values, KEY_ID + " = ?", new String[] { String.valueOf(weather.getId()) });
@@ -400,8 +417,11 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
                 double precipitation =c.getDouble(c.getColumnIndex(KEY_PRECIPITATION));
                 boolean checked = c.getInt(c.getColumnIndex(KEY_IS_CHECKED)) > 0;
                 Date date = new Date(c.getString(c.getColumnIndex(KEY_DATE)));
+                double windSpeed = c.getDouble(c.getColumnIndex((KEY_WIND_SPEED)));
+                String iconName = c.getString(c.getColumnIndex(KEY_ICON));
+                String description = c.getString(c.getColumnIndex(KEY_DESCRIPTION));
 
-                WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date);
+                WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date,windSpeed,iconName,description);
                 weather.setIsChecked(checked);
 
                 weather.setId(c.getInt((c.getColumnIndex(KEY_ID))));

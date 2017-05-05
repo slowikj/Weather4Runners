@@ -36,6 +36,11 @@ public class TBPreferencesUnitTests {
         assertEquals(20,endHour);
     }
     @Test
+    public void setAndGetWind() throws Exception{
+        preference.setWindSpeed(21.0);
+        assertEquals(21.0,preference.getWindSpeed());
+    }
+    @Test
     public void setIdTest() throws Exception{
         preference.setId(1);
         assertEquals(1,preference.getId());

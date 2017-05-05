@@ -12,18 +12,20 @@ public class Preference {
     private double Precipitation = 10;
     private int Humidity = 0;
     private Cloudiness Cloudiness = com.example.annabujak.weather4runners.Enum.Cloudiness.Sunny;
+    private double WindSpeed = 20.0;
     private int StartHour = 10;
     private int EndHour = 17;
 
     public Preference(){
     }
-    public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour, int _Humidity, double _Precipitation){
+    public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour, int _Humidity, double _Precipitation, double _WindSpeed){
         Temperature =_Temprature;
         Cloudiness = _Cloudiness;
         StartHour = _StartHour;
         EndHour = _EndHour;
         Humidity = _Humidity;
         Precipitation = _Precipitation;
+        WindSpeed = _WindSpeed;
     }
     public void setTemperature(int temperature){
         Temperature = temperature;
@@ -63,4 +65,7 @@ public class Preference {
 
     public int getHumidity(){return Humidity;}
     public void setHumidity(int humidity){Humidity = humidity;}
+
+    public double getWindSpeed(){return WindSpeed;}
+    public void setWindSpeed(double _WindSpeed){WindSpeed = _WindSpeed;}
 }

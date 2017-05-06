@@ -13,8 +13,6 @@ import java.sql.Date;
 
 public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtractor {
 
-    private JSONObject weatherJSONItem;
-
     public JSONOpenWeatherMapValuesExtractor(JSONObject weatherJSONItem) {
         super(weatherJSONItem);
     }
@@ -26,7 +24,7 @@ public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtracto
                 new String[]{"main", "temp"}
         );
 
-        return ConversionsHelper.convertTemperatureToCelsius(Integer.parseInt(strTemp));
+        return ConversionsHelper.convertTemperatureToCelsius((int)Double.parseDouble(strTemp));
     }
 
     @Override

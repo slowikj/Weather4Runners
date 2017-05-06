@@ -19,12 +19,10 @@ public class JSONWeatherParser {
 
     public JSONWeatherParser(
             JSONWeatherValuesExtractorFactory jsonWeatherValuesExtractorFactory) {
-
         this.jsonWeatherValuesExtractorFactory = jsonWeatherValuesExtractorFactory;
     }
 
     public ArrayList<WeatherInfo> getParsed(JSONArray jsonArray) throws JSONException {
-
         ArrayList<WeatherInfo> res = new ArrayList<WeatherInfo>();
 
         for (int i = 0; i < jsonArray.length(); ++i) {

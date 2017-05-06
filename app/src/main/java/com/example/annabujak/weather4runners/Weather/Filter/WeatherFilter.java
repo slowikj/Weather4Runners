@@ -27,7 +27,7 @@ public class WeatherFilter {
                 dailyWeather.add(w);
             }
         }
-        return Algorithm.FindBestWeather(weather,preference);
+        return Algorithm.FindBestDailyWeather(dailyWeather,preference);
     }
     private boolean IsWeatherForDay(WeatherInfo w){
         Date now = new Date();
@@ -43,7 +43,7 @@ public class WeatherFilter {
                 weeklyWeather.add(w);
             }
         }
-        return Algorithm.FindBestWeather(weather,preference);
+        return Algorithm.FindBestWeeklyWeather(weeklyWeather,preference);
     }
     private boolean IsWeatherForWeek(WeatherInfo w){
         Date now = new Date();

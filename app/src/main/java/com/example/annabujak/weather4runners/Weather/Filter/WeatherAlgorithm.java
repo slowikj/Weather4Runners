@@ -6,7 +6,9 @@ import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pawel.bujak on 05.05.2017.
@@ -17,14 +19,42 @@ public class WeatherAlgorithm {
 
     private Integer PropositionsCount;
     private Preference Preference;
+    private final Integer DaysInWeek = 7;
 
     public WeatherAlgorithm(Integer _PropositionsCount){
         PropositionsCount = _PropositionsCount;
     }
 
-    public List<WeatherInfo> FindBestWeather(List<WeatherInfo> weather, Preference preference){
-
+    public List<WeatherInfo> FindBestDailyWeather(List<WeatherInfo> weatherInfos, Preference preference){
         Preference = preference;
+        return FindBestWeather(weatherInfos,PropositionsCount);
+    }
+    public List<WeatherInfo> FindBestWeeklyWeather(List<WeatherInfo> weatherInfo, Preference preference){
+        Preference = preference;
+        Map<Integer,List<WeatherInfo>> WeekDays = InitializeWeekDaysMap();
+        for (WeatherInfo w:weatherInfo) {
+            WeekDays.get(w.getDate().getDay()%DaysInWeek).add(w);
+        }
+        List<WeatherInfo> bestInWeek = new ArrayList<>();
+        for(int i = 0; i < DaysInWeek; i ++){
+            if(FindBestWeather(WeekDays.get(i),1).size() > 0)
+                bestInWeek.add(FindBestWeather(WeekDays.get(i),1).get(0));
+        }
+        return FindBestWeather(bestInWeek,PropositionsCount);
+    }
+    private Map<Integer,List<WeatherInfo>> InitializeWeekDaysMap(){
+        Map<Integer,List<WeatherInfo>> week = new HashMap<>();
+        week.put(0,new ArrayList<WeatherInfo>());
+        week.put(1,new ArrayList<WeatherInfo>());
+        week.put(2,new ArrayList<WeatherInfo>());
+        week.put(3,new ArrayList<WeatherInfo>());
+        week.put(4,new ArrayList<WeatherInfo>());
+        week.put(5,new ArrayList<WeatherInfo>());
+        week.put(6,new ArrayList<WeatherInfo>());
+        return week;
+    }
+    private List<WeatherInfo> FindBestWeather(List<WeatherInfo> weather, Integer bestWeatherCount){
+
         List<WeatherPreferencePair<WeatherInfo,Double>> preferenceList = new ArrayList<>();
         for (WeatherInfo w : weather) {
             if(IsInPreferenceTime(w)){
@@ -39,7 +69,7 @@ public class WeatherAlgorithm {
             }
         });
         List<WeatherInfo> finalList = new ArrayList<>();
-        for(int i = 0; i < PropositionsCount; i ++)
+        for(int i = 0; i < Math.min(bestWeatherCount,preferenceList.size()); i ++)
             finalList.add(preferenceList.get(i).left);
         return finalList;
     }
@@ -48,27 +78,55 @@ public class WeatherAlgorithm {
     }
     private Double CountWeatherPreference(WeatherInfo w){
         Double result = 0.0;
+        Double CloudinessImportance = 0.1;
+
 
         result += GetTemperatureValue(w);
-        result += GetCloudiness(w);
+        result += GetCloudinessValue(w)* CloudinessImportance;
+        result += GetHumidityValue(w);
+        result += GetWindSpeedValue(w);
+        result += GetPrecipitationValue(w);
 
         return result;
     }
     private Double GetTemperatureValue(WeatherInfo w){
         Double MinTemp = -20.0;
         Double MaxTemp = 40.0;
-        Double Divider = (MaxTemp - MinTemp)/4.0;
 
-        Double TemporaryTopResult = ((Preference.getTemperature() - MinTemp) - (w.getTemperature()-MinTemp))/Divider;
-        Double TemporaryBottomResult = (MaxTemp - MinTemp)/Divider;
+        Double TemporaryTopResult = ((Preference.getTemperature() - MinTemp) - (w.getTemperature()-MinTemp));
+        Double TemporaryBottomResult = (MaxTemp - MinTemp);
         return Math.abs(TemporaryTopResult/TemporaryBottomResult);
     }
-    private Double GetCloudiness(WeatherInfo w){
+    private Double GetCloudinessValue(WeatherInfo w){
         Double MinCloud = 0.0;
         Double MaxCloud = 4.0;
 
         Double TemporaryTopResult = ((Preference.getCloudiness().getValue() - MinCloud) - (w.getCloudiness().getValue()-MinCloud));
         Double TemporaryBottomResult = (MaxCloud - MinCloud);
+        return Math.abs(TemporaryTopResult/TemporaryBottomResult);
+    }
+    private Double GetHumidityValue(WeatherInfo w){
+        Double MinHum = 0.0;
+        Double MaxHum = 100.0;
+
+        Double TemporaryTopResult = ((Preference.getHumidity() - MinHum) - (w.getHumidity()-MinHum));
+        Double TemporaryBottomResult = (MaxHum - MinHum);
+        return Math.abs(TemporaryTopResult/TemporaryBottomResult);
+    }
+    private Double GetWindSpeedValue(WeatherInfo w){
+        Double MinWind = 0.0;
+        Double MaxWind = 100.0;
+
+        Double TemporaryTopResult = ((Preference.getWindSpeed() - MinWind) - (w.getWindSpeed()-MinWind));
+        Double TemporaryBottomResult = (MaxWind - MinWind);
+        return Math.abs(TemporaryTopResult/TemporaryBottomResult);
+    }
+    private Double GetPrecipitationValue(WeatherInfo w){
+        Double MinPre = 0.0;
+        Double MaxPre = 500.0;
+
+        Double TemporaryTopResult = ((Preference.getPrecipitation() - MinPre) - (w.getPrecipitation()-MinPre));
+        Double TemporaryBottomResult = (MaxPre - MinPre);
         return Math.abs(TemporaryTopResult/TemporaryBottomResult);
     }
 }

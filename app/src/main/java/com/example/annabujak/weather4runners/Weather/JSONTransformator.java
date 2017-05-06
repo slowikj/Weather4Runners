@@ -15,18 +15,18 @@ import java.util.List;
  * Created by slowik on 05.05.2017.
  */
 
-public class HourlyWeatherInfoCreator {
+public class JSONTransformator {
 
     private JSONWeatherParser jsonWeatherParser;
     private WeatherInfosApproximatorFactory weatherInfosApproximatorFactory;
 
-    public HourlyWeatherInfoCreator(JSONWeatherParser jsonWeatherParser,
-                                    WeatherInfosApproximatorFactory weatherInfosApproximatorFactory) {
+    public JSONTransformator(JSONWeatherParser jsonWeatherParser,
+                             WeatherInfosApproximatorFactory weatherInfosApproximatorFactory) {
         this.jsonWeatherParser = jsonWeatherParser;
         this.weatherInfosApproximatorFactory = weatherInfosApproximatorFactory;
     }
 
-    public List<WeatherInfo> get(JSONArray jsonArray, int hoursPerForecast) throws JSONException {
+    public List<WeatherInfo> getHourlyWeatherInfos(JSONArray jsonArray, int hoursPerForecast) throws JSONException {
         ArrayList<WeatherInfo> parsedJson = jsonWeatherParser.getParsed(jsonArray);
         ArrayList<WeatherInfo> res = new ArrayList<>();
         for(int i = 0; i < parsedJson.size() - 1; ++i) {

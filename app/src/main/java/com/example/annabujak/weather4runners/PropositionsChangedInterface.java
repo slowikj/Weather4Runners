@@ -1,6 +1,6 @@
 package com.example.annabujak.weather4runners;
 
-import com.example.annabujak.weather4runners.Weather.WeatherProposition;
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface PropositionsChangedInterface {
 
-    void onPropositionsChanged(List<WeatherProposition> propositions);
+    void onPropositionsChanged(List<WeatherInfo> propositions);
 }

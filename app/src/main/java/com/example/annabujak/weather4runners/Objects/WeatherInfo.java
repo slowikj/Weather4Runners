@@ -2,6 +2,7 @@ package com.example.annabujak.weather4runners.Objects;
 
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -61,6 +62,10 @@ public class WeatherInfo {
     }
 
     public java.util.Date getDate(){return Date;}
+
+    public String getFormattedDate(SimpleDateFormat dateFormat) {
+        return dateFormat.format(this.getDate());
+    }
 
     public void setId(long id){Id = id;}
     public long getId(){return Id;}

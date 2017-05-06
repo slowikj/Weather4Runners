@@ -16,11 +16,8 @@ import android.widget.Toast;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.DataActivityInterface;
 import com.example.annabujak.weather4runners.Weather.PropositionsListAdapter;
-import com.example.annabujak.weather4runners.Weather.WeatherProposition;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 25.04.2017.

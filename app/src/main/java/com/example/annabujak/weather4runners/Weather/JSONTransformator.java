@@ -18,22 +18,27 @@ import java.util.List;
 public class JSONTransformator {
 
     private JSONWeatherParser jsonWeatherParser;
+
     private WeatherInfosApproximatorFactory weatherInfosApproximatorFactory;
 
+    private int hoursPerForecast;
+
     public JSONTransformator(JSONWeatherParser jsonWeatherParser,
-                             WeatherInfosApproximatorFactory weatherInfosApproximatorFactory) {
+                             WeatherInfosApproximatorFactory weatherInfosApproximatorFactory,
+                             int hoursPerForecast) {
         this.jsonWeatherParser = jsonWeatherParser;
         this.weatherInfosApproximatorFactory = weatherInfosApproximatorFactory;
+        this.hoursPerForecast = hoursPerForecast;
     }
 
-    public List<WeatherInfo> getHourlyWeatherInfos(JSONArray jsonArray, int hoursPerForecast) throws JSONException {
+    public ArrayList<WeatherInfo> getHourlyWeatherInfos(JSONArray jsonArray) throws JSONException {
         ArrayList<WeatherInfo> parsedJson = jsonWeatherParser.getParsed(jsonArray);
         ArrayList<WeatherInfo> res = new ArrayList<>();
         for(int i = 0; i < parsedJson.size() - 1; ++i) {
             res.addAll(getApproximator(
                     parsedJson.get(i),
                     parsedJson.get(i + 1),
-                    hoursPerForecast + 1).getApproximated());
+                    this.hoursPerForecast + 1).getApproximated());
         }
 
         res.add(parsedJson.get(parsedJson.size() - 1));

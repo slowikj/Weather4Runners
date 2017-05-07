@@ -8,10 +8,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-import com.example.annabujak.weather4runners.PropositionsChangedInterface;
+import com.example.annabujak.weather4runners.PropositionsChangedListener;
 import com.example.annabujak.weather4runners.R;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 
 public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsListAdapter.PropositionsListViewHolder>
-    implements PropositionsChangedInterface {
+    implements PropositionsChangedListener {
 
     private SimpleDateFormat dateFormat;
 

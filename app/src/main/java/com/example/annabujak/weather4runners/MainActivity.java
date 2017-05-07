@@ -14,21 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.annabujak.weather4runners.Enum.Cloudiness;
-import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONOpenWeatherMapValuesExtractor;
-import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONOpenWeatherMapValuesExtractorFactory;
-import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONWeatherValuesExtractor;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.annabujak.weather4runners.CentralControl.WeatherManager;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity
-    implements DataActivityInterface {
+        implements DataActivityInterface {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -45,11 +40,22 @@ public class MainActivity extends AppCompatActivity
      */
     private ViewPager mViewPager;
 
+    private ProgressBar mLoadingIndicator;
+
+    private WeatherManager weatherManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setViewReferences();
+
+        weatherManager = new WeatherManager(getApplicationContext());
+        weatherManager.setPropositionsUpdatedListener(this);
+    }
+
+    private void setViewReferences() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // create the adapter that will return a fragment for each of the three
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
 

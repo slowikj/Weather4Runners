@@ -25,6 +25,7 @@ import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsCh
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;

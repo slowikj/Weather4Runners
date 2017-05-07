@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by slowik on 05.05.2017.
@@ -58,7 +59,8 @@ public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtracto
                 new String[] {"dt"}
         );
 
-        return new Date(Integer.parseInt(strDate));
+        return new Date(
+                TimeUnit.SECONDS.toMillis(Long.parseLong(strDate)));
     }
 
     @Override

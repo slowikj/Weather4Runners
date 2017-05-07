@@ -118,10 +118,11 @@ public class CentralControl {
         protected Void doInBackground(ArrayList<WeatherInfo>... params) {
             ArrayList<WeatherInfo> weatherForecast = params[0];
 
-            Preference preference = new Preference(); // TODO: I have to take current preferences from somewhere
+            Preference preference = new Preference();
+            databaseManager.UpdatePreferences(preference);
 
             ArrayList<WeatherInfo> dailyPropositions = weatherFilter
-                    .GetDailyWeather(weatherForecast, preference);
+                    .GetDailyWeather(weatherForecast, databaseManager.GetPreference());
 
             ArrayList<WeatherInfo> weeklyPropositions = weatherFilter
                     .GetWeeklyWeather(weatherForecast, preference);

@@ -4,7 +4,7 @@ import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosApproximator;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 
 /**

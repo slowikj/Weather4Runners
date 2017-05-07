@@ -5,7 +5,7 @@ import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**

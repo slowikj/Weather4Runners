@@ -35,8 +35,11 @@ public class DBManager {
     public ArrayList<WeatherInfo> GetWeatherData(){
         return database.getAllWeatherInfos();
     }
+
     public void UpdatePreferences(Preference preference) {
         database.clearPreferences();
         database.addPreference(preference);
     }
+
+    public Preference GetPreference(){return database.getPreference(1);}
 }

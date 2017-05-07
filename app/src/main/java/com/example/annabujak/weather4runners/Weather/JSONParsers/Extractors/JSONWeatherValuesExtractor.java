@@ -5,7 +5,7 @@ import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by slowik on 03.05.2017.

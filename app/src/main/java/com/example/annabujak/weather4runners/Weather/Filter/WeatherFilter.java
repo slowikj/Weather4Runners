@@ -20,7 +20,7 @@ public class WeatherFilter {
         Algorithm = new WeatherAlgorithm(_WeatherPropositions);
     }
 
-    public ArrayList<WeatherInfo> GetDailyWeather(ArrayList<WeatherInfo> weather, Preference preference){
+    public ArrayList<WeatherInfo> GetDailyWeather(List<WeatherInfo> weather, Preference preference){
         ArrayList<WeatherInfo> dailyWeather = new ArrayList<>();
         for (WeatherInfo w: weather) {
             if(IsWeatherForDay(w)){
@@ -36,7 +36,7 @@ public class WeatherFilter {
         return (double)(w.getDate().getTime() - now.getTime())*MilisecondsToDays <= 1 ? true : false;
     }
 
-    public ArrayList<WeatherInfo> GetWeeklyWeather(ArrayList<WeatherInfo> weather, Preference preference){
+    public ArrayList<WeatherInfo> GetWeeklyWeather(List<WeatherInfo> weather, Preference preference){
         ArrayList<WeatherInfo> weeklyWeather = new ArrayList<>();
         for (WeatherInfo w: weather) {
             if(IsWeatherForWeek(w)){

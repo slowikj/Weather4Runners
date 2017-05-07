@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity
 
     private CentralControl centralControl;
 
+    private PagerFragment pagerFragment;
+
+    // TODO add PreferencesFragment here
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +55,13 @@ public class MainActivity extends AppCompatActivity
 
         this.centralControl = getCentralControl();
 
+        createFragments();
+
         if(savedInstanceState == null) {
-            setFragment(new PagerFragment(), false);
+            setFragment(this.pagerFragment, false);
         }
+
+        refreshAll();
     }
 
     @Override
@@ -88,17 +96,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        ArrayList<WeatherInfo> a = propositions;
+        this.pagerFragment.onDailyPropositionsChanged(propositions);
     }
 
     @Override
     public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-
+        this.pagerFragment.onWeeklyPropositionsChanged(propositions);
     }
 
     @Override
     public void onUpdatingFinished() {
         this.mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    private void createFragments() {
+        // TODO: add preferences fragment here
+        this.pagerFragment = new PagerFragment();
     }
 
     private void refreshAll() {

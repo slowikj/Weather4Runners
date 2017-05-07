@@ -36,7 +36,7 @@ public class WeatherInfo {
     }
 
     public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, Date _Date, double _WindSpeed,
-                       String _IconName) {
+                           String _IconName) {
         Temperature = _Temperature;
         Humidity = _Humidity;
         Cloudiness = _Cloudiness;

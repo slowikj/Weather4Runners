@@ -1,6 +1,5 @@
-package com.example.annabujak.weather4runners.Fragments;
+package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,35 +8,45 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.DataActivityInterface;
-import com.example.annabujak.weather4runners.Weather.PropositionsListAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by slowik on 25.04.2017.
  */
 
-public class PropositionsFragment extends Fragment {
-
-    private ImageView weatherCloud;
+public class PropositionsFragment extends android.support.v4.app.Fragment {
 
     private RecyclerView recyclerView;
 
-    private TextView tvDate;
-
-    private TextView tvShortWeatherDescription;
+    private PropositionsListAdapter propositionsListAdapter;
 
     private View fullView;
 
     private DataActivityInterface attachedActivity;
 
     private SimpleDateFormat itemsListDateFormat;
+
+    public static PropositionsFragment getDailyPropositionsFragment() {
+        return getPropositionsFragment(new SimpleDateFormat("h:mm a"));
+    }
+
+    public static PropositionsFragment getWeeklyPropositionsFragment() {
+        return getPropositionsFragment(new SimpleDateFormat("dd.MM.yy"));
+    }
+
+    private static PropositionsFragment getPropositionsFragment(SimpleDateFormat dateFormat) {
+        PropositionsFragment res = new PropositionsFragment();
+        res.setDateFormat(dateFormat); // TODO : improve
+
+        return res;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,10 @@ public class PropositionsFragment extends Fragment {
 
     public void setDateFormat(SimpleDateFormat dateFormat) {
         this.itemsListDateFormat = dateFormat;
+    }
+
+    public void setPropositions(ArrayList<WeatherInfo> propositions) {
+        this.propositionsListAdapter.setPropositionsList(propositions);
     }
 
     @Nullable
@@ -86,11 +99,8 @@ public class PropositionsFragment extends Fragment {
     }
 
     private void setChildViews() {
-        this.weatherCloud = (ImageView) this.fullView.findViewById(R.id.cloud_weather_image);
-        this.tvDate = (TextView) this.fullView.findViewById(R.id.item_name);
-        this.tvShortWeatherDescription = (TextView) this.fullView.findViewById(R.id.short_weather_info);
-
         this.recyclerView = getRecyclerView(this.fullView);
+        this.propositionsListAdapter = (PropositionsListAdapter)this.recyclerView.getAdapter();
     }
 
     private RecyclerView getRecyclerView(View parentView) {
@@ -109,11 +119,6 @@ public class PropositionsFragment extends Fragment {
         return rv;
     }
 
-    // TODO subscribe for database changes (this.attachedActivity.subscribeForDBChanges(rv.getAdapter())
-    // TODO unsubstribe for ...
-    //  database should be stored in the main activity
-    // TODO create recycler view listeners
-
     private class ListItemOnClickListener implements View.OnClickListener {
 
         @Override
@@ -127,7 +132,7 @@ public class PropositionsFragment extends Fragment {
 
             holder.mCheckbox.setChecked(!holder.mCheckbox.isChecked());
 
-            Toast.makeText(getContext(), "you clicked on item", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "you clicked on item", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -137,7 +142,7 @@ public class PropositionsFragment extends Fragment {
         public boolean onLongClick(View v) {
 
             // TODO
-            Toast.makeText(getContext(), "you long clicked on item", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "you long clicked on item", Toast.LENGTH_SHORT).show();
 
             return true;
         }

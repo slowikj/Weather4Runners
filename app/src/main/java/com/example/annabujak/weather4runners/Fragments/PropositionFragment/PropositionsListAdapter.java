@@ -1,4 +1,4 @@
-package com.example.annabujak.weather4runners.Weather;
+package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import com.example.annabujak.weather4runners.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by slowik on 24.04.2017.
@@ -34,6 +33,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         this.dateFormat = dateFormat;
         this.onClickListener = onClickListener;
         this.onLongClickListener = onLongClickListener;
+        this.propositionsList = new ArrayList<>();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     public void onBindViewHolder(PropositionsListViewHolder holder, int position) {
         holder.mCheckbox.setChecked(propositionsList.get(position).getIsChecked());
         holder.name.setText(propositionsList.get(position).getFormattedDate(dateFormat));
-        holder.shortDescription.setText(propositionsList.get(position).getTemperature());
+        holder.shortDescription.setText(propositionsList.get(position).getDescription());
 
         holder.SetTags();
     }
@@ -58,12 +58,10 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         return this.propositionsList.size();
     }
 
-//    @Override
-//    public void onPropositionsChanged(List<WeatherInfo> propositions) {
-//        this.propositionsList = new ArrayList<>(propositions);
-//
-//        notifyDataSetChanged();
-//    }
+    public void setPropositionsList(ArrayList<WeatherInfo> propositions) {
+        this.propositionsList = propositions;
+        notifyDataSetChanged();
+    }
 
     public class PropositionsListViewHolder extends RecyclerView.ViewHolder {
 

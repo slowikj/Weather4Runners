@@ -2,6 +2,7 @@ package com.example.annabujak.weather4runners.CentralControl;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.util.Pair;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Objects.Preference;
@@ -112,10 +113,11 @@ public class CentralControl {
         }
     }
 
-    class PropositionsComputer extends AsyncTask<ArrayList<WeatherInfo>, Void, Void> {
+    class PropositionsComputer
+            extends AsyncTask<ArrayList<WeatherInfo>, Void, Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>> {
 
         @Override
-        protected Void doInBackground(ArrayList<WeatherInfo>... params) {
+        protected Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>> doInBackground(ArrayList<WeatherInfo>... params) {
             ArrayList<WeatherInfo> weatherForecast = params[0];
 
             Preference preference = new Preference();
@@ -127,16 +129,15 @@ public class CentralControl {
             ArrayList<WeatherInfo> weeklyPropositions = weatherFilter
                     .GetWeeklyWeather(weatherForecast, preference);
 
-            dailyPropositionsChangedListener.onDailyPropositionsChanged(dailyPropositions);
-            weeklyPropositionsChangedListener.onWeeklyPropositionsChanged(weeklyPropositions);
-
-            return null;
+            return new Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>(dailyPropositions, weeklyPropositions);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>> propositionsPair) {
+            super.onPostExecute(propositionsPair);
 
+            dailyPropositionsChangedListener.onDailyPropositionsChanged(propositionsPair.first);
+            weeklyPropositionsChangedListener.onWeeklyPropositionsChanged(propositionsPair.second);
             updatingFinishedListener.onUpdatingFinished();
         }
     }

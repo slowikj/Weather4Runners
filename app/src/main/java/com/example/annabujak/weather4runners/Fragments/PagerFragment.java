@@ -11,22 +11,32 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.annabujak.weather4runners.MainActivity;
+import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.PropositionsFragment;
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by slowik on 07.05.2017.
  */
 
-public class PagerFragment extends Fragment {
+public class PagerFragment extends Fragment
+    implements DailyPropositionsChangedListener,
+        WeeklyPropositionsChangedListener {
 
     private View fullView;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    private PropositionsFragment dailyPropositions;
+
+    private PropositionsFragment weeklyPropositions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,9 +52,20 @@ public class PagerFragment extends Fragment {
         if(this.fullView == null) {
             this.fullView = createFullView(inflater, container);
             setChildViews(this.fullView);
+            createPagerFragments();
         }
 
         return this.fullView;
+    }
+
+    @Override
+    public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+        this.dailyPropositions.setPropositions(propositions);
+    }
+
+    @Override
+    public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+        this.weeklyPropositions.setPropositions(propositions);
     }
 
     private View createFullView(LayoutInflater inflater, ViewGroup container) {
@@ -59,32 +80,15 @@ public class PagerFragment extends Fragment {
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-    public static class PlaceholderFragment extends android.support.v4.app.Fragment {
-
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+    private void createPagerFragments() {
+        this.dailyPropositions = PropositionsFragment.getDailyPropositionsFragment();
+        this.weeklyPropositions = PropositionsFragment.getWeeklyPropositionsFragment();
+        //TODO: add the third one, related to statistics
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private static final int ALL_PAGES_COUNT = 3;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -92,23 +96,29 @@ public class PagerFragment extends Fragment {
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position) {
+                case 0: return dailyPropositions;
+                case 1: return weeklyPropositions;
+                case 2: return new android.support.v4.app.Fragment(); // TODO: add statistics
+                default: return null;
+            }
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return ALL_PAGES_COUNT;
         }
 
+        // TODO: extract string consts
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Diagram section";
-                case 1:
                     return "Day weather section";
-                case 2:
+                case 1:
                     return "Week weather section";
+                case 2:
+                    return "Diagram section";
             }
             return null;
         }

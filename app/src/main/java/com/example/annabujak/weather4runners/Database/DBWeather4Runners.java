@@ -401,8 +401,8 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         // updating row
         database.update(TABLE_WEATHER_INFO, values, KEY_ID + " = ?", new String[] { String.valueOf(weather.getId()) });
     }
-    public List<WeatherInfo> getAllWeatherInfos() {
-        List<WeatherInfo> allWeatherInfos = new ArrayList<WeatherInfo>();
+    public ArrayList<WeatherInfo> getAllWeatherInfos() {
+        ArrayList<WeatherInfo> allWeatherInfos = new ArrayList<WeatherInfo>();
         String selectQuery = "SELECT  * FROM " + TABLE_WEATHER_INFO;
 
         SQLiteDatabase database = this.getReadableDatabase();

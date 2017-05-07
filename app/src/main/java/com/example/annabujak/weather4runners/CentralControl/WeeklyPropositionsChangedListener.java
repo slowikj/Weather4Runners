@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by slowik on 07.05.2017.
  */
 
-public interface PropositionsChangedListener {
+public interface WeeklyPropositionsChangedListener {
 
-    void onPropositionsChanged(ArrayList<WeatherInfo> propositions);
+    void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions);
 }

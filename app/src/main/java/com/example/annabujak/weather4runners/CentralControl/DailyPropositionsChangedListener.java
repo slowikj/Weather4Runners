@@ -8,7 +8,8 @@ import java.util.ArrayList;
  * Created by slowik on 07.05.2017.
  */
 
-public interface WeatherForecastChangedListener {
+public interface DailyPropositionsChangedListener {
 
-    void onWeatherForecastChanged(ArrayList<WeatherInfo> hourlyForecasts);
+    void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions);
+
 }

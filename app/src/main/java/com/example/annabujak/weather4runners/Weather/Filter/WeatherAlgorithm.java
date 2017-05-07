@@ -25,25 +25,25 @@ public class WeatherAlgorithm {
         PropositionsCount = _PropositionsCount;
     }
 
-    public List<WeatherInfo> FindBestDailyWeather(List<WeatherInfo> weatherInfos, Preference preference){
+    public ArrayList<WeatherInfo> FindBestDailyWeather(ArrayList<WeatherInfo> weatherInfos, Preference preference){
         Preference = preference;
         return FindBestWeather(weatherInfos,PropositionsCount);
     }
-    public List<WeatherInfo> FindBestWeeklyWeather(List<WeatherInfo> weatherInfo, Preference preference){
+    public ArrayList<WeatherInfo> FindBestWeeklyWeather(ArrayList<WeatherInfo> weatherInfo, Preference preference){
         Preference = preference;
-        Map<Integer,List<WeatherInfo>> WeekDays = InitializeWeekDaysMap();
+        Map<Integer,ArrayList<WeatherInfo>> WeekDays = InitializeWeekDaysMap();
         for (WeatherInfo w:weatherInfo) {
             WeekDays.get(w.getDate().getDay()%DaysInWeek).add(w);
         }
-        List<WeatherInfo> bestInWeek = new ArrayList<>();
+        ArrayList<WeatherInfo> bestInWeek = new ArrayList<>();
         for(int i = 0; i < DaysInWeek; i ++){
             if(FindBestWeather(WeekDays.get(i),1).size() > 0)
                 bestInWeek.add(FindBestWeather(WeekDays.get(i),1).get(0));
         }
         return FindBestWeather(bestInWeek,PropositionsCount);
     }
-    private Map<Integer,List<WeatherInfo>> InitializeWeekDaysMap(){
-        Map<Integer,List<WeatherInfo>> week = new HashMap<>();
+    private Map<Integer,ArrayList<WeatherInfo>> InitializeWeekDaysMap(){
+        Map<Integer,ArrayList<WeatherInfo>> week = new HashMap<>();
         week.put(0,new ArrayList<WeatherInfo>());
         week.put(1,new ArrayList<WeatherInfo>());
         week.put(2,new ArrayList<WeatherInfo>());
@@ -53,7 +53,7 @@ public class WeatherAlgorithm {
         week.put(6,new ArrayList<WeatherInfo>());
         return week;
     }
-    private List<WeatherInfo> FindBestWeather(List<WeatherInfo> weather, Integer bestWeatherCount){
+    private ArrayList<WeatherInfo> FindBestWeather(ArrayList<WeatherInfo> weather, Integer bestWeatherCount){
 
         List<WeatherPreferencePair<WeatherInfo,Double>> preferenceList = new ArrayList<>();
         for (WeatherInfo w : weather) {
@@ -68,7 +68,7 @@ public class WeatherAlgorithm {
                 return o1.right.compareTo(o2.right);
             }
         });
-        List<WeatherInfo> finalList = new ArrayList<>();
+        ArrayList<WeatherInfo> finalList = new ArrayList<>();
         for(int i = 0; i < Math.min(bestWeatherCount,preferenceList.size()); i ++)
             finalList.add(preferenceList.get(i).left);
         return finalList;

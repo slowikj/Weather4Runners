@@ -8,7 +8,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-import com.example.annabujak.weather4runners.PropositionsChangedListener;
 import com.example.annabujak.weather4runners.R;
 
 import java.text.SimpleDateFormat;
@@ -19,8 +18,7 @@ import java.util.List;
  * Created by slowik on 24.04.2017.
  */
 
-public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsListAdapter.PropositionsListViewHolder>
-    implements PropositionsChangedListener {
+public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsListAdapter.PropositionsListViewHolder> {
 
     private SimpleDateFormat dateFormat;
 
@@ -60,12 +58,12 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         return this.propositionsList.size();
     }
 
-    @Override
-    public void onPropositionsChanged(List<WeatherInfo> propositions) {
-        this.propositionsList = new ArrayList<>(propositions);
-
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void onPropositionsChanged(List<WeatherInfo> propositions) {
+//        this.propositionsList = new ArrayList<>(propositions);
+//
+//        notifyDataSetChanged();
+//    }
 
     public class PropositionsListViewHolder extends RecyclerView.ViewHolder {
 

@@ -5,4 +5,5 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="facebook_login">Zaloguj się przez facebook</string>
     <string name="facebook_passOver">Pomiń</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

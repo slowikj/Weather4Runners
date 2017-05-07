@@ -17,13 +17,24 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.annabujak.weather4runners.CentralControl.WeatherManager;
+import com.example.annabujak.weather4runners.CentralControl.CentralControl;
+import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.CentralControl.UpdatingFinishedListener;
+import com.example.annabujak.weather4runners.CentralControl.WeatherForecastManager;
+import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity
-        implements DataActivityInterface {
+        implements DataActivityInterface,
+            DailyPropositionsChangedListener,
+            WeeklyPropositionsChangedListener,
+            UpdatingFinishedListener
+{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -42,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
     private ProgressBar mLoadingIndicator;
 
-    private WeatherManager weatherManager;
+    private CentralControl centralControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +62,7 @@ public class MainActivity extends AppCompatActivity
 
         setViewReferences();
 
-        weatherManager = new WeatherManager(getApplicationContext());
-        weatherManager.setPropositionsUpdatedListener(this);
+        this.centralControl = getCentralControl();
     }
 
     private void setViewReferences() {
@@ -69,6 +79,14 @@ public class MainActivity extends AppCompatActivity
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
+    private CentralControl getCentralControl() {
+        CentralControl res = new CentralControl(getApplicationContext());
+        res.setDailyPropositionsChangedListener(this);
+        res.setWeeklyPropositionsChangedListener(this);
+
+        return res;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,17 +97,36 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case R.id.action_refresh:
+                refreshAll();
+                return true;
+            case R.id.action_settings:
+                // TODO: show settings/preferences
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+        ArrayList<WeatherInfo> a = propositions;
+    }
+
+    @Override
+    public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+
+    }
+
+    @Override
+    public void onUpdatingFinished() {
+        this.mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    private void refreshAll() {
+        this.mLoadingIndicator.setVisibility(View.VISIBLE);
+        this.centralControl.updateWeatherForecast();
     }
 
     /**

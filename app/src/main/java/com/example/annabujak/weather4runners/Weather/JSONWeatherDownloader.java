@@ -46,6 +46,10 @@ public class JSONWeatherDownloader {
         return (new JSONObject(response)).getJSONArray("list");
     }
 
+    public void setLocation(String cityName) {
+        this.location = cityName;
+    }
+
     private URL buildURL() throws MalformedURLException {
         Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                 .appendQueryParameter(LOCATION_QUERY, this.location)

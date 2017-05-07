@@ -32,7 +32,7 @@ public class DBManager {
             database.addWeatherInfo(w);
         }
     }
-    public List<WeatherInfo> GetWeatherData(){
+    public ArrayList<WeatherInfo> GetWeatherData(){
         return database.getAllWeatherInfos();
     }
     public void UpdatePreferences(Preference preference) {

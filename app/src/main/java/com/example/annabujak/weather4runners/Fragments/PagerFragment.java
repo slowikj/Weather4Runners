@@ -33,6 +33,7 @@ public class PagerFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // TODO: attach activity interface
+
     }
 
     @Nullable

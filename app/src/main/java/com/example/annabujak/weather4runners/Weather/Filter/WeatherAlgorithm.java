@@ -115,7 +115,7 @@ public class WeatherAlgorithm {
     }
     private Double GetWindSpeedValue(WeatherInfo w){
         Double MinWind = 0.0;
-        Double MaxWind = 100.0;
+        Double MaxWind = 150.0;
 
         Double TemporaryTopResult = ((Preference.getWindSpeed() - MinWind) - (w.getWindSpeed()-MinWind));
         Double TemporaryBottomResult = (MaxWind - MinWind);
@@ -123,7 +123,7 @@ public class WeatherAlgorithm {
     }
     private Double GetPrecipitationValue(WeatherInfo w){
         Double MinPre = 0.0;
-        Double MaxPre = 500.0;
+        Double MaxPre = 200.0;
 
         Double TemporaryTopResult = ((Preference.getPrecipitation() - MinPre) - (w.getPrecipitation()-MinPre));
         Double TemporaryBottomResult = (MaxPre - MinPre);

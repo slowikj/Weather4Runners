@@ -1,42 +1,35 @@
 package com.example.annabujak.weather4runners;
 
-import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
 import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.CentralControl.UpdatingFinishedListener;
-import com.example.annabujak.weather4runners.CentralControl.WeatherForecastManager;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity
-        implements DataActivityInterface,
-            DailyPropositionsChangedListener,
+        implements DailyPropositionsChangedListener,
             WeeklyPropositionsChangedListener,
             UpdatingFinishedListener {
+
+    private static final String TAG_PAGER_FRAGMENT = "pager_fragment_tag";
 
     private ProgressBar mLoadingIndicator;
 
@@ -52,23 +45,33 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         setViewReferences();
+        restorePreviousStateOrInstantiate(savedInstanceState);
 
         this.centralControl = getCentralControl();
+        this.centralControl.updatePropositions();
+    }
 
-        createFragments();
-
+    private void restorePreviousStateOrInstantiate(Bundle savedInstanceState) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if(savedInstanceState == null) {
-            setFragment(this.pagerFragment, false);
+            createFragments(fragmentManager);
+            setFragment(this.pagerFragment, false); // TODO: later, change to fb fragment
+        } else {
+            fetchFragments(fragmentManager, savedInstanceState);
         }
+    }
 
-        refreshAll();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        saveFragmentInstances(outState);
     }
 
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-
         } else {
             super.onBackPressed();
         }
@@ -109,9 +112,32 @@ public class MainActivity extends AppCompatActivity
         this.mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
-    private void createFragments() {
-        // TODO: add preferences fragment here
+    private void createFragments(FragmentManager fragmentManager) {
+        // TODO: add the other fragments here
         this.pagerFragment = new PagerFragment();
+    }
+
+    private void fetchFragments(FragmentManager fragmentManager,
+                                Bundle savedInstanceState) {
+        // TODO: add the other fragments here
+        this.pagerFragment = (PagerFragment) fragmentManager.getFragment(
+                savedInstanceState,
+                TAG_PAGER_FRAGMENT);
+    }
+
+    private void saveFragmentInstances(Bundle outState) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        saveFragment(outState, fragmentManager, this.pagerFragment, TAG_PAGER_FRAGMENT);
+        // TODO: add the other fragments here
+    }
+
+    private void saveFragment(Bundle outState,
+                              FragmentManager fragmentManager,
+                              Fragment fragment,
+                              String fragmentTag) {
+        fragmentManager.putFragment(outState,
+                fragmentTag,
+                fragment);
     }
 
     private void refreshAll() {
@@ -138,13 +164,10 @@ public class MainActivity extends AppCompatActivity
     private void setFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
-
         fragmentTransaction.replace(R.id.main_fragment, fragment);
-
         fragmentTransaction.commit();
     }
 }

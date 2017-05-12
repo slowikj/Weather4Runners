@@ -46,9 +46,18 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     @Override
     public void onBindViewHolder(PropositionsListViewHolder holder, int position) {
-        holder.mCheckbox.setChecked(propositionsList.get(position).getIsChecked());
-        holder.name.setText(propositionsList.get(position).getFormattedDate(dateFormat));
-        holder.shortDescription.setText(propositionsList.get(position).getDescription());
+        WeatherInfo elem = propositionsList.get(position);
+        holder.mCheckbox.setChecked(elem.getIsChecked());
+
+        holder.name.setText(
+                String.format("%s; %s C, %s; %s mm; %s km/h",
+                        elem.getFormattedDate(this.dateFormat).toString(),
+                        (new Integer(elem.getTemperature())).toString(),
+                        (new Integer(elem.getHumidity())).toString(),
+                        (new Double(elem.getPrecipitation())).toString(),
+                        (new Double(elem.getWindSpeed())).toString()));
+
+        holder.shortDescription.setText(elem.getDescription());
 
         holder.SetTags();
     }

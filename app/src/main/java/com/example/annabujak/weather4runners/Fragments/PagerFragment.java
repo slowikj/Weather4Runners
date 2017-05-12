@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.Fragments.PropositionFragment.PropositionsFragment;
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.AbstractPropositionsFragment;
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 
@@ -28,34 +30,50 @@ public class PagerFragment extends Fragment
     implements DailyPropositionsChangedListener,
         WeeklyPropositionsChangedListener {
 
-    private View fullView;
+    private static final String TAG_DAILY_PROPOSITIONS_FRAGMENT = "daily_propositions_frag";
+
+    private static final String TAG_WEEKLY_PROPOSITIONS_FRAGMENT = "weekly_propositions_frag";
+
+    private static final String TAG_STATS_FRAGMENT = "stats_frag";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
 
-    private PropositionsFragment dailyPropositions;
+    private AbstractPropositionsFragment dailyPropositions;
 
-    private PropositionsFragment weeklyPropositions;
+    private AbstractPropositionsFragment weeklyPropositions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: attach activity interface
-
+        FragmentManager fragmentManager = getChildFragmentManager();
+        if(savedInstanceState == null) {
+            instantiatePagerFragments(fragmentManager);
+        } else {
+            fetchPagerFragments(savedInstanceState, fragmentManager);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(this.fullView == null) {
-            this.fullView = createFullView(inflater, container);
-            setChildViews(this.fullView);
-            createPagerFragments();
-        }
+        return inflater.inflate(R.layout.pager_fragment_layout, container, false);
+    }
 
-        return this.fullView;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setChildViews(view);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        savePagerFragments(outState);
     }
 
     @Override
@@ -68,10 +86,6 @@ public class PagerFragment extends Fragment
         this.weeklyPropositions.setPropositions(propositions);
     }
 
-    private View createFullView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.pager_fragment_layout, container, false);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void setChildViews(View parentView) {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
@@ -80,10 +94,37 @@ public class PagerFragment extends Fragment
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-    private void createPagerFragments() {
-        this.dailyPropositions = PropositionsFragment.getDailyPropositionsFragment();
-        this.weeklyPropositions = PropositionsFragment.getWeeklyPropositionsFragment();
-        //TODO: add the third one, related to statistics
+    private void instantiatePagerFragments(FragmentManager fragmentManager) {
+        this.dailyPropositions = new DailyPropositionsFragment();
+        this.weeklyPropositions = new WeeklyPropositionsFragment();
+        // TODO: add the statistics fragment
+    }
+
+    private void fetchPagerFragments(Bundle savedInstanceState,
+                                     FragmentManager fragmentManager) {
+        this.dailyPropositions = (AbstractPropositionsFragment) fragmentManager
+                .getFragment(savedInstanceState, TAG_DAILY_PROPOSITIONS_FRAGMENT);
+
+        this.weeklyPropositions = (AbstractPropositionsFragment) fragmentManager
+                .getFragment(savedInstanceState, TAG_WEEKLY_PROPOSITIONS_FRAGMENT);
+
+        // TODO: add the statistics fragment
+    }
+
+    private void savePagerFragments(Bundle outState) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        saveFragment(outState, fragmentManager, this.dailyPropositions, TAG_DAILY_PROPOSITIONS_FRAGMENT);
+        saveFragment(outState, fragmentManager, this.weeklyPropositions, TAG_WEEKLY_PROPOSITIONS_FRAGMENT);
+        // TODO: add statistics fragment here
+    }
+
+    private void saveFragment(Bundle outState,
+                              FragmentManager fragmentManager,
+                              Fragment fragment,
+                              String fragmentKey) {
+        fragmentManager.putFragment(outState,
+                fragmentKey,
+                fragment);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -99,7 +140,7 @@ public class PagerFragment extends Fragment
             switch(position) {
                 case 0: return dailyPropositions;
                 case 1: return weeklyPropositions;
-                case 2: return new android.support.v4.app.Fragment(); // TODO: add statistics
+                case 2: return new Fragment(); // TODO: change to stats
                 default: return null;
             }
         }

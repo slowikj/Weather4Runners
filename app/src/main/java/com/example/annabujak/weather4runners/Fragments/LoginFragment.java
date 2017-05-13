@@ -1,10 +1,13 @@
-package com.example.annabujak.weather4runners.Facebook;
+package com.example.annabujak.weather4runners.Fragments;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
@@ -20,41 +23,41 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class FacebookLoginActivity extends AppCompatActivity {
+
+public class LoginFragment extends Fragment {
+
     private TextView passOver;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-    DBWeather4Runners database;
+
+    private View fullView;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
-        setContentView(R.layout.facebook_activity);
-        database = new DBWeather4Runners(this);
-
-        passOver = (TextView) findViewById(R.id.info);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-
-        if(profilExists())
-            startMainActivity();
-        registerLogin();
     }
-    private boolean profilExists(){
-        Profile profile = Profile.getCurrentProfile();
-        if (profile != null)
-            return true;
-        return false;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(this.fullView == null) {
+            this.fullView = createFullView(inflater, container);
+
+            passOver = (TextView) this.fullView.findViewById(R.id.info);
+            loginButton = (LoginButton) this.fullView.findViewById(R.id.login_button);
+        }
+
+        return this.fullView;
+    }
+    private View createFullView(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.facebook_activity, container, false);
     }
     private void startMainActivity(){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
-    }
-    private void addUserData(Profile profile){
-        database.addUser(new User(profile.getFirstName(),profile.getLastName()));
-        database.close();
     }
     private void registerLogin(){
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -66,8 +69,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
                         @Override
                         protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
                             mProfileTracker.stopTracking();
-                            database.clearUser();
-                            addUserData(profile2);
+                          //  addUserData(profile2);
                             startMainActivity();
                         }
                     };
@@ -92,7 +94,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 

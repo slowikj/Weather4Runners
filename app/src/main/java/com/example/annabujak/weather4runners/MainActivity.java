@@ -16,18 +16,25 @@ import com.example.annabujak.weather4runners.CentralControl.CentralControl;
 import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.CentralControl.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
+import com.example.annabujak.weather4runners.Fragments.LoginFragment;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
+import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 
 import java.util.ArrayList;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
             WeeklyPropositionsChangedListener,
-            UpdatingFinishedListener {
+            UpdatingFinishedListener,
+            ILoginFacebook{
 
     private static final String TAG_PAGER_FRAGMENT = "pager_fragment_tag";
 
@@ -36,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     private CentralControl centralControl;
 
     private PagerFragment pagerFragment;
+
+    private LoginFragment loginFragment;
 
     // TODO add PreferencesFragment here
 
@@ -48,19 +57,18 @@ public class MainActivity extends AppCompatActivity
         restorePreviousStateOrInstantiate(savedInstanceState);
 
         this.centralControl = getCentralControl();
-        this.centralControl.updatePropositions();
+        //this.centralControl.updatePropositions();
     }
 
     private void restorePreviousStateOrInstantiate(Bundle savedInstanceState) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if(savedInstanceState == null) {
             createFragments(fragmentManager);
-            setFragment(this.pagerFragment, false); // TODO: later, change to fb fragment
+            setFragment(loginFragment,false);
         } else {
             fetchFragments(fragmentManager, savedInstanceState);
         }
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -114,7 +122,19 @@ public class MainActivity extends AppCompatActivity
 
     private void createFragments(FragmentManager fragmentManager) {
         // TODO: add the other fragments here
+        FacebookSdk.sdkInitialize(this);
         this.pagerFragment = new PagerFragment();
+        loginFragment = new LoginFragment();
+    }
+    @Override
+    public void StartPagerFragment(){
+        setFragment(this.pagerFragment, false);
+    }
+
+    @Override
+    public void AddUser(String firstName, String secondName) {
+        User user = new User(firstName,secondName);
+        centralControl.updateUser(user);
     }
 
     private void fetchFragments(FragmentManager fragmentManager,
@@ -126,6 +146,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void saveFragmentInstances(Bundle outState) {
+        if(getFragmentManager().findFragmentById(R.id.main_fragment) == null)
+            return;
         FragmentManager fragmentManager = getSupportFragmentManager();
         saveFragment(outState, fragmentManager, this.pagerFragment, TAG_PAGER_FRAGMENT);
         // TODO: add the other fragments here

@@ -6,6 +6,7 @@ import android.support.v4.util.Pair;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
 import com.example.annabujak.weather4runners.Weather.Filter.WeatherFilter;
@@ -74,6 +75,9 @@ public class CentralControl {
         recomputePropositions(this.databaseManager.GetWeatherData());
     }
 
+    public void updateUser(User user){
+        databaseManager.UpdateUserDatas(user);
+    }
     private void recomputePropositions(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(
                 AsyncTask.THREAD_POOL_EXECUTOR,

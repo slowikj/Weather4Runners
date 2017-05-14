@@ -78,7 +78,8 @@ public class PagerFragment extends Fragment
 
     @Override
     public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        this.dailyPropositions.setPropositions(propositions);
+        if(this.dailyPropositions != null)//Musiałam dodać, bo coś się wywalało!
+            this.dailyPropositions.setPropositions(propositions);
     }
 
     @Override

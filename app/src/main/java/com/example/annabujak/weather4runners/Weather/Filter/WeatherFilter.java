@@ -1,6 +1,7 @@
 package com.example.annabujak.weather4runners.Weather.Filter;
 
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class WeatherFilter {
     private Double MilisecondsToDays = 1.0/100000000.0;
     private WeatherAlgorithm Algorithm;
 
-    public WeatherFilter(int _WeatherPropositions){
-        Algorithm = new WeatherAlgorithm(_WeatherPropositions);
+    public WeatherFilter(int _WeatherPropositions, PreferenceBalance _Balance){
+        Algorithm = new WeatherAlgorithm(_WeatherPropositions, _Balance);
     }
 
     public ArrayList<WeatherInfo> GetDailyWeather(List<WeatherInfo> weather, Preference preference){

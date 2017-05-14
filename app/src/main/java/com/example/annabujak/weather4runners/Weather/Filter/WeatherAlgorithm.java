@@ -1,6 +1,7 @@
 package com.example.annabujak.weather4runners.Weather.Filter;
 
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ public class WeatherAlgorithm {
 
 
     private Integer PropositionsCount;
+    private PreferenceBalance Balance;
     private Preference Preference;
     private final Integer DaysInWeek = 7;
 
-    public WeatherAlgorithm(Integer _PropositionsCount){
+    public WeatherAlgorithm(Integer _PropositionsCount, PreferenceBalance _Balance){
         PropositionsCount = _PropositionsCount;
+        Balance = _Balance;
     }
 
     public ArrayList<WeatherInfo> FindBestDailyWeather(ArrayList<WeatherInfo> weatherInfos, Preference preference){
@@ -81,11 +84,11 @@ public class WeatherAlgorithm {
         Double CloudinessImportance = 0.1;
 
 
-        result += GetTemperatureValue(w);
-        result += GetCloudinessValue(w)* CloudinessImportance;
-        result += GetHumidityValue(w);
-        result += GetWindSpeedValue(w);
-        result += GetPrecipitationValue(w);
+        result += GetTemperatureValue(w) * Balance.GetTemperatureImportance();
+        result += GetCloudinessValue(w) * Balance.GetCloudinessImportance(); //* CloudinessImportance;
+        result += GetHumidityValue(w) * Balance.GetHumidityImportance();
+        result += GetWindSpeedValue(w) * Balance.GetWindSpeedImportance();
+        result += GetPrecipitationValue(w) * Balance.GetPrecipitationImportance();
 
         return result;
     }

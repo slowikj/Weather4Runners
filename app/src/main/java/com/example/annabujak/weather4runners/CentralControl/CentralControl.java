@@ -6,6 +6,7 @@ import android.support.v4.util.Pair;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
@@ -48,7 +49,9 @@ public class CentralControl {
         this.weatherForecastManager = new WeatherForecastManager(
                 getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
-        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS);
+        //TODO
+        PreferenceBalance Balance = new PreferenceBalance(1,0.1,1,1,1);
+        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, Balance);
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {

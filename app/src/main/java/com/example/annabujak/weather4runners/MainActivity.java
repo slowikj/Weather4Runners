@@ -1,5 +1,6 @@
 package com.example.annabujak.weather4runners;
 
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,18 +18,16 @@ import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsCha
 import com.example.annabujak.weather4runners.CentralControl.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
+import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
+import com.example.annabujak.weather4runners.Fragments.PreferenceFragment;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 
 import java.util.ArrayList;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 
 public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
@@ -46,7 +45,9 @@ public class MainActivity extends AppCompatActivity
 
     private LoginFragment loginFragment;
 
-    // TODO add PreferencesFragment here
+    private PreferenceFragment preferenceFragment;
+
+    private ChartFragment chartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity
                 refreshAll();
                 return true;
             case R.id.action_settings:
-                // TODO: show settings/preferences
+                setFragment(preferenceFragment,true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -121,10 +122,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createFragments(FragmentManager fragmentManager) {
-        // TODO: add the other fragments here
+
         FacebookSdk.sdkInitialize(this);
         this.pagerFragment = new PagerFragment();
         loginFragment = new LoginFragment();
+        preferenceFragment = new PreferenceFragment();
+        chartFragment = new ChartFragment();
     }
     @Override
     public void StartPagerFragment(){
@@ -191,5 +194,16 @@ public class MainActivity extends AppCompatActivity
         }
         fragmentTransaction.replace(R.id.main_fragment, fragment);
         fragmentTransaction.commit();
+    }
+    //Overload for Preference Fragment
+    private void setFragment(android.preference.PreferenceFragment fragment, boolean addToBackStack) {
+        android.app.FragmentManager mFragmentManager = getFragmentManager();
+        FragmentTransaction mFragmentTransaction = mFragmentManager
+                .beginTransaction();
+        if (addToBackStack) {
+            mFragmentTransaction.addToBackStack(null);
+        }
+        mFragmentTransaction.replace(android.R.id.content, fragment);
+        mFragmentTransaction.commit();
     }
 }

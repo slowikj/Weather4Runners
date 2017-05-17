@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.annabujak.weather4runners.Enum.Cloudiness;
+import com.example.annabujak.weather4runners.MainActivity;
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference;
 
@@ -31,6 +34,8 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
     private String SEEK_S;
     private String SEEK_E;
 
+
+    SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,35 +92,51 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
     }
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        //TODO metody do prawidłowego przekształcania 0-100 na wartości preferencji
 
+        preferences = prefs;
         if (SEEK_T.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekTemperature.setSummary(i+" ");
+            seekTemperature.setSummary(RenderPreference.getTemperature(i)+" ");
         } else if (SEEK_H.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekHumidity.setSummary(i+" ");
+            seekHumidity.setSummary(RenderPreference.getHumidity(i)+" ");
         }
         else if (SEEK_P.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekPrecipitation.setSummary(i+" ");
+            seekPrecipitation.setSummary(RenderPreference.getPrecipitation(i)+" ");
         }
         else if (SEEK_W.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekWindSpeed.setSummary(i+" ");
+            seekWindSpeed.setSummary(RenderPreference.getWindSpeed(i)+" ");
         }
         else if (SEEK_C.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekCloudiness.setSummary(i+" ");
+            seekCloudiness.setSummary(RenderPreference.getCloudiness(i)+" ");
         }
         else if (SEEK_S.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekStartHour.setSummary(i+" ");
+            seekStartHour.setSummary(RenderPreference.getStartHour(i)+" ");
         }
         else if (SEEK_E.equals(key)) {
             int i = prefs.getInt(key, 0);
-            seekEndHour.setSummary(i+" ");
+            seekEndHour.setSummary(RenderPreference.getEndHours(i)+" ");
         }
 
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+
+        Preference preference = new Preference(
+                RenderPreference.getTemperature(preferences.getInt(SEEK_T,0)),
+                Cloudiness.fromId( RenderPreference.getCloudiness(preferences.getInt(SEEK_C,0))),
+                RenderPreference.getStartHour(preferences.getInt(SEEK_S,0)),
+                RenderPreference.getEndHours(preferences.getInt(SEEK_E,0)),
+                RenderPreference.getHumidity(preferences.getInt(SEEK_H,0)),
+                (double)RenderPreference.getPrecipitation(preferences.getInt(SEEK_P,0)),
+                (double)RenderPreference.getWindSpeed(preferences.getInt(SEEK_W,0)));
+
+        ((MainActivity)getActivity()).UpdatePreference(preference);
     }
 }

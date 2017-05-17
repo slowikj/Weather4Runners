@@ -21,7 +21,9 @@ import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
+import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.IWeatherPreferenceFragment;
 import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.WeatherPreferenceFragment;
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
             WeeklyPropositionsChangedListener,
             UpdatingFinishedListener,
-            ILoginFacebook{
+            ILoginFacebook,
+            IWeatherPreferenceFragment{
 
     private static final String TAG_PAGER_FRAGMENT = "pager_fragment_tag";
 
@@ -205,5 +208,11 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
+    }
+
+    @Override
+    public void UpdatePreference(Preference preference) {
+        centralControl.updatePreference(preference);
+        centralControl.updatePropositions();
     }
 }

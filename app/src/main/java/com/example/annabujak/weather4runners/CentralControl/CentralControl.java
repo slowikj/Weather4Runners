@@ -81,6 +81,8 @@ public class CentralControl {
     public void updateUser(User user){
         databaseManager.UpdateUserDatas(user);
     }
+    public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
+
     private void recomputePropositions(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(
                 AsyncTask.THREAD_POOL_EXECUTOR,
@@ -127,7 +129,7 @@ public class CentralControl {
         protected Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>> doInBackground(ArrayList<WeatherInfo>... params) {
             ArrayList<WeatherInfo> weatherForecast = params[0];
 
-            Preference preference = new Preference();
+            Preference preference = databaseManager.GetPreference();
             databaseManager.UpdatePreferences(preference);
 
             ArrayList<WeatherInfo> dailyPropositions = weatherFilter

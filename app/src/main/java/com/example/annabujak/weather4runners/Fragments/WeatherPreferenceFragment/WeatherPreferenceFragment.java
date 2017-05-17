@@ -1,22 +1,19 @@
-package com.example.annabujak.weather4runners.Fragments;
+package com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
 
 /**
  * Created by pawel.bujak on 15.05.2017.
  */
 
-public class PreferenceFragment extends android.preference.PreferenceFragment  implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class WeatherPreferenceFragment extends android.preference.PreferenceFragment  implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SeekBarPreference seekTemperature;
     private SeekBarPreference seekHumidity;

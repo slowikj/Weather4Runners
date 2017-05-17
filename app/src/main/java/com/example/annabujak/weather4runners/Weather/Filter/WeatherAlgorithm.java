@@ -81,7 +81,6 @@ public class WeatherAlgorithm {
     }
     private Double CountWeatherPreference(WeatherInfo w){
         Double result = 0.0;
-        Double CloudinessImportance = 0.1;
 
 
         result += GetTemperatureValue(w) * Balance.GetTemperatureImportance();

@@ -21,7 +21,7 @@ import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
-import com.example.annabujak.weather4runners.Fragments.PreferenceFragment;
+import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.WeatherPreferenceFragment;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
 
     private LoginFragment loginFragment;
 
-    private PreferenceFragment preferenceFragment;
+    private WeatherPreferenceFragment weatherPreferenceFragment;
 
     private ChartFragment chartFragment;
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
                 refreshAll();
                 return true;
             case R.id.action_settings:
-                setFragment(preferenceFragment,true);
+                setFragment(weatherPreferenceFragment,true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
         FacebookSdk.sdkInitialize(this);
         this.pagerFragment = new PagerFragment();
         loginFragment = new LoginFragment();
-        preferenceFragment = new PreferenceFragment();
+        weatherPreferenceFragment = new WeatherPreferenceFragment();
         chartFragment = new ChartFragment();
     }
     @Override

@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.menu_propositions_number:
+                // TODO: a dialog with one TextBox to change the number
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

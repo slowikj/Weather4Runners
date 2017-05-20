@@ -87,7 +87,9 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
 
             holder.getCheckbox().setChecked(!holder.getCheckbox().isChecked());
 
-            Toast.makeText(getContext(), "you clicked", Toast.LENGTH_SHORT).show();
+            Integer pos = recyclerView.getChildAdapterPosition(view);
+
+            Toast.makeText(getContext(), "you clicked " + pos.toString(), Toast.LENGTH_SHORT).show();
         }
 
         @Override

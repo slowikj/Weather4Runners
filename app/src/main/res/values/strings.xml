@@ -17,4 +17,6 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+    <string name="menu_change_propositions_number_title" > Change the number of propositions</string>
 </resources>

@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
         this.mDrawerLayout = getDrawerLayout(toolbar);
 
         this.mNavigationView = (NavigationView) findViewById(R.id.nav_view);

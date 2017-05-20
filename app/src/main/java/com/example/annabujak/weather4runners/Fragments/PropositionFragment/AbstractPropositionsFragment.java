@@ -11,14 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.annabujak.weather4runners.CustomRecyclerViewOnTouchListener;
+import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
-import com.example.annabujak.weather4runners.RecyclerViewItemClickListener;
+import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 25.04.2017.
@@ -83,6 +81,12 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
 
         @Override
         public void onClick(View view, int position) {
+            PropositionsListAdapter.PropositionsListViewHolder holder =
+                    (PropositionsListAdapter.PropositionsListViewHolder)recyclerView
+                        .findViewHolderForAdapterPosition(position);
+
+            holder.getCheckbox().setChecked(!holder.getCheckbox().isChecked());
+
             Toast.makeText(getContext(), "you clicked", Toast.LENGTH_SHORT).show();
         }
 

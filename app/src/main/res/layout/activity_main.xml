@@ -35,19 +35,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/pb_loading_indicator"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_centerInParent="true"
-                android:visibility="invisible"
-                />
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/main_fragment"/>
+                android:id="@+id/main_fragment"
+                />
+
+            <ProgressBar
+                android:id="@+id/pb_loading_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"
+                android:foregroundTint="@color/colorAccent"
+                />
         </RelativeLayout>
     </LinearLayout>
 

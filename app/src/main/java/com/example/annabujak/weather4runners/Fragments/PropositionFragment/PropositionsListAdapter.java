@@ -40,7 +40,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     @Override
     public void onBindViewHolder(PropositionsListViewHolder holder, int position) {
         WeatherInfo elem = propositionsList.get(position);
-        holder.getmCheckbox().setChecked(elem.getIsChecked());
+        holder.getCheckbox().setChecked(elem.getIsChecked());
 
         holder.getName().setText(
                 String.format("%s; %s C, %s; %s mm; %s km/h",
@@ -81,7 +81,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
             this.shortDescription = (TextView)itemView.findViewById(R.id.item_short_description);
         }
 
-        public CheckBox getmCheckbox() {
+        public CheckBox getCheckbox() {
             return mCheckbox;
         }
 

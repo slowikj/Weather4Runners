@@ -18,7 +18,6 @@ import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsCha
 import com.example.annabujak.weather4runners.CentralControl.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
-import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
 import com.example.annabujak.weather4runners.Fragments.PagerFragment;
 import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.IWeatherPreferenceFragment;
@@ -29,28 +28,27 @@ import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
             WeeklyPropositionsChangedListener,
+            DailyWeatherPropositionsNotifier,
+            WeeklyWeatherPropositionsNotifier,
             UpdatingFinishedListener,
             ILoginFacebook,
             IWeatherPreferenceFragment{
-
-    private static final String TAG_PAGER_FRAGMENT = "pager_fragment_tag";
 
     private ProgressBar mLoadingIndicator;
 
     private CentralControl centralControl;
 
-    private PagerFragment pagerFragment;
+    private LinkedList<DailyPropositionsChangedListener> dailyPropositionsChangedListeners;
 
-    private LoginFragment loginFragment;
+    private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
 
-    private WeatherPreferenceFragment weatherPreferenceFragment;
-
-    private ChartFragment chartFragment;
+    private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,26 +56,19 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         setViewReferences();
-        restorePreviousStateOrInstantiate(savedInstanceState);
+        restorePreviousStateIfAny(savedInstanceState);
+
+        initListenersLists();
+        initEmptyPropositionsList();
 
         this.centralControl = getCentralControl();
-        //this.centralControl.updatePropositions();
     }
 
-    private void restorePreviousStateOrInstantiate(Bundle savedInstanceState) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if(savedInstanceState == null) {
-            createFragments(fragmentManager);
-            setFragment(loginFragment,false);
-        } else {
-            fetchFragments(fragmentManager, savedInstanceState);
-        }
-    }
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void onResume() {
+        super.onResume();
 
-        saveFragmentInstances(outState);
+        this.centralControl.updatePropositionsAsync();
     }
 
     @Override
@@ -102,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                 refreshAll();
                 return true;
             case R.id.action_settings:
-                setFragment(weatherPreferenceFragment,true);
+                setFragment(new WeatherPreferenceFragment(), true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -110,13 +101,47 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void UpdatePreference(Preference preference) {
+        centralControl.updatePreference(preference);
+        centralControl.updatePropositionsAsync();
+    }
+
+    @Override
+    public void subscribeForDailyWeatherPropositionsChanged(DailyPropositionsChangedListener listener) {
+        this.dailyPropositionsChangedListeners.add(listener);
+        listener.onDailyPropositionsChanged(this.dailyPropositions);
+    }
+
+    @Override
+    public void unsubscribeForDailyWeatherPropositionsChanged(DailyPropositionsChangedListener listener) {
+        this.dailyPropositionsChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void subscribeForWeeklyWeatherPropositionsChanged(WeeklyPropositionsChangedListener listener) {
+        this.weeklyPropositionsChangedListeners.add(listener);
+        listener.onWeeklyPropositionsChanged(this.weeklyPropositions);
+    }
+
+    @Override
+    public void unsubscribeForWeeklyWeatherPropositionsChanged(WeeklyPropositionsChangedListener listener) {
+        this.weeklyPropositionsChangedListeners.remove(listener);
+    }
+
+    @Override
     public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        this.pagerFragment.onDailyPropositionsChanged(propositions);
+        this.dailyPropositions = propositions;
+        for(DailyPropositionsChangedListener listener: this.dailyPropositionsChangedListeners) {
+            listener.onDailyPropositionsChanged(propositions);
+        }
     }
 
     @Override
     public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        this.pagerFragment.onWeeklyPropositionsChanged(propositions);
+        this.weeklyPropositions = propositions;
+        for(WeeklyPropositionsChangedListener listener: this.weeklyPropositionsChangedListeners) {
+            listener.onWeeklyPropositionsChanged(propositions);
+        }
     }
 
     @Override
@@ -124,17 +149,9 @@ public class MainActivity extends AppCompatActivity
         this.mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
-    private void createFragments(FragmentManager fragmentManager) {
-
-        FacebookSdk.sdkInitialize(this);
-        this.pagerFragment = new PagerFragment();
-        loginFragment = new LoginFragment();
-        weatherPreferenceFragment = new WeatherPreferenceFragment();
-        chartFragment = new ChartFragment();
-    }
     @Override
     public void StartPagerFragment(){
-        setFragment(this.pagerFragment, false);
+        setFragment(new PagerFragment(), false);
     }
 
     @Override
@@ -143,34 +160,26 @@ public class MainActivity extends AppCompatActivity
         centralControl.updateUser(user);
     }
 
-    private void fetchFragments(FragmentManager fragmentManager,
-                                Bundle savedInstanceState) {
-        // TODO: add the other fragments here
-        this.pagerFragment = (PagerFragment) fragmentManager.getFragment(
-                savedInstanceState,
-                TAG_PAGER_FRAGMENT);
+    private void initListenersLists() {
+        this.dailyPropositionsChangedListeners = new LinkedList<>();
+        this.weeklyPropositionsChangedListeners = new LinkedList<>();
     }
 
-    private void saveFragmentInstances(Bundle outState) {
-        if(getFragmentManager().findFragmentById(R.id.main_fragment) == null)
-            return;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        saveFragment(outState, fragmentManager, this.pagerFragment, TAG_PAGER_FRAGMENT);
-        // TODO: add the other fragments here
+    private void initEmptyPropositionsList() {
+        this.dailyPropositions = new ArrayList<>();
+        this.weeklyPropositions = new ArrayList<>();
     }
 
-    private void saveFragment(Bundle outState,
-                              FragmentManager fragmentManager,
-                              Fragment fragment,
-                              String fragmentTag) {
-        fragmentManager.putFragment(outState,
-                fragmentTag,
-                fragment);
+    private void restorePreviousStateIfAny(Bundle savedInstanceState) {
+        if(savedInstanceState == null) {
+            FacebookSdk.sdkInitialize(this);
+            setFragment(new LoginFragment() ,false);
+        }
     }
 
     private void refreshAll() {
         this.mLoadingIndicator.setVisibility(View.VISIBLE);
-        this.centralControl.updateWeatherForecast();
+        this.centralControl.updateWeatherForecastAsync();
     }
 
     private void setViewReferences() {
@@ -208,11 +217,5 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
-    }
-
-    @Override
-    public void UpdatePreference(Preference preference) {
-        centralControl.updatePreference(preference);
-        centralControl.updatePropositions();
     }
 }

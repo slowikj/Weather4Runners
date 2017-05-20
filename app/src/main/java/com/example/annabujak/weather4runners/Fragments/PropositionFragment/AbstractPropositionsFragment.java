@@ -24,11 +24,11 @@ import java.util.ArrayList;
 
 public class AbstractPropositionsFragment extends android.support.v4.app.Fragment {
 
-    private RecyclerView recyclerView;
-
-    private PropositionsListAdapter propositionsListAdapter;
+    protected PropositionsListAdapter propositionsListAdapter;
 
     protected SimpleDateFormat itemsListDateFormat;
+
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +46,6 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setChildViews(view, this.propositionsListAdapter);
-    }
-
-    public void setPropositions(ArrayList<WeatherInfo> propositions) {
-        this.propositionsListAdapter.setPropositionsList(propositions);
     }
 
     @NonNull

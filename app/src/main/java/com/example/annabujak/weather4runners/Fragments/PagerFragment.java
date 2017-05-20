@@ -1,5 +1,7 @@
 package com.example.annabujak.weather4runners.Fragments;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,46 +16,47 @@ import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.AbstractPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
+import com.example.annabujak.weather4runners.WeeklyWeatherPropositionsNotifier;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by slowik on 07.05.2017.
  */
 
 public class PagerFragment extends Fragment
-    implements DailyPropositionsChangedListener,
+    implements DailyWeatherPropositionsNotifier,
+        WeeklyWeatherPropositionsNotifier,
+        DailyPropositionsChangedListener,
         WeeklyPropositionsChangedListener {
-
-    private static final String TAG_DAILY_PROPOSITIONS_FRAGMENT = "daily_propositions_frag";
-
-    private static final String TAG_WEEKLY_PROPOSITIONS_FRAGMENT = "weekly_propositions_frag";
-
-    private static final String TAG_STATS_FRAGMENT = "stats_frag";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
 
-    private AbstractPropositionsFragment dailyPropositions;
+    private DailyWeatherPropositionsNotifier dailyWeatherPropositionsNotifier;
 
-    private AbstractPropositionsFragment weeklyPropositions;
+    private WeeklyWeatherPropositionsNotifier weeklyWeatherPropositionsNotifier;
+
+    private LinkedList<DailyPropositionsChangedListener> dailyPropositionsChangedListeners;
+
+    private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
+
+    private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentManager fragmentManager = getChildFragmentManager();
-        if(savedInstanceState == null) {
-            instantiatePagerFragments(fragmentManager);
-        } else {
-            fetchPagerFragments(savedInstanceState, fragmentManager);
-        }
+        initListenersLists();
+        initEmptyPropositionsLists();
     }
 
     @Nullable
@@ -70,21 +73,77 @@ public class PagerFragment extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        savePagerFragments(outState);
+        attachDailyWeatherPropositionsNotifier(context);
+        attachWeeklyWeatherPropositionsNotifier(context);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        this.dailyWeatherPropositionsNotifier
+                .subscribeForDailyWeatherPropositionsChanged(this);
+
+        this.weeklyWeatherPropositionsNotifier
+                .subscribeForWeeklyWeatherPropositionsChanged(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        this.dailyWeatherPropositionsNotifier
+                .unsubscribeForDailyWeatherPropositionsChanged(this);
+
+        this.weeklyWeatherPropositionsNotifier
+                .unsubscribeForWeeklyWeatherPropositionsChanged(this);
+    }
+
+    @Override
+    public void subscribeForDailyWeatherPropositionsChanged(DailyPropositionsChangedListener listener) {
+        this.dailyPropositionsChangedListeners.add(listener);
+        listener.onDailyPropositionsChanged(this.dailyPropositions);
+    }
+
+    @Override
+    public void unsubscribeForDailyWeatherPropositionsChanged(DailyPropositionsChangedListener listener) {
+        this.dailyPropositionsChangedListeners.remove(listener);
+    }
+
+    @Override
+    public void subscribeForWeeklyWeatherPropositionsChanged(WeeklyPropositionsChangedListener listener) {
+        this.weeklyPropositionsChangedListeners.add(listener);
+        listener.onWeeklyPropositionsChanged(this.weeklyPropositions);
+    }
+
+    @Override
+    public void unsubscribeForWeeklyWeatherPropositionsChanged(WeeklyPropositionsChangedListener listener) {
+        this.weeklyPropositionsChangedListeners.remove(listener);
     }
 
     @Override
     public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        if(this.dailyPropositions != null)//Musiałam dodać, bo coś się wywalało!
-            this.dailyPropositions.setPropositions(propositions);
+        this.dailyPropositions = propositions;
+        notifyDailyPropositionsChanged();
     }
 
     @Override
     public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        this.weeklyPropositions.setPropositions(propositions);
+        this.weeklyPropositions = propositions;
+        notifyWeeklyPropositionsChanged();
+    }
+
+    private void initListenersLists() {
+        dailyPropositionsChangedListeners = new LinkedList<>();
+        weeklyPropositionsChangedListeners = new LinkedList<>();
+    }
+
+    private void initEmptyPropositionsLists() {
+        this.dailyPropositions = new ArrayList<>();
+        this.weeklyPropositions = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -95,37 +154,34 @@ public class PagerFragment extends Fragment
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-    private void instantiatePagerFragments(FragmentManager fragmentManager) {
-        this.dailyPropositions = new DailyPropositionsFragment();
-        this.weeklyPropositions = new WeeklyPropositionsFragment();
-        // TODO: add the statistics fragment
+    private void attachWeeklyWeatherPropositionsNotifier(Context context) {
+        try {
+            this.weeklyWeatherPropositionsNotifier = (WeeklyWeatherPropositionsNotifier)context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(
+                    "PagerFragment has to implement WeeklyWeatherPropositionsNotifier interface");
+        }
     }
 
-    private void fetchPagerFragments(Bundle savedInstanceState,
-                                     FragmentManager fragmentManager) {
-        this.dailyPropositions = (AbstractPropositionsFragment) fragmentManager
-                .getFragment(savedInstanceState, TAG_DAILY_PROPOSITIONS_FRAGMENT);
-
-        this.weeklyPropositions = (AbstractPropositionsFragment) fragmentManager
-                .getFragment(savedInstanceState, TAG_WEEKLY_PROPOSITIONS_FRAGMENT);
-
-        // TODO: add the statistics fragment
+    private void attachDailyWeatherPropositionsNotifier(Context context) {
+        try {
+            this.dailyWeatherPropositionsNotifier = (DailyWeatherPropositionsNotifier) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(
+                    "PagerFragment has to implement DailyWeatherPropositionsNotifier interface");
+        }
     }
 
-    private void savePagerFragments(Bundle outState) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        saveFragment(outState, fragmentManager, this.dailyPropositions, TAG_DAILY_PROPOSITIONS_FRAGMENT);
-        saveFragment(outState, fragmentManager, this.weeklyPropositions, TAG_WEEKLY_PROPOSITIONS_FRAGMENT);
-        // TODO: add statistics fragment here
+    private void notifyDailyPropositionsChanged() {
+        for(DailyPropositionsChangedListener listener: this.dailyPropositionsChangedListeners) {
+            listener.onDailyPropositionsChanged(this.dailyPropositions);
+        }
     }
 
-    private void saveFragment(Bundle outState,
-                              FragmentManager fragmentManager,
-                              Fragment fragment,
-                              String fragmentKey) {
-        fragmentManager.putFragment(outState,
-                fragmentKey,
-                fragment);
+    private void notifyWeeklyPropositionsChanged() {
+        for(WeeklyPropositionsChangedListener listener: this.weeklyPropositionsChangedListeners) {
+            listener.onWeeklyPropositionsChanged(this.weeklyPropositions);
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -139,9 +195,9 @@ public class PagerFragment extends Fragment
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             switch(position) {
-                case 0: return dailyPropositions;
-                case 1: return weeklyPropositions;
-                case 2: return new Fragment(); // TODO: change to stats
+                case 0: return new DailyPropositionsFragment();
+                case 1: return new WeeklyPropositionsFragment();
+                case 2: return new ChartFragment();
                 default: return null;
             }
         }
@@ -151,7 +207,6 @@ public class PagerFragment extends Fragment
             return ALL_PAGES_COUNT;
         }
 
-        // TODO: extract string consts
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {

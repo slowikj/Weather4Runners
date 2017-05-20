@@ -70,12 +70,12 @@ public class CentralControl {
         this.weatherForecastManager.setLocation(cityName);
     }
 
-    public void updateWeatherForecast() {
+    public void updateWeatherForecastAsync() {
         (new WeatherForecastUpdaterTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void updatePropositions() {
-        recomputePropositions(this.databaseManager.GetWeatherData());
+    public void updatePropositionsAsync() {
+        recomputePropositionsAsync(this.databaseManager.GetWeatherData());
     }
 
     public void updateUser(User user){
@@ -83,7 +83,7 @@ public class CentralControl {
     }
     public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
 
-    private void recomputePropositions(ArrayList<WeatherInfo> weatherForecast) {
+    private void recomputePropositionsAsync(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(
                 AsyncTask.THREAD_POOL_EXECUTOR,
                 weatherForecast);
@@ -118,7 +118,7 @@ public class CentralControl {
         protected void onPostExecute(ArrayList<WeatherInfo> weatherInfos) {
             super.onPostExecute(weatherInfos);
 
-            recomputePropositions(weatherInfos);
+            recomputePropositionsAsync(weatherInfos);
         }
     }
 

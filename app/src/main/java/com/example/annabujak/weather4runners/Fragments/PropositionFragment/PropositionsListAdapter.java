@@ -39,7 +39,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     @Override
     public PropositionsListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_layout, parent, false);
+                .inflate(R.layout.proposition_item_list_layout, parent, false);
 
         return new PropositionsListViewHolder(view);
     }

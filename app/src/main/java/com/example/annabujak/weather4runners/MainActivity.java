@@ -1,6 +1,8 @@
 package com.example.annabujak.weather4runners;
 
 import android.app.FragmentTransaction;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -40,7 +42,8 @@ public class MainActivity extends AppCompatActivity
             WeeklyWeatherPropositionsNotifier,
             UpdatingFinishedListener,
             ILoginFacebook,
-            IWeatherPreferenceFragment{
+            IWeatherPreferenceFragment,
+            NavigationView.OnNavigationItemSelectedListener {
 
     private ProgressBar mLoadingIndicator;
 
@@ -91,16 +94,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_refresh:
-                refreshAll();
-                return true;
-            case R.id.action_settings:
-                setFragment(new WeatherPreferenceFragment(), true);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+
 
     @Override
     public void UpdatePreference(Preference preference) {

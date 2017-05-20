@@ -1,6 +1,6 @@
-package com.example.annabujak.weather4runners;
+package com.example.annabujak.weather4runners.Notifiers;
 
-import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 
 /**
  * Created by slowik on 20.05.2017.

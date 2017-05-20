@@ -1,6 +1,5 @@
 package com.example.annabujak.weather4runners.Fragments;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,15 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.CentralControl.WeeklyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.DailyWeatherPropositionsNotifier;
-import com.example.annabujak.weather4runners.Fragments.PropositionFragment.AbstractPropositionsFragment;
+import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
-import com.example.annabujak.weather4runners.WeeklyWeatherPropositionsNotifier;
+import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

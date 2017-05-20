@@ -3,10 +3,9 @@ package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.example.annabujak.weather4runners.CentralControl.DailyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.DailyWeatherPropositionsNotifier;
+import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.text.SimpleDateFormat;

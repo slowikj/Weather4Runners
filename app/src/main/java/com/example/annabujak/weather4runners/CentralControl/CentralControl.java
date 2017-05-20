@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.support.v4.util.Pair;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
+import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
+import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;

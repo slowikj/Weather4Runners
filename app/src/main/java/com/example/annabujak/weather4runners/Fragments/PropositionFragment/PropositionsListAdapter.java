@@ -21,18 +21,11 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     private SimpleDateFormat dateFormat;
 
-    private View.OnClickListener onClickListener;
-    private View.OnLongClickListener onLongClickListener;
-
     private ArrayList<WeatherInfo> propositionsList;
 
-    public PropositionsListAdapter(SimpleDateFormat dateFormat,
-                                   View.OnClickListener onClickListener,
-                                   View.OnLongClickListener onLongClickListener) {
+    public PropositionsListAdapter(SimpleDateFormat dateFormat) {
 
         this.dateFormat = dateFormat;
-        this.onClickListener = onClickListener;
-        this.onLongClickListener = onLongClickListener;
         this.propositionsList = new ArrayList<>();
     }
 
@@ -47,9 +40,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     @Override
     public void onBindViewHolder(PropositionsListViewHolder holder, int position) {
         WeatherInfo elem = propositionsList.get(position);
-        holder.mCheckbox.setChecked(elem.getIsChecked());
+        holder.getmCheckbox().setChecked(elem.getIsChecked());
 
-        holder.name.setText(
+        holder.getName().setText(
                 String.format("%s; %s C, %s; %s mm; %s km/h",
                         elem.getFormattedDate(this.dateFormat).toString(),
                         (new Integer(elem.getTemperature())).toString(),
@@ -57,9 +50,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
                         (new Double(elem.getPrecipitation())).toString(),
                         (new Double(elem.getWindSpeed())).toString()));
 
-        holder.shortDescription.setText(elem.getDescription());
-
-        holder.SetTags();
+        holder.getShortDescription().setText(elem.getDescription());
     }
 
     @Override
@@ -74,22 +65,14 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     public class PropositionsListViewHolder extends RecyclerView.ViewHolder {
 
-        public CheckBox mCheckbox;
-        public TextView name;
-        public TextView shortDescription;
+        private CheckBox mCheckbox;
+        private TextView name;
+        private TextView shortDescription;
 
         public PropositionsListViewHolder(View itemView) {
             super(itemView);
 
             setViewReferences(itemView);
-            setListeners();
-        }
-
-        public void SetTags()
-        {
-            this.mCheckbox.setTag(this);
-            this.name.setTag(this);
-            this.shortDescription.setTag(this);
         }
 
         private void setViewReferences(View itemView) {
@@ -98,21 +81,16 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
             this.shortDescription = (TextView)itemView.findViewById(R.id.item_short_description);
         }
 
-        private void setListeners() {
-            setOnClickListeners();
-            setOnLongClickListeners();
+        public CheckBox getmCheckbox() {
+            return mCheckbox;
         }
 
-        private void setOnClickListeners() {
-            this.mCheckbox.setOnClickListener(onClickListener);
-            this.name.setOnClickListener(onClickListener);
-            this.shortDescription.setOnClickListener(onClickListener);
+        public TextView getName() {
+            return name;
         }
 
-        private void setOnLongClickListeners() {
-            this.mCheckbox.setOnLongClickListener(onLongClickListener);
-            this.name.setOnLongClickListener(onLongClickListener);
-            this.shortDescription.setOnLongClickListener(onLongClickListener);
+        public TextView getShortDescription() {
+            return shortDescription;
         }
     }
 }

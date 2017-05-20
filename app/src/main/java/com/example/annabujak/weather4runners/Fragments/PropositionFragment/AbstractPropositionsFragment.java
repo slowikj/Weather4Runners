@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.annabujak.weather4runners.CustomRecyclerViewOnTouchListener;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
+import com.example.annabujak.weather4runners.RecyclerViewItemClickListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,11 +52,7 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
 
     @NonNull
     private PropositionsListAdapter getPropositionsListAdapter(SimpleDateFormat dateFormat) {
-        return new PropositionsListAdapter(
-                dateFormat,
-                new ListItemOnClickListener(),
-                new ListItemOnLongClickListener()
-        );
+        return new PropositionsListAdapter(dateFormat);
     }
 
     private void setChildViews(View view, RecyclerView.Adapter adapter) {
@@ -70,36 +68,27 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        rv.addOnItemTouchListener(
+                new CustomRecyclerViewOnTouchListener(
+                        getContext(),
+                        rv,
+                        new ListItemOnClickListener()));
+
         return rv;
     }
 
     // Listeners
-    private class ListItemOnClickListener implements View.OnClickListener {
+    private class ListItemOnClickListener implements RecyclerViewItemClickListener{
+
 
         @Override
-        public void onClick(View v) {
-            // TODO
-            // OnClick means that we want to go running this time
-            // check checkbox and send info to data base about the user's declaration
-
-            PropositionsListAdapter.PropositionsListViewHolder holder =
-                    (PropositionsListAdapter.PropositionsListViewHolder)v.getTag();
-
-            holder.mCheckbox.setChecked(!holder.mCheckbox.isChecked());
-
-            Toast.makeText(getContext(), "you clicked on item", Toast.LENGTH_SHORT).show();
+        public void onClick(View view, int position) {
+            Toast.makeText(getContext(), "you clicked", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private class ListItemOnLongClickListener implements  View.OnLongClickListener {
 
         @Override
-        public boolean onLongClick(View v) {
-
-            // TODO
-            Toast.makeText(getContext(), "you long clicked on item", Toast.LENGTH_SHORT).show();
-
-            return true;
+        public void onLongClick(View view, int position) {
+            Toast.makeText(getContext(), "you LONG clicked", Toast.LENGTH_SHORT).show();
         }
     }
 }

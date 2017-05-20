@@ -3,16 +3,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.annabujak.weather4runners.MainActivity">
 
-    <item
-        android:id="@+id/action_refresh"
-        android:orderInCategory="1"
-        android:title="@string/action_refresh"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="2"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-
 </menu>

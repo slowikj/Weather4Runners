@@ -3,6 +3,9 @@ package com.example.annabujak.weather4runners;
 import android.app.FragmentTransaction;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -16,6 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
+import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
@@ -46,6 +50,10 @@ public class MainActivity extends AppCompatActivity
             NavigationView.OnNavigationItemSelectedListener {
 
     private ProgressBar mLoadingIndicator;
+
+    private NavigationView mNavigationView;
+
+    private DrawerLayout mDrawerLayout;
 
     private CentralControl centralControl;
 
@@ -78,7 +86,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
@@ -101,10 +111,38 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        boolean returnResult = false;
+        switch(item.getItemId()) {
+            case R.id.nav_propositions:
+                setFragment(new PagerFragment(), true);
+                returnResult = true;
+                break;
+            case R.id.nav_update_forecast:
+                refreshAll();
+                returnResult = true;
+                break;
+            case R.id.nav_locations:
+                // TODO
+                returnResult = true;
+                break;
+            case R.id.nav_preferences:
+                setFragment(new WeatherPreferenceFragment(), true);
+                returnResult = true;
+                break;
+            case R.id.nav_saved_propositions:
+                //TODO
+                returnResult = true;
+                break;
+            case R.id.id_nav_charts:
+                setFragment(new ChartFragment(), true);
+                returnResult = true;
+                break;
+        }
+
+        this.mDrawerLayout.closeDrawer(GravityCompat.START);
+
+        return returnResult;
     }
-
-
 
     @Override
     public void UpdatePreference(Preference preference) {
@@ -193,6 +231,21 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        this.mDrawerLayout = getDrawerLayout(toolbar);
+
+        this.mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        this.mNavigationView.setNavigationItemSelectedListener(this);
+        this.mNavigationView.setItemIconTintList(null);
+    }
+
+    private DrawerLayout getDrawerLayout(Toolbar toolbar) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_content);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        return drawer;
     }
 
     private CentralControl getCentralControl() {

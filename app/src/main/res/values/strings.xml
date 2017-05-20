@@ -14,4 +14,7 @@
     <string name="seek_cloudiness">seek_cloudiness</string>
     <string name="seek_starthour">seek_starthour</string>
     <string name="seek_endhour">seek_endhour</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

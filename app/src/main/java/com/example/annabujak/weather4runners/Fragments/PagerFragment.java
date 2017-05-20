@@ -184,7 +184,7 @@ public class PagerFragment extends Fragment
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private static final int ALL_PAGES_COUNT = 3;
+        private static final int ALL_PAGES_COUNT = 2;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -195,7 +195,6 @@ public class PagerFragment extends Fragment
             switch(position) {
                 case 0: return new DailyPropositionsFragment();
                 case 1: return new WeeklyPropositionsFragment();
-                case 2: return new ChartFragment();
                 default: return null;
             }
         }
@@ -212,8 +211,6 @@ public class PagerFragment extends Fragment
                     return "Day weather section";
                 case 1:
                     return "Week weather section";
-                case 2:
-                    return "Diagram section";
             }
             return null;
         }

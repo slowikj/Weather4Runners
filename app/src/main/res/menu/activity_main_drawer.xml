@@ -3,21 +3,30 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_propositions"
-            android:title="See the latest propositions"
-            android:icon="@mipmap/ic_propositions"
+            android:title="Latest propositions"
+            android:icon="@drawable/ic_propositions"
             />
         <item
             android:id="@+id/nav_update_forecast"
             android:title="Update weather forecast"
-            android:icon="@mipmap/ic_sun"/>
+            android:icon="@drawable/ic_update"/>
         <item
-            android:id="+id/nav_preferences"
-            android:title="Change weather preferences"
-            android:icon="@mipmap/ic_settings"/>
+            android:id="@+id/nav_preferences"
+            android:title="Weather preferences"
+            android:icon="@drawable/ic_settings"/>
         <item
-            android:id="+id/nav_locations"
-            android:title="Manage your locations"
-            android:icon="@mipmap/ic_location"/>
+            android:id="@+id/nav_locations"
+            android:title="Your locations"
+            android:icon="@drawable/ic_location"/>
+        <item
+            android:id="@+id/nav_saved_propositions"
+            android:title="Your declarations"
+            android:icon="@drawable/ic_declarations"/>
+
+        <item
+            android:id="@+id/id_nav_charts"
+            android:title="Statistics"
+            android:icon="@drawable/ic_charts"/>
     </group>
 
 </menu>

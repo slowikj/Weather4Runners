@@ -29,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_checked"
-                android:checked="@bool/is_item_checked_default"/>
+                android:checked="@bool/is_item_checked_default"
+                android:clickable="false"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

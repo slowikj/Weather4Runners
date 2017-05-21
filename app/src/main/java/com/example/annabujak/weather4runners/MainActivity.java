@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
+import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
@@ -37,6 +38,7 @@ import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 
@@ -98,19 +100,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_propositions_number:
-                // TODO: a dialog with one TextBox to change the number
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -142,7 +133,11 @@ public class MainActivity extends AppCompatActivity
                 returnResult = true;
                 break;
             case R.id.nav_order_of_imporance:
-                setFragment(new ImportantConditionsFragment(), true);
+                // TODO: get the date from database
+                ArrayList<WeatherConditionsNames> importantConditions = new ArrayList<>(
+                        Arrays.asList(WeatherConditionsNames.values())
+                );
+                setFragment(ImportantConditionsFragment.Create(importantConditions), true);
                 returnResult = true;
                 break;
         }

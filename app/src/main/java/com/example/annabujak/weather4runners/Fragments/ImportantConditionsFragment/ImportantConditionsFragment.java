@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,13 +32,26 @@ public class ImportantConditionsFragment extends Fragment {
 
     private ImportantConditionsAdapter importantConditionsAdapter;
 
+    private ArrayList<WeatherConditionsNames> importantWeatherConditionsNames;
+
+    public static ImportantConditionsFragment Create(
+            ArrayList<WeatherConditionsNames> importantWeatherConditionsNames) {
+        ImportantConditionsFragment res = new ImportantConditionsFragment();
+        res.importantWeatherConditionsNames = importantWeatherConditionsNames;
+        return res;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String str = WeatherConditionsNames.Cloudiness.toString();
 
-        this.importantConditionsAdapter = createImportantConditionsAdapter();
+        this.importantConditionsAdapter = createImportantConditionsAdapter(
+                this.importantWeatherConditionsNames
+        );
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -49,6 +65,27 @@ public class ImportantConditionsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setChildViews(view);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_important_conditions, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_important_conditions_refresh:
+                this.importantWeatherConditionsNames = new ArrayList<WeatherConditionsNames>(
+                        Arrays.asList(WeatherConditionsNames.values()));
+                this.importantConditionsAdapter.setData(
+                        this.importantWeatherConditionsNames);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setChildViews(View view) {
@@ -71,9 +108,8 @@ public class ImportantConditionsFragment extends Fragment {
     }
 
     @NonNull
-    private ImportantConditionsAdapter createImportantConditionsAdapter() {
-        return new ImportantConditionsAdapter(
-                new ArrayList<WeatherConditionsNames>(
-                        Arrays.asList(WeatherConditionsNames.values())));
+    private ImportantConditionsAdapter createImportantConditionsAdapter(
+            ArrayList<WeatherConditionsNames> importantWeatherConditionsNames) {
+        return new ImportantConditionsAdapter(importantWeatherConditionsNames);
     }
 }

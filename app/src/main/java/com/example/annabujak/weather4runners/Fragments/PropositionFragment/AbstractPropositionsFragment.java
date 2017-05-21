@@ -7,6 +7,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -34,6 +37,7 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.propositionsListAdapter = getPropositionsListAdapter(this.itemsListDateFormat);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -46,6 +50,22 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setChildViews(view, this.propositionsListAdapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_propositions, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_propositions_number:
+                // TODO: a dialog with one TextBox to change the number
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @NonNull

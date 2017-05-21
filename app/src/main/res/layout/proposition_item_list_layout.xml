@@ -28,19 +28,19 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_checked"
-                android:checked="@bool/is_item_checked_default"
+                android:id="@+id/item_proposition_checked"
+                android:checked="@bool/item_proposition_is_checked_default"
                 android:clickable="false"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_name"
+                android:id="@+id/item_proposition_name"
                 android:padding="4dp"
                 android:textColor="#000000"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_short_description"/>
+                android:id="@+id/item_proposition_short_description"/>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

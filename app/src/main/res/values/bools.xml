@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="is_item_checked_default"> false </bool>
+    <bool name="item_proposition_is_checked_default"> false </bool>
 </resources>

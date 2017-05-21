@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
+import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity
                 // TODO
                 returnResult = true;
                 break;
-            case R.id.nav_preferences:
+            case R.id.nav_favourite_values:
                 setFragment(new WeatherPreferenceFragment(), true);
                 returnResult = true;
                 break;
@@ -138,6 +139,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.id_nav_charts:
                 setFragment(new ChartFragment(), true);
+                returnResult = true;
+                break;
+            case R.id.nav_order_of_imporance:
+                setFragment(new ImportantConditionsFragment(), true);
                 returnResult = true;
                 break;
         }

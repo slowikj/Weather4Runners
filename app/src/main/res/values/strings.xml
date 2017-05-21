@@ -17,6 +17,14 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-
+    <string name="menu_main">Main</string>
     <string name="menu_change_propositions_number_title" > Change the number of propositions</string>
+    <string name="menu_weather_preferences" > Weather conditions preferences </string>
+    <string name="menu_show_propositions"> Show propositions </string>
+    <string name="menu_update_weather_forecast">Update weather forecast </string>
+    <string name="menu_declarations"> Your declarations </string>
+    <string name="menu_statistics">Statistics</string>
+    <string name="menu_favourite_values">Favourite values</string>
+    <string name="menu_order_of_importance">Order of importance</string>
+    <string name="menu_your_locations">Your locations</string>
 </resources>

@@ -2,31 +2,49 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_propositions"
-            android:title="Latest propositions"
-            android:icon="@drawable/ic_propositions"
-            />
-        <item
-            android:id="@+id/nav_update_forecast"
-            android:title="Update weather forecast"
-            android:icon="@drawable/ic_update"/>
-        <item
-            android:id="@+id/nav_preferences"
-            android:title="Weather preferences"
-            android:icon="@drawable/ic_settings"/>
-        <item
-            android:id="@+id/nav_locations"
-            android:title="Your locations"
-            android:icon="@drawable/ic_location"/>
-        <item
-            android:id="@+id/nav_saved_propositions"
-            android:title="Your declarations"
-            android:icon="@drawable/ic_declarations"/>
+            android:title="@string/menu_main">
+            <menu>
+                <item
+                    android:id="@+id/nav_propositions"
+                    android:title="@string/menu_show_propositions"
+                    android:icon="@drawable/ic_propositions"
+                    />
+                <item
+                    android:id="@+id/nav_update_forecast"
+                    android:title="@string/menu_update_weather_forecast"
+                    android:icon="@drawable/ic_update"/>
+
+                <item
+                    android:id="@+id/nav_saved_propositions"
+                    android:title="@string/menu_declarations"
+                    android:icon="@drawable/ic_date_range_black_24dp"/>
+
+                <item
+                    android:id="@+id/id_nav_charts"
+                    android:title="@string/menu_statistics"
+                    android:icon="@drawable/ic_charts"/>
+                <item
+                    android:id="@+id/nav_locations"
+                    android:title="@string/menu_your_locations"
+                    android:icon="@drawable/ic_location"/>
+            </menu>
+        </item>
 
         <item
-            android:id="@+id/id_nav_charts"
-            android:title="Statistics"
-            android:icon="@drawable/ic_charts"/>
+            android:title="@string/menu_weather_preferences"
+            android:icon="@drawable/ic_settings">
+            <menu>
+                <item
+                    android:id="@+id/nav_favourite_values"
+                    android:title="@string/menu_favourite_values"
+                    android:icon="@drawable/ic_favorite_border_black_24dp"/>
+                <item
+                    android:id="@+id/nav_order_of_imporance"
+                    android:title="@string/menu_order_of_importance"
+                    android:icon="@drawable/ic_numbered_list"/>
+            </menu>
+        </item>
+
     </group>
 
 </menu>

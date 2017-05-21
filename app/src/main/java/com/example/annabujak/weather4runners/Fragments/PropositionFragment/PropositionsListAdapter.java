@@ -76,9 +76,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         }
 
         private void setViewReferences(View itemView) {
-            this.mCheckbox = (CheckBox)itemView.findViewById(R.id.item_checked);
-            this.name = (TextView)itemView.findViewById(R.id.item_name);
-            this.shortDescription = (TextView)itemView.findViewById(R.id.item_short_description);
+            this.mCheckbox = (CheckBox)itemView.findViewById(R.id.item_proposition_checked);
+            this.name = (TextView)itemView.findViewById(R.id.item_proposition_name);
+            this.shortDescription = (TextView)itemView.findViewById(R.id.item_proposition_short_description);
         }
 
         public CheckBox getCheckbox() {

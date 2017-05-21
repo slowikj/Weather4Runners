@@ -27,4 +27,6 @@
     <string name="menu_favourite_values">Favourite values</string>
     <string name="menu_order_of_importance">Order of importance</string>
     <string name="menu_your_locations">Your locations</string>
+
+    <string name="important_conditions_description">Remove unimportant items and order the rest</string>
 </resources>

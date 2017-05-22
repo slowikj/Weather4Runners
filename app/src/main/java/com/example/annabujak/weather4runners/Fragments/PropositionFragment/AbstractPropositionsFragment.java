@@ -1,33 +1,48 @@
 package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
+import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 /**
  * Created by slowik on 25.04.2017.
  */
 
-public class AbstractPropositionsFragment extends android.support.v4.app.Fragment {
+public abstract class AbstractPropositionsFragment extends android.support.v4.app.Fragment
+    implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected PropositionsListAdapter propositionsListAdapter;
+
+    protected ArrayList<WeatherInfo> propositions;
 
     protected SimpleDateFormat itemsListDateFormat;
 
@@ -58,10 +73,28 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_propositions_number:
-                // TODO: a dialog with one TextBox to change the number
+                Context context = getContext();
+                EditText editText = new EditText(context);
+                editText.setText(((Integer)getNumberOfItemsToShowOrDefault()).toString());
+                getChangeNumberDialog(context, editText, getChangeIntPrefCommand())
+                    .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -94,6 +127,56 @@ public class AbstractPropositionsFragment extends android.support.v4.app.Fragmen
 
         return rv;
     }
+
+    protected int getIntSharedPref(String tag, Integer defaultValue) {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(tag, defaultValue);
+
+    }
+
+    protected void saveIntSharedPref(String tag, int value) {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(tag, value);
+        editor.commit();
+    }
+
+    private AlertDialog.Builder getChangeNumberDialog(
+            Context context, final EditText edit, final Command action) {
+        return new AlertDialog.Builder(context)
+                .setMessage("Set the number of items to show")
+                .setView(edit)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Integer value = Integer.parseInt(edit.getText().toString());
+                                action.execute(value);
+                            }
+                        });
+    }
+
+    protected ArrayList<WeatherInfo> getFirstNPropositions(int n, ArrayList<WeatherInfo> propositions) {
+        ArrayList<WeatherInfo> res = new ArrayList<>();
+        int cnt = Math.min(n, propositions.size());
+        for(int i = 0; i < cnt; ++i) {
+            res.add(propositions.get(i));
+        }
+
+        return res;
+    }
+
+    protected void updatePropositionsListView() {
+        this.propositionsListAdapter.setPropositionsList(
+                getFirstNPropositions(getNumberOfItemsToShowOrDefault(),
+                        this.propositions)
+        );
+    }
+
+    protected abstract int getNumberOfItemsToShowOrDefault();
+
+    protected abstract Command<Integer> getChangeIntPrefCommand();
 
     // Listeners
     private class ListItemOnClickListener implements RecyclerViewItemClickListener{

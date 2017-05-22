@@ -33,7 +33,7 @@ public class CentralControl {
 
     private static final int HOURS_PER_FORECAST = 3;
 
-    private static final int BEST_WEATHER_PROPOSITIONS = 4;
+    private static final int BEST_WEATHER_PROPOSITIONS = Integer.MAX_VALUE;
 
     private DBManager databaseManager;
 

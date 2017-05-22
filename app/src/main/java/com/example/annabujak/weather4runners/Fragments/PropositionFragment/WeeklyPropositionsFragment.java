@@ -1,9 +1,11 @@
 package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
@@ -18,6 +20,10 @@ import java.util.ArrayList;
 public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
     implements WeeklyPropositionsChangedListener {
 
+    private static final String SHARED_PREF_NUMBER_OF_ITEMS_TAG = "shared_pref_number_of_weekly_items_tag";
+
+    private static final int DEFAULT_NUMBER_OF_ITEMS = 4;
+
     private WeeklyWeatherPropositionsNotifier weeklyWeatherPropositionsNotifier;
 
     @Override
@@ -27,8 +33,24 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
     }
 
     @Override
+    protected Command<Integer> getChangeIntPrefCommand() {
+        return new Command<Integer>() {
+            @Override
+            public void execute(Integer value) {
+                saveIntSharedPref(SHARED_PREF_NUMBER_OF_ITEMS_TAG, value);
+            }
+        };
+    }
+
+    @Override
+    protected int getNumberOfItemsToShowOrDefault() {
+        return getIntSharedPref(SHARED_PREF_NUMBER_OF_ITEMS_TAG, DEFAULT_NUMBER_OF_ITEMS);
+    }
+
+    @Override
     public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
-        this.propositionsListAdapter.setPropositionsList(propositions);
+        this.propositions = propositions;
+        updatePropositionsListView();
     }
 
     @Override
@@ -56,5 +78,14 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
 
         this.weeklyWeatherPropositionsNotifier
                 .unsubscribeForWeeklyWeatherPropositionsChanged(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch(key) {
+            case SHARED_PREF_NUMBER_OF_ITEMS_TAG:
+                updatePropositionsListView();
+                break;
+        }
     }
 }

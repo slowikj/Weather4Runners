@@ -39,14 +39,18 @@ public class DailyPropositionsFragment extends AbstractPropositionsFragment
         return new Command<Integer>() {
             @Override
             public void execute(Integer value) {
-                saveIntSharedPref(SHARED_PREF_NUMBER_OF_ITEMS_TAG, value);
+                sharedPreferencesHelper.saveIntSharedPref(
+                        SHARED_PREF_NUMBER_OF_ITEMS_TAG,
+                        value);
             }
         };
     }
 
     @Override
     protected int getNumberOfItemsToShowOrDefault() {
-        return getIntSharedPref(SHARED_PREF_NUMBER_OF_ITEMS_TAG, DEFAULT_NUMBER_OF_ITEMS);
+        return sharedPreferencesHelper.getIntSharedPref(
+                SHARED_PREF_NUMBER_OF_ITEMS_TAG,
+                DEFAULT_NUMBER_OF_ITEMS);
     }
 
     @Override

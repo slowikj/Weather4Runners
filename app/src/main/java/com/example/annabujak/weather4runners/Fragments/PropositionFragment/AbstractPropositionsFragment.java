@@ -1,17 +1,16 @@
 package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,15 +22,12 @@ import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
-import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
 /**
  * Created by slowik on 25.04.2017.
@@ -46,7 +42,10 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     protected SimpleDateFormat itemsListDateFormat;
 
+    protected SharedPreferencesHelper sharedPreferencesHelper;
+
     private RecyclerView recyclerView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,16 +72,22 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.sharedPreferencesHelper = SharedPreferencesHelper.create(getActivity());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        this.sharedPreferencesHelper
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        this.sharedPreferencesHelper
+                .unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
@@ -93,8 +98,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
                 Context context = getContext();
                 EditText editText = new EditText(context);
                 editText.setText(((Integer)getNumberOfItemsToShowOrDefault()).toString());
-                getChangeNumberDialog(context, editText, getChangeIntPrefCommand())
-                    .show();
+                getChangingNumberDialog(context, editText, getChangeIntPrefCommand()).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,9 +116,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     private RecyclerView getRecyclerView(View parentView, RecyclerView.Adapter adapter) {
         RecyclerView rv = (RecyclerView) parentView.findViewById(R.id.rv_propositions);
-
         rv.setAdapter(adapter);
-
         rv.setHasFixedSize(false);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -128,20 +130,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
         return rv;
     }
 
-    protected int getIntSharedPref(String tag, Integer defaultValue) {
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(tag, defaultValue);
-
-    }
-
-    protected void saveIntSharedPref(String tag, int value) {
-        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(tag, value);
-        editor.commit();
-    }
-
-    private AlertDialog.Builder getChangeNumberDialog(
+    private AlertDialog.Builder getChangingNumberDialog(
             Context context, final EditText edit, final Command action) {
         return new AlertDialog.Builder(context)
                 .setMessage("Set the number of items to show")

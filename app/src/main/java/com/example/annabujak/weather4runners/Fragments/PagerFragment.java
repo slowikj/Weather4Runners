@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -35,9 +36,13 @@ public class PagerFragment extends Fragment
         DailyPropositionsChangedListener,
         WeeklyPropositionsChangedListener {
 
+    private static final int ALL_PAGES_COUNT = 2;
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    private TabLayout mTabLayout;
 
     private DailyWeatherPropositionsNotifier dailyWeatherPropositionsNotifier;
 
@@ -146,10 +151,44 @@ public class PagerFragment extends Fragment
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void setChildViews(View parentView) {
+        mTabLayout = createTabLayout(
+                new String[] {"Next 24 hours", "Next few days"},
+                parentView,
+                R.id.tab_layout);
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
         mViewPager = (ViewPager) parentView.findViewById(R.id.pager_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(
+                new TabLayout.TabLayoutOnPageChangeListener(this.mTabLayout));
+
+        this.mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+
+    }
+
+    private TabLayout createTabLayout(String[] tabNames, View parentView, int layoutId) {
+        TabLayout tabLayout = (TabLayout) parentView.findViewById(layoutId);
+        for(String tabName: tabNames) {
+            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        }
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        return tabLayout;
     }
 
     private void attachWeeklyWeatherPropositionsNotifier(Context context) {
@@ -183,8 +222,6 @@ public class PagerFragment extends Fragment
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private static final int ALL_PAGES_COUNT = 2;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

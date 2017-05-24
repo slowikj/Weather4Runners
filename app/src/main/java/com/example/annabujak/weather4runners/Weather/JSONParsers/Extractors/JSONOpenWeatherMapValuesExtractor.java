@@ -90,7 +90,7 @@ public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtracto
 
     @Override
     public double extractPrecipitation() {
-        return Math.max(extractRain(), extractSnow());
+        return extractRain() + extractSnow();
     }
 
     @Override

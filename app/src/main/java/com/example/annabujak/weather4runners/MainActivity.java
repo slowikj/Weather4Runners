@@ -22,6 +22,7 @@ import com.example.annabujak.weather4runners.CentralControl.CentralControl;
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
+import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
@@ -32,6 +33,7 @@ import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment
 import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.WeatherPreferenceFragment;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
@@ -45,6 +47,7 @@ import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
             WeeklyPropositionsChangedListener,
+            AddChosenHourListener,
             DailyWeatherPropositionsNotifier,
             WeeklyWeatherPropositionsNotifier,
             UpdatingFinishedListener,
@@ -256,6 +259,7 @@ public class MainActivity extends AppCompatActivity
         CentralControl res = new CentralControl(getApplicationContext());
         res.setDailyPropositionsChangedListener(this);
         res.setWeeklyPropositionsChangedListener(this);
+        res.setAddChosenHourListener(this);
         res.setUpdatingFinishedListener(this);
 
         return res;
@@ -280,5 +284,10 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
+    }
+
+    @Override
+    public void onAddedChosenHour(ChosenHour chosenHour) {
+        centralControl.addChosenHour(chosenHour);
     }
 }

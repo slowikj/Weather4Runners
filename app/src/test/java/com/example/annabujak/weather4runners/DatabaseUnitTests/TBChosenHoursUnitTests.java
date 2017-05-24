@@ -15,17 +15,17 @@ import static junit.framework.Assert.assertEquals;
  */
 
 public class TBChosenHoursUnitTests {
-    ChosenHour bestHour = new ChosenHour(new Date(), 15);
+    ChosenHour chosenHour = new ChosenHour(new Date(), false);
     @Test
     public void setAndGetChosenHourUnitTest() throws Exception{
         SimpleDateFormat dateParser = new SimpleDateFormat("dd/MM/yyyy");
-        bestHour.setDayAndHour(dateParser.parse("15/09/2016"),16);
-        assertEquals(dateParser.parse("15/09/2016"),bestHour.getDate());
-        assertEquals(16,bestHour.getHour());
+        chosenHour.setDayAnIsdHour(dateParser.parse("15/09/2016"),false);
+        assertEquals(dateParser.parse("15/09/2016"),chosenHour.getDate());
+        assertEquals(false,chosenHour.getIsHour());
     }
     @Test
     public void setIdTest() throws Exception{
-        bestHour.setId(1);
-        assertEquals(1,bestHour.getId());
+        chosenHour.setId(1);
+        assertEquals(1,chosenHour.getId());
     }
 }

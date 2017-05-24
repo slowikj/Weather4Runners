@@ -228,7 +228,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, chosenHour.getDate().toString());
-        values.put(KEY_HOUR, chosenHour.getHour());
+        values.put(KEY_HOUR, chosenHour.getIsHour());
 
         long id =  database.insert(TABLE_CHOSEN_HOURS, null, values);
         chosenHour.setId(id);
@@ -245,7 +245,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
 
         if(cursor.getCount() == 0)
             return null;
-        ChosenHour chosenHour = new ChosenHour(new Date(cursor.getString(cursor.getColumnIndex(KEY_DATE))),cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
+        ChosenHour chosenHour = new ChosenHour(new Date(cursor.getString(cursor.getColumnIndex(KEY_DATE))),cursor.getInt(cursor.getColumnIndex(KEY_HOUR)) > 0);
         chosenHour.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
 
         return chosenHour;
@@ -260,7 +260,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                ChosenHour hour = new ChosenHour(new Date(c.getString(c.getColumnIndex(KEY_DATE))),c.getInt(c.getColumnIndex(KEY_HOUR)));
+                ChosenHour hour = new ChosenHour(new Date(c.getString(c.getColumnIndex(KEY_DATE))),c.getInt(c.getColumnIndex(KEY_HOUR)) > 0);
                 hour.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 allHours.add(hour);
             } while (c.moveToNext());
@@ -273,7 +273,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, hour.getDate().toString());
-        values.put(KEY_HOUR, hour.getHour());
+        values.put(KEY_HOUR, hour.getIsHour());
 
         // updating row
         database.update(TABLE_CHOSEN_HOURS, values, KEY_ID + " = ?", new String[] { String.valueOf(hour.getId()) });

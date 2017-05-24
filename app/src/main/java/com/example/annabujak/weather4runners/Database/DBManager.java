@@ -2,6 +2,7 @@ package com.example.annabujak.weather4runners.Database;
 
 import android.content.Context;
 
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
@@ -49,4 +50,6 @@ public class DBManager {
         database.addUser(user);
     }
     public User GetUser(){return database.getUser(1);}
+    public void AddChosenHour(ChosenHour hour){database.addChosenHour(hour);}
+    public List<ChosenHour> GetChosenHours(){return database.getAllChosenHours();}
 }

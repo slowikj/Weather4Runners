@@ -76,11 +76,11 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void addChosenHourTest() throws Exception {
         Date current = new Date();
-        ChosenHour chosenHour = new ChosenHour(current,19);
+        ChosenHour chosenHour = new ChosenHour(current,false);
         database.addChosenHour(chosenHour);
         ChosenHour actualChosenHour = database.getChosenHour(chosenHour.getId());
         assertEquals(current.toString(),actualChosenHour.getDate().toString());
-        assertEquals(19,actualChosenHour.getHour());
+        assertEquals(false,actualChosenHour.getIsHour());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void getAllChosenHoursTest() throws Exception {
 
-        final ChosenHour chosenToAdd = new ChosenHour(new Date(),12);
+        final ChosenHour chosenToAdd = new ChosenHour(new Date(),true);
         List<ChosenHour> allChosenHours;
         boolean tookAll = false;
 
@@ -156,12 +156,12 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void updateChosenHourTest() throws Exception {
         Date current = new Date();
-        ChosenHour hour = new ChosenHour(current,12);
+        ChosenHour hour = new ChosenHour(current,true);
         database.addChosenHour(hour);
-        hour.setDayAndHour(current,13);
+        hour.setDayAnIsdHour(current,false);
         database.updateChosenHour(hour);
         ChosenHour currentHour = database.getChosenHour(hour.getId());
-        assertEquals(13,currentHour.getHour());
+        assertEquals(false,currentHour.getIsHour());
     }
 
 
@@ -200,7 +200,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void clearChosenHoursTest() throws Exception {
-        ChosenHour chosenHour = new ChosenHour(new Date(),15);
+        ChosenHour chosenHour = new ChosenHour(new Date(),false);
         database.clearChosenHours();
         database.addChosenHour(chosenHour);
         assertEquals(1,chosenHour.getId());
@@ -218,7 +218,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void deleteChosenHourTest() throws Exception{
-        ChosenHour hour = new ChosenHour(new Date(),12);
+        ChosenHour hour = new ChosenHour(new Date(),false);
         database.addChosenHour(hour);
         database.deleteChosenHour(hour.getId());
         ChosenHour getted = database.getChosenHour(hour.getId());

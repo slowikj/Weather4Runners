@@ -5,9 +5,11 @@ import android.os.AsyncTask;
 import android.support.v4.util.Pair;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
+import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
@@ -47,6 +49,8 @@ public class CentralControl {
 
     private UpdatingFinishedListener updatingFinishedListener;
 
+    private AddChosenHourListener addChosenHourListener;
+
     public CentralControl(Context context) {
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
@@ -59,6 +63,9 @@ public class CentralControl {
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
         this.dailyPropositionsChangedListener = listener;
+    }
+    public void setAddChosenHourListener(AddChosenHourListener listener){
+        this.addChosenHourListener = listener;
     }
 
     public void setWeeklyPropositionsChangedListener(WeeklyPropositionsChangedListener listener) {
@@ -84,6 +91,7 @@ public class CentralControl {
     public void updateUser(User user){
         databaseManager.UpdateUserDatas(user);
     }
+    public void addChosenHour(ChosenHour hour){databaseManager.AddChosenHour(hour);}
     public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
 
     private void recomputePropositionsAsync(ArrayList<WeatherInfo> weatherForecast) {

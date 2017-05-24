@@ -9,21 +9,21 @@ import java.util.Date;
 public class ChosenHour {
     long Id;
     Date Date;
-    int Hour;
+    Boolean IsHour;
 
-    public ChosenHour(Date _Date, int _Hour){
+    public ChosenHour(Date _Date, boolean _Hour){
         Date = _Date;
-        Hour  =_Hour;
+        IsHour  =_Hour;
     }
-    public void setDayAndHour(Date date, int hour){
+    public void setDayAnIsdHour(Date date, boolean hour){
         Date = date;
-        Hour = hour;
+        IsHour = hour;
     }
     public Date getDate(){
         return Date;
     }
-    public int getHour(){
-        return Hour;
+    public boolean getIsHour(){
+        return IsHour;
     }
     public void setId(long id){
         Id = id;

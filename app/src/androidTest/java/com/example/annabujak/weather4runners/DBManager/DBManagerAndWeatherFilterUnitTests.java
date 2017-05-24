@@ -34,7 +34,7 @@ public class DBManagerAndWeatherFilterUnitTests {
     public void setUp() throws Exception {
         appContext = InstrumentationRegistry.getTargetContext();
         manager = new DBManager(appContext);
-        filter = new WeatherFilter(4);
+       // filter = new WeatherFilter(Cloudiness.Big)
     }
 
     @After

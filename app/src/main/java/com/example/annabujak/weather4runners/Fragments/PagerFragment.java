@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
@@ -42,6 +44,8 @@ public class PagerFragment extends Fragment
 
     private ViewPager mViewPager;
 
+    private FloatingActionButton mRefreshButton;
+
     private TabLayout mTabLayout;
 
     private DailyWeatherPropositionsNotifier dailyWeatherPropositionsNotifier;
@@ -53,6 +57,8 @@ public class PagerFragment extends Fragment
     private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
 
     private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
+
+    private WeatherForecastUpdater weatherForecastUpdater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,12 @@ public class PagerFragment extends Fragment
 
         attachDailyWeatherPropositionsNotifier(context);
         attachWeeklyWeatherPropositionsNotifier(context);
+
+        try {
+            this.weatherForecastUpdater = (WeatherForecastUpdater) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException("attached activity must implement WeatherForecastUpdater");
+        }
     }
 
     @Override
@@ -178,7 +190,20 @@ public class PagerFragment extends Fragment
             }
         });
 
+        this.mRefreshButton = getRefreshButton(parentView);
+    }
 
+    private FloatingActionButton getRefreshButton(View parentView) {
+        FloatingActionButton res = (FloatingActionButton) parentView.findViewById(
+                R.id.forecast_refresh_button);
+        res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                weatherForecastUpdater.onWeatherForecastUpdate();
+            }
+        });
+
+        return res;
     }
 
     private TabLayout createTabLayout(String[] tabNames, View parentView, int layoutId) {

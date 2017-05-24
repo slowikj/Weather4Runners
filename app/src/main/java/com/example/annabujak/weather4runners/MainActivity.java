@@ -25,6 +25,7 @@ import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragme
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
@@ -53,7 +54,8 @@ public class MainActivity extends AppCompatActivity
             ILoginFacebook,
             IWeatherPreferenceFragment,
             NavigationView.OnNavigationItemSelectedListener,
-            ImportantConditionsChangedListener {
+            ImportantConditionsChangedListener,
+            WeatherForecastUpdater{
 
     private ProgressBar mLoadingIndicator;
 
@@ -115,20 +117,12 @@ public class MainActivity extends AppCompatActivity
                 setFragment(new PagerFragment(), true);
                 returnResult = true;
                 break;
-            case R.id.nav_update_forecast:
-                refreshAll();
-                returnResult = true;
-                break;
             case R.id.nav_locations:
                 // TODO
                 returnResult = true;
                 break;
             case R.id.nav_favourite_values:
                 setFragment(new WeatherPreferenceFragment(), true);
-                returnResult = true;
-                break;
-            case R.id.nav_saved_propositions:
-                //TODO
                 returnResult = true;
                 break;
             case R.id.id_nav_charts:
@@ -289,5 +283,10 @@ public class MainActivity extends AppCompatActivity
     public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
         // TODO
         // convert the argument into PreferenceBalance and update preferenceBalance in database
+    }
+
+    @Override
+    public void onWeatherForecastUpdate() {
+        this.refreshAll();
     }
 }

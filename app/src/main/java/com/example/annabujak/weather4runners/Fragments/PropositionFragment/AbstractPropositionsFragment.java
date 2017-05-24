@@ -140,8 +140,15 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer value = Integer.parseInt(edit.getText().toString());
-                                action.execute(value);
+                                try {
+                                    Integer value = Integer.parseInt(edit.getText().toString());
+
+                                    action.execute(value);
+                                } catch(Exception e) {
+                                    Toast.makeText(getContext(),
+                                            getResources().getString(R.string.parsing_input_error_message),
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
     }

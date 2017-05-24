@@ -1,5 +1,6 @@
 package com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
+import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
 import com.example.annabujak.weather4runners.R;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class ImportantConditionsFragment extends Fragment{
     private ImportantConditionsAdapter importantConditionsAdapter;
 
     private ArrayList<WeatherConditionsNames> importantWeatherConditionsNames;
+
+    private ImportantConditionsChangedListener importantConditionsChangedListener;
 
     public static ImportantConditionsFragment Create(
             ArrayList<WeatherConditionsNames> importantWeatherConditionsNames) {
@@ -86,6 +90,24 @@ public class ImportantConditionsFragment extends Fragment{
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            this.importantConditionsChangedListener = (ImportantConditionsChangedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("the attached fragment should implement ImportantConditionsChangedListener ");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        this.importantConditionsChangedListener
+                .onImportantConditionsChangedListener(this.importantWeatherConditionsNames);
+        super.onDetach();
     }
 
     private void setChildViews(View view) {

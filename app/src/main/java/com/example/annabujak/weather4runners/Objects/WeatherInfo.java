@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class WeatherInfo {
 
-    private Date Date;
+    private long Date;
     private long Id;
     private int Temperature;
     private int Humidity;
@@ -22,7 +22,7 @@ public class WeatherInfo {
     private String IconName;
     private String Description ="";
 
-    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, Date _Date, double _WindSpeed,
+    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, long _Date, double _WindSpeed,
                        String _IconName, String _Description) {
         Temperature = _Temperature;
         Humidity = _Humidity;
@@ -35,7 +35,7 @@ public class WeatherInfo {
         Description = _Description;
     }
 
-    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, Date _Date, double _WindSpeed,
+    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, long _Date, double _WindSpeed,
                            String _IconName) {
         Temperature = _Temperature;
         Humidity = _Humidity;
@@ -61,7 +61,7 @@ public class WeatherInfo {
         return Precipitation;
     }
 
-    public java.util.Date getDate(){return Date;}
+    public java.util.Date getDate(){return new Date(this.Date);}
 
     public String getFormattedDate(SimpleDateFormat dateFormat) {
         return dateFormat.format(this.getDate());

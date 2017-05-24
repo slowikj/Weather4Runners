@@ -26,7 +26,7 @@ import java.util.Collections;
  * Created by slowik on 21.05.2017.
  */
 
-public class ImportantConditionsFragment extends Fragment {
+public class ImportantConditionsFragment extends Fragment{
 
     private RecyclerView mRecyclerView;
 

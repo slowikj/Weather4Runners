@@ -7,7 +7,7 @@ package com.example.annabujak.weather4runners.Enum;
 public enum WeatherConditionsNames {
     Precipitation,
     Temperature,
-    Rain,
+    Humidity,
     Cloudiness,
     Wind
 }

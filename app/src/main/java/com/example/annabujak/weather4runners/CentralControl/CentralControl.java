@@ -132,16 +132,23 @@ public class CentralControl {
         protected Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>> doInBackground(ArrayList<WeatherInfo>... params) {
             ArrayList<WeatherInfo> weatherForecast = params[0];
 
-            Preference preference = databaseManager.GetPreference();
-            databaseManager.UpdatePreferences(preference);
+            Preference preference = getUserWeatherPreferenceOrDefault();
 
             ArrayList<WeatherInfo> dailyPropositions = weatherFilter
-                    .GetDailyWeather(weatherForecast, databaseManager.GetPreference());
+                    .GetDailyWeather(weatherForecast, preference);
 
             ArrayList<WeatherInfo> weeklyPropositions = weatherFilter
                     .GetWeeklyWeather(weatherForecast, preference);
 
             return new Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>(dailyPropositions, weeklyPropositions);
+        }
+
+        private Preference getUserWeatherPreferenceOrDefault() {
+            try {
+                return databaseManager.GetPreference();
+            } catch(IndexOutOfBoundsException e) {
+                return new Preference();
+            }
         }
 
         @Override

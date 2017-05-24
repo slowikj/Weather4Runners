@@ -53,14 +53,13 @@ public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtracto
     }
 
     @Override
-    public Date extractDate() throws JSONException {
+    public long extractDate() throws JSONException {
         String strDate = extractWeatherString(
                 this.weatherJSONItem,
                 new String[] {"dt"}
         );
 
-        return new Date(
-                TimeUnit.SECONDS.toMillis(Long.parseLong(strDate)));
+        return TimeUnit.SECONDS.toMillis(Long.parseLong(strDate));
     }
 
     @Override

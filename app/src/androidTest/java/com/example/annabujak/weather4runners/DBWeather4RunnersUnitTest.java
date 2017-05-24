@@ -12,7 +12,6 @@ import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
@@ -246,7 +245,7 @@ public class DBWeather4RunnersUnitTest {
         assertEquals(newWeather.getPrecipitation(),weatherInfo.getPrecipitation());
         assertEquals(newWeather.getHumidity(),weatherInfo.getHumidity());
         assertEquals(newWeather.getCloudiness().toString(),"Big");
-        assertEquals(weatherInfo.getDate().toString(),newWeather.getDate().toString());
+        assertEquals(weatherInfo.getLongDate().toString(),newWeather.getLongDate().toString());
         assertEquals(weatherInfo.getTemperature(),newWeather.getTemperature());
         assertEquals(weatherInfo.getIsChecked(),true);
         assertEquals(weatherInfo.getWindSpeed(),22.0);

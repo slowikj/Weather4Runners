@@ -2,7 +2,6 @@ package com.example.annabujak.weather4runners.Weather.Approximators;
 
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosApproximator;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class WeatherInfosLinearApproximator extends WeatherInfosApproximator {
                 getApproximatedHumidity(index),
                 getApproximatedCloudiness(index),
                 getApproximatedPrecipitation(index),
-                getApproximatedDate(index),
+                getApproximatedDateLong(index),
                 getApproximatedWindSpeed(index),
                 getApproximatedIconName(index),
                 getApproximatedDescription(index)
@@ -80,6 +79,15 @@ public class WeatherInfosLinearApproximator extends WeatherInfosApproximator {
                         index,
                         this.allItemsCnt
                 ));
+    }
+
+    private long getApproximatedDateLong(int index) {
+        return (long)getApproximatedNumericValue(
+                this.begin.getDateLong(),
+                this.end.getDateLong(),
+                index,
+                this.allItemsCnt
+        );
     }
 
     private double getApproximatedWindSpeed(int index) {

@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
+import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
@@ -46,6 +48,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     private RecyclerView recyclerView;
 
+    private PropositionClickedListener propositionClickedListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,8 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
     public void onAttach(Context context) {
         super.onAttach(context);
         this.sharedPreferencesHelper = SharedPreferencesHelper.create(getActivity());
+
+        attachPropositionsClickedListener((PropositionClickedListener) context);
     }
 
     @Override
@@ -125,7 +130,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
                 new CustomRecyclerViewOnTouchListener(
                         getContext(),
                         rv,
-                        new ListItemOnClickListener()));
+                        new PropositionItemClickedListener()));
 
         return rv;
     }
@@ -140,8 +145,15 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Integer value = Integer.parseInt(edit.getText().toString());
-                                action.execute(value);
+                                try {
+                                    Integer value = Integer.parseInt(edit.getText().toString());
+
+                                    action.execute(value);
+                                } catch(Exception e) {
+                                    Toast.makeText(getContext(),
+                                            getResources().getString(R.string.parsing_input_error_message),
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
     }
@@ -167,19 +179,27 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     protected abstract Command<Integer> getChangeIntPrefCommand();
 
+    protected abstract ChosenHour getChosenProposition(long date);
+
+    private void attachPropositionsClickedListener(PropositionClickedListener context) {
+        try {
+            this.propositionClickedListener = context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException("attached element must implement PropositionsClickedListener");
+        }
+    }
+
     // Listeners
-    private class ListItemOnClickListener implements RecyclerViewItemClickListener{
+    private class PropositionItemClickedListener implements RecyclerViewItemClickListener{
 
 
         @Override
         public void onClick(View view, int position) {
-            PropositionsListAdapter.PropositionsListViewHolder holder =
-                    (PropositionsListAdapter.PropositionsListViewHolder)recyclerView
-                        .findViewHolderForAdapterPosition(position);
-
+            PropositionsListAdapter.PropositionsListViewHolder holder = getHolder(position);
             holder.getCheckbox().setChecked(!holder.getCheckbox().isChecked());
-
             Integer pos = recyclerView.getChildAdapterPosition(view);
+
+            // TODO: propositionClickedListener.on...(getChosenProposition(holder.getDate())
 
             Toast.makeText(getContext(), "you clicked " + pos.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -187,6 +207,12 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
         @Override
         public void onLongClick(View view, int position) {
             Toast.makeText(getContext(), "you LONG clicked", Toast.LENGTH_SHORT).show();
+            // TODO: handle FB notification
+        }
+
+        protected PropositionsListAdapter.PropositionsListViewHolder getHolder(int position) {
+            return (PropositionsListAdapter.PropositionsListViewHolder)recyclerView
+                    .findViewHolderForAdapterPosition(position);
         }
     }
 }

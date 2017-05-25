@@ -24,7 +24,7 @@ import java.util.List;
 public class DBWeather4Runners extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Weather for runners";
 
     private static final String TABLE_PREFERENCES_NAME = "preferences";
@@ -77,7 +77,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
             + TABLE_WEATHER_INFO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TEMPERATURE
             + " INTEGER," + KEY_HUMIDITY + " INTEGER,"+ KEY_CLOUDINESS + " INTEGER,"
             + KEY_PRECIPITATION + " DOUBLE PRECISION, "+ KEY_DATE
-            + " TEXT, "+KEY_IS_CHECKED + " BOOLEAN, "+ KEY_WIND_SPEED + " DOUBLE PRECISION, "
+            + " LONG, "+KEY_IS_CHECKED + " BOOLEAN, "+ KEY_WIND_SPEED + " DOUBLE PRECISION, "
             + KEY_ICON+ " TEXT, "+ KEY_DESCRIPTION+ " TEXT" + ")";
 
     public DBWeather4Runners(Context context){
@@ -336,7 +336,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_HUMIDITY,weather.getHumidity());
         values.put(KEY_CLOUDINESS, weather.getCloudiness().getValue());
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
-        values.put(KEY_DATE, weather.getDate().toString());
+        values.put(KEY_DATE, weather.getDateLong());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
         values.put(KEY_WIND_SPEED,weather.getWindSpeed());
         values.put(KEY_ICON,weather.getIconName());
@@ -363,12 +363,12 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         int humidity = cursor.getInt(cursor.getColumnIndex(KEY_HUMIDITY));
         double precipitation =cursor.getDouble(cursor.getColumnIndex(KEY_PRECIPITATION));
         boolean checked = cursor.getInt(cursor.getColumnIndex(KEY_IS_CHECKED)) > 0;
-        Date date = new Date(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
+        long longDate = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
         double windSpeed = cursor.getDouble(cursor.getColumnIndex((KEY_WIND_SPEED)));
         String iconName = cursor.getString(cursor.getColumnIndex(KEY_ICON));
         String description = cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION));
 
-        WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date,windSpeed,iconName,description);
+        WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,longDate,windSpeed,iconName,description);
 
         weather.setIsChecked(checked);
         weather.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
@@ -392,7 +392,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_HUMIDITY,weather.getHumidity());
         values.put(KEY_CLOUDINESS, weather.getCloudiness().getValue());
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
-        values.put(KEY_DATE, weather.getDate().toString());
+        values.put(KEY_DATE, weather.getDateLong());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
         values.put(KEY_WIND_SPEED,weather.getWindSpeed());
         values.put(KEY_ICON,weather.getIconName());
@@ -416,12 +416,12 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
                 int humidity = c.getInt(c.getColumnIndex(KEY_HUMIDITY));
                 double precipitation =c.getDouble(c.getColumnIndex(KEY_PRECIPITATION));
                 boolean checked = c.getInt(c.getColumnIndex(KEY_IS_CHECKED)) > 0;
-                Date date = new Date(c.getString(c.getColumnIndex(KEY_DATE)));
+                long  longDate = c.getLong(c.getColumnIndex(KEY_DATE));
                 double windSpeed = c.getDouble(c.getColumnIndex((KEY_WIND_SPEED)));
                 String iconName = c.getString(c.getColumnIndex(KEY_ICON));
                 String description = c.getString(c.getColumnIndex(KEY_DESCRIPTION));
 
-                WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,date,windSpeed,iconName,description);
+                WeatherInfo weather = new WeatherInfo(temperature,humidity,cloudiness,precipitation,longDate,windSpeed,iconName,description);
                 weather.setIsChecked(checked);
 
                 weather.setId(c.getInt((c.getColumnIndex(KEY_ID))));

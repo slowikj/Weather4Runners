@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
@@ -34,13 +38,16 @@ public class PagerFragment extends Fragment
     implements DailyWeatherPropositionsNotifier,
         WeeklyWeatherPropositionsNotifier,
         DailyPropositionsChangedListener,
-        WeeklyPropositionsChangedListener {
+        WeeklyPropositionsChangedListener,
+        PropositionClickedListener {
 
     private static final int ALL_PAGES_COUNT = 2;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    private FloatingActionButton mRefreshButton;
 
     private TabLayout mTabLayout;
 
@@ -52,7 +59,11 @@ public class PagerFragment extends Fragment
 
     private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
 
+    private PropositionClickedListener propositionClickedListener;
+
     private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
+
+    private WeatherForecastUpdater weatherForecastUpdater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +92,8 @@ public class PagerFragment extends Fragment
 
         attachDailyWeatherPropositionsNotifier(context);
         attachWeeklyWeatherPropositionsNotifier(context);
+        attachWeatherForecastUpdater((WeatherForecastUpdater) context);
+        attachPropositionClickedListener((PropositionClickedListener) context);
     }
 
     @Override
@@ -139,6 +152,11 @@ public class PagerFragment extends Fragment
         notifyWeeklyPropositionsChanged();
     }
 
+    @Override
+    public void onPropositionClickedListener(ChosenHour clickedHour) {
+        this.propositionClickedListener.onPropositionClickedListener(clickedHour);
+    }
+
     private void initListenersLists() {
         dailyPropositionsChangedListeners = new LinkedList<>();
         weeklyPropositionsChangedListeners = new LinkedList<>();
@@ -178,7 +196,20 @@ public class PagerFragment extends Fragment
             }
         });
 
+        this.mRefreshButton = getRefreshButton(parentView);
+    }
 
+    private FloatingActionButton getRefreshButton(View parentView) {
+        FloatingActionButton res = (FloatingActionButton) parentView.findViewById(
+                R.id.forecast_refresh_button);
+        res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                weatherForecastUpdater.onWeatherForecastUpdate();
+            }
+        });
+
+        return res;
     }
 
     private TabLayout createTabLayout(String[] tabNames, View parentView, int layoutId) {
@@ -206,6 +237,22 @@ public class PagerFragment extends Fragment
         } catch(ClassCastException e) {
             throw new ClassCastException(
                     "PagerFragment has to implement DailyWeatherPropositionsNotifier interface");
+        }
+    }
+
+    private void attachPropositionClickedListener(PropositionClickedListener context) {
+        try {
+            this.propositionClickedListener = context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException("attached element must implement PropositionsClickedListener");
+        }
+    }
+
+    private void attachWeatherForecastUpdater(WeatherForecastUpdater context) {
+        try {
+            this.weatherForecastUpdater = context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException("attached element must implement WeatherForecastUpdater");
         }
     }
 

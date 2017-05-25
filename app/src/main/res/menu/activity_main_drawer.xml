@@ -9,15 +9,6 @@
                     android:title="@string/menu_show_propositions"
                     android:icon="@drawable/ic_propositions"
                     />
-                <item
-                    android:id="@+id/nav_update_forecast"
-                    android:title="@string/menu_update_weather_forecast"
-                    android:icon="@drawable/ic_update"/>
-
-                <item
-                    android:id="@+id/nav_saved_propositions"
-                    android:title="@string/menu_declarations"
-                    android:icon="@drawable/ic_date_range_black_24dp"/>
 
                 <item
                     android:id="@+id/id_nav_charts"

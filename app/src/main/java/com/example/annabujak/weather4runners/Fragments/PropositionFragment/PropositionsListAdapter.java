@@ -51,6 +51,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
                         (new Double(elem.getWindSpeed())).toString()));
 
         holder.getShortDescription().setText(elem.getDescription());
+        holder.setDate(elem.getDateLong());
     }
 
     @Override
@@ -66,8 +67,12 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
     public class PropositionsListViewHolder extends RecyclerView.ViewHolder {
 
         private CheckBox mCheckbox;
+
         private TextView name;
+
         private TextView shortDescription;
+
+        private long date;
 
         public PropositionsListViewHolder(View itemView) {
             super(itemView);
@@ -92,5 +97,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         public TextView getShortDescription() {
             return shortDescription;
         }
+
+        public long getDate() { return this.date; }
+
+        public void setDate(long date) { this.date = date; }
     }
 }

@@ -24,7 +24,10 @@ import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
 import com.example.annabujak.weather4runners.Fragments.LoginFragment;
@@ -35,6 +38,7 @@ import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsN
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.facebook.FacebookSdk;
@@ -53,7 +57,10 @@ public class MainActivity extends AppCompatActivity
             UpdatingFinishedListener,
             ILoginFacebook,
             IWeatherPreferenceFragment,
-            NavigationView.OnNavigationItemSelectedListener {
+            NavigationView.OnNavigationItemSelectedListener,
+            ImportantConditionsChangedListener,
+            WeatherForecastUpdater,
+            PropositionClickedListener {
 
     private ProgressBar mLoadingIndicator;
 
@@ -115,20 +122,12 @@ public class MainActivity extends AppCompatActivity
                 setFragment(new PagerFragment(), true);
                 returnResult = true;
                 break;
-            case R.id.nav_update_forecast:
-                refreshAll();
-                returnResult = true;
-                break;
             case R.id.nav_locations:
                 // TODO
                 returnResult = true;
                 break;
             case R.id.nav_favourite_values:
                 setFragment(new WeatherPreferenceFragment(), true);
-                returnResult = true;
-                break;
-            case R.id.nav_saved_propositions:
-                //TODO
                 returnResult = true;
                 break;
             case R.id.id_nav_charts:
@@ -208,6 +207,22 @@ public class MainActivity extends AppCompatActivity
     public void AddUser(String firstName, String secondName) {
         User user = new User(firstName,secondName);
         centralControl.updateUser(user);
+    }
+
+    @Override
+    public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
+        // TODO
+        // convert the argument into PreferenceBalance and update preferenceBalance in database
+    }
+
+    @Override
+    public void onWeatherForecastUpdate() {
+        this.refreshAll();
+    }
+
+    @Override
+    public void onPropositionClickedListener(ChosenHour clickedHour) {
+        // TODO: update database
     }
 
     private void initListenersLists() {

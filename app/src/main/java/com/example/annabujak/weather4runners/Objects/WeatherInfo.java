@@ -2,8 +2,8 @@ package com.example.annabujak.weather4runners.Objects;
 
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by slowik on 24.04.2017.
@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class WeatherInfo {
 
-    private Date Date;
+    private long longDate; // UTC, unix epoch
     private long Id;
     private int Temperature;
     private int Humidity;
@@ -22,26 +22,26 @@ public class WeatherInfo {
     private String IconName;
     private String Description ="";
 
-    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, Date _Date, double _WindSpeed,
+    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, long _Date, double _WindSpeed,
                        String _IconName, String _Description) {
         Temperature = _Temperature;
         Humidity = _Humidity;
         Cloudiness = _Cloudiness;
         Precipitation = _Precipitation;
-        Date = _Date;
+        longDate = _Date;
         isChecked = false;
         WindSpeed = _WindSpeed;
         IconName = _IconName;
         Description = _Description;
     }
 
-    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, Date _Date, double _WindSpeed,
+    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, long _Date, double _WindSpeed,
                            String _IconName) {
         Temperature = _Temperature;
         Humidity = _Humidity;
         Cloudiness = _Cloudiness;
         Precipitation = _Precipitation;
-        Date = _Date;
+        longDate = _Date;
         isChecked = false;
         WindSpeed = _WindSpeed;
         IconName = _IconName;
@@ -61,7 +61,9 @@ public class WeatherInfo {
         return Precipitation;
     }
 
-    public java.util.Date getDate(){return Date;}
+    public java.util.Date getDate(){ return new java.util.Date(this.longDate);}
+
+    public long getDateLong() { return this.longDate; }
 
     public String getFormattedDate(SimpleDateFormat dateFormat) {
         return dateFormat.format(this.getDate());

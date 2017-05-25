@@ -25,7 +25,7 @@ public abstract class JSONWeatherValuesExtractor {
 
     public abstract Cloudiness extractCloudiness() throws JSONException;
 
-    public abstract Date extractDate() throws JSONException;
+    public abstract long extractDate() throws JSONException;
 
     public abstract double extractWind() throws JSONException;
 

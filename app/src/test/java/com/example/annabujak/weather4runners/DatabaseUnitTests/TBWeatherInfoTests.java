@@ -22,7 +22,7 @@ public class TBWeatherInfoTests {
         WeatherInfo wf = new WeatherInfo(20,14, Cloudiness.Big,23.0,now, 25.0, "NazwaIkony");
         assertEquals(wf.getTemperature(),20);
         assertEquals(wf.getCloudiness().toString(),"Big");
-        assertEquals(wf.getDate().toString(),now.toString());
+        assertEquals(wf.getLongDate().toString(),now.toString());
         assertEquals(wf.getHumidity(),14);
         assertEquals(wf.getPrecipitation(),23.0);
         assertEquals(wf.getWindSpeed(), 25.0);

@@ -32,9 +32,10 @@ public class WeatherFilter {
     }
     private boolean IsWeatherForDay(WeatherInfo w){
         Date now = new Date();
-        if(w.getDate().getTime() - now.getTime() < 0)
+        Date forecastTime = w.getDate();
+        if(forecastTime.getTime() - now.getTime() < 0)
             return false;
-        return (double)(w.getDate().getTime() - now.getTime())*MilisecondsToDays <= 1 ? true : false;
+        return (double)(forecastTime.getTime() - now.getTime())*MilisecondsToDays <= 1 ? true : false;
     }
 
     public ArrayList<WeatherInfo> GetWeeklyWeather(List<WeatherInfo> weather, Preference preference){
@@ -48,9 +49,10 @@ public class WeatherFilter {
     }
     private boolean IsWeatherForWeek(WeatherInfo w){
         Date now = new Date();
+        Date forecastTime = w.getDate();
         Integer DaysInWeek = 7;
-        if(w.getDate().getTime() - now.getTime() < 0)
+        if(forecastTime.getTime() - now.getTime() < 0)
             return false;
-        return (double)(w.getDate().getTime() - now.getTime())*MilisecondsToDays <= DaysInWeek ? true : false;
+        return (double)(forecastTime.getTime() - now.getTime())*MilisecondsToDays <= DaysInWeek ? true : false;
     }
 }

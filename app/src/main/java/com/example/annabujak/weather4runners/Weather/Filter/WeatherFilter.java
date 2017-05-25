@@ -32,7 +32,7 @@ public class WeatherFilter {
     }
     private boolean IsWeatherForDay(WeatherInfo w){
         Date now = new Date();
-        Date forecastTime = w.getDate();
+        Date forecastTime = new Date(w.getDate());
         if(forecastTime.getTime() - now.getTime() < 0)
             return false;
         return (double)(forecastTime.getTime() - now.getTime())*MilisecondsToDays <= 1 ? true : false;
@@ -49,7 +49,7 @@ public class WeatherFilter {
     }
     private boolean IsWeatherForWeek(WeatherInfo w){
         Date now = new Date();
-        Date forecastTime = w.getDate();
+        Date forecastTime = new Date(w.getDate());
         Integer DaysInWeek = 7;
         if(forecastTime.getTime() - now.getTime() < 0)
             return false;

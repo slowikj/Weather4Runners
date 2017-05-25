@@ -4,18 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by slowik on 12.05.2017.
@@ -50,9 +47,8 @@ public class DailyPropositionsFragment extends AbstractPropositionsFragment
     }
 
     @Override
-    protected ChosenHour getChosenProposition(long date) {
-       // TODO: return new ChosenHour(date, true)
-        return null;
+    protected ChosenProposition getChosenProposition(long date) {
+       return new ChosenProposition(date, true);
     }
 
     @Override

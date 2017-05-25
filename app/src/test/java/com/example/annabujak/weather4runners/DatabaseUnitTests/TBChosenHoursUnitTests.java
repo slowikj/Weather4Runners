@@ -1,7 +1,7 @@
 package com.example.annabujak.weather4runners.DatabaseUnitTests;
 
 
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 
 import org.junit.Test;
 
@@ -15,17 +15,17 @@ import static junit.framework.Assert.assertEquals;
  */
 
 public class TBChosenHoursUnitTests {
-    ChosenHour chosenHour = new ChosenHour(new Date(), false);
+    ChosenProposition chosenProposition = new ChosenProposition(new Date().getSeconds(), false);
     @Test
     public void setAndGetChosenHourUnitTest() throws Exception{
         SimpleDateFormat dateParser = new SimpleDateFormat("dd/MM/yyyy");
-        chosenHour.setDayAnIsdHour(dateParser.parse("15/09/2016"),false);
-        assertEquals(dateParser.parse("15/09/2016"),chosenHour.getDate());
-        assertEquals(false,chosenHour.getIsHour());
+        chosenProposition.setDayAnIsdHour(dateParser.parse("15/09/2016").getSeconds(),false);
+        assertEquals(dateParser.parse("15/09/2016").getSeconds(), chosenProposition.getDate());
+        assertEquals(false, chosenProposition.getIsHour());
     }
     @Test
     public void setIdTest() throws Exception{
-        chosenHour.setId(1);
-        assertEquals(1,chosenHour.getId());
+        chosenProposition.setId(1);
+        assertEquals(1, chosenProposition.getId());
     }
 }

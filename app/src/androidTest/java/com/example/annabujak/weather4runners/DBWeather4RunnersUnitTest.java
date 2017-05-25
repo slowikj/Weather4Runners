@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.annabujak.weather4runners.Objects.BestHour;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Database.DBWeather4Runners;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.User;
@@ -75,11 +75,11 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void addChosenHourTest() throws Exception {
         Date current = new Date();
-        ChosenHour chosenHour = new ChosenHour(current,false);
-        database.addChosenHour(chosenHour);
-        ChosenHour actualChosenHour = database.getChosenHour(chosenHour.getId());
-        assertEquals(current.toString(),actualChosenHour.getDate().toString());
-        assertEquals(false,actualChosenHour.getIsHour());
+        ChosenProposition chosenProposition = new ChosenProposition(current.getSeconds(),false);
+        database.addChosenHour(chosenProposition);
+        ChosenProposition actualChosenProposition = database.getChosenHour(chosenProposition.getId());
+        assertEquals(current.getSeconds(), actualChosenProposition.getDate());
+        assertEquals(false, actualChosenProposition.getIsHour());
     }
 
     @Test
@@ -94,14 +94,14 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void getAllChosenHoursTest() throws Exception {
 
-        final ChosenHour chosenToAdd = new ChosenHour(new Date(),true);
-        List<ChosenHour> allChosenHours;
+        final ChosenProposition chosenToAdd = new ChosenProposition((new Date()).getSeconds(),true);
+        List<ChosenProposition> allChosenPropositions;
         boolean tookAll = false;
 
         database.addChosenHour(chosenToAdd);
-        allChosenHours = database.getAllChosenHours();
+        allChosenPropositions = database.getAllChosenHours();
 
-        for(ChosenHour hour : allChosenHours) {
+        for(ChosenProposition hour : allChosenPropositions) {
             if(new Long(hour.getId()).toString().equals(new Long(chosenToAdd.getId()).toString())) {
                 tookAll = true;
             }
@@ -155,11 +155,11 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void updateChosenHourTest() throws Exception {
         Date current = new Date();
-        ChosenHour hour = new ChosenHour(current,true);
+        ChosenProposition hour = new ChosenProposition(current.getSeconds(),true);
         database.addChosenHour(hour);
-        hour.setDayAnIsdHour(current,false);
+        hour.setDayAnIsdHour(current.getSeconds(),false);
         database.updateChosenHour(hour);
-        ChosenHour currentHour = database.getChosenHour(hour.getId());
+        ChosenProposition currentHour = database.getChosenHour(hour.getId());
         assertEquals(false,currentHour.getIsHour());
     }
 
@@ -199,10 +199,10 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void clearChosenHoursTest() throws Exception {
-        ChosenHour chosenHour = new ChosenHour(new Date(),false);
+        ChosenProposition chosenProposition = new ChosenProposition((new Date()).getSeconds(),false);
         database.clearChosenHours();
-        database.addChosenHour(chosenHour);
-        assertEquals(1,chosenHour.getId());
+        database.addChosenHour(chosenProposition);
+        assertEquals(1, chosenProposition.getId());
     }
 
 
@@ -217,10 +217,10 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void deleteChosenHourTest() throws Exception{
-        ChosenHour hour = new ChosenHour(new Date(),false);
+        ChosenProposition hour = new ChosenProposition((new Date()).getSeconds(),false);
         database.addChosenHour(hour);
         database.deleteChosenHour(hour.getId());
-        ChosenHour getted = database.getChosenHour(hour.getId());
+        ChosenProposition getted = database.getChosenHour(hour.getId());
         assertNull(getted);
     }
 
@@ -238,14 +238,13 @@ public class DBWeather4RunnersUnitTest {
     @Test
     public void addWeatherInfo() throws Exception{
         Date now = new Date();
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0,now,22.0,"Icon","Desc");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0,now.getSeconds(),22.0,"Icon","Desc");
         weatherInfo.setIsChecked(true);
         database.addWeatherInfo(weatherInfo);
         WeatherInfo newWeather = database.getWeatherInfo(weatherInfo.getId());
         assertEquals(newWeather.getPrecipitation(),weatherInfo.getPrecipitation());
         assertEquals(newWeather.getHumidity(),weatherInfo.getHumidity());
         assertEquals(newWeather.getCloudiness().toString(),"Big");
-        assertEquals(weatherInfo.getLongDate().toString(),newWeather.getLongDate().toString());
         assertEquals(weatherInfo.getTemperature(),newWeather.getTemperature());
         assertEquals(weatherInfo.getIsChecked(),true);
         assertEquals(weatherInfo.getWindSpeed(),22.0);
@@ -255,7 +254,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void deleteWatherInfo() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
         database.addWeatherInfo(weatherInfo);
         database.deleteWeatherInfo(weatherInfo.getId());
         WeatherInfo gotten = database.getWeatherInfo(weatherInfo.getId());
@@ -264,7 +263,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void clearWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
         database.clearWeatherInfo();
         database.addWeatherInfo(weatherInfo);
         assertEquals(1,weatherInfo.getId());
@@ -272,7 +271,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void updateWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
         database.addWeatherInfo(weatherInfo);
         weatherInfo.setIsChecked(true);
         weatherInfo.setIconName("NewIcon");
@@ -285,7 +284,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void getAllWeatherInfos() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, new Date(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
         List<WeatherInfo> allWeatherInfos;
         boolean tookAll = false;
 

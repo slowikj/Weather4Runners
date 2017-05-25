@@ -15,8 +15,10 @@ public class Preference {
     private double WindSpeed = 20.0;
     private int StartHour = 10;
     private int EndHour = 17;
+    private PreferenceBalance Balance;
 
     public Preference(){
+        Balance = new PreferenceBalance(1,0.1,1,1,1);
     }
     public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour, int _Humidity, double _Precipitation, double _WindSpeed){
         Temperature =_Temprature;
@@ -26,6 +28,17 @@ public class Preference {
         Humidity = _Humidity;
         Precipitation = _Precipitation;
         WindSpeed = _WindSpeed;
+        Balance = new PreferenceBalance(1,0.1,1,1,1);
+    }
+    public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour, int _Humidity, double _Precipitation, double _WindSpeed, PreferenceBalance _Balanse){
+        Temperature =_Temprature;
+        Cloudiness = _Cloudiness;
+        StartHour = _StartHour;
+        EndHour = _EndHour;
+        Humidity = _Humidity;
+        Precipitation = _Precipitation;
+        WindSpeed = _WindSpeed;
+        Balance = _Balanse;
     }
     public void setTemperature(int temperature){
         Temperature = temperature;
@@ -68,4 +81,7 @@ public class Preference {
 
     public double getWindSpeed(){return WindSpeed;}
     public void setWindSpeed(double _WindSpeed){WindSpeed = _WindSpeed;}
+
+    public PreferenceBalance getPreferenceBalance(){return  Balance;}
+    public void setPreferenceBalance(PreferenceBalance _Balance){Balance = _Balance;}
 }

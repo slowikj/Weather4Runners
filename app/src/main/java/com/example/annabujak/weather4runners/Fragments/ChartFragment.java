@@ -8,20 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.annabujak.weather4runners.Listeners.ChosenPropositionListener;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by pawel.bujak on 15.05.2017.
  */
 
-public class ChartFragment extends Fragment {
+public class ChartFragment extends Fragment implements ChosenPropositionListener {
+
+    private GraphView graphDays;
+    private GraphView graphHours;
+    private BarGraphSeries<DataPoint> seriesDays;
+    private BarGraphSeries<DataPoint> seriesHours;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,38 +43,61 @@ public class ChartFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        GraphView graphDays = (GraphView) view.findViewById(R.id.graphDays);
-        GraphView graphHours = (GraphView) view.findViewById(R.id.graphHours);
-        BarGraphSeries<DataPoint> seriesDays = new BarGraphSeries<>(new DataPoint[] {
-                new DataPoint(1, 7),
-                new DataPoint(2, 10),
-                new DataPoint(3, 11),
-                new DataPoint(4, 40),
-                new DataPoint(5, 6),
-                new DataPoint(6, 20),
-                new DataPoint(7, 6)
-
-        });
-        BarGraphSeries<DataPoint> seriesHours = new BarGraphSeries<>(new DataPoint[] {
-                new DataPoint(1, 7),
-                new DataPoint(2, 10),
-                new DataPoint(3, 11),
-                new DataPoint(4, 40),
-                new DataPoint(5, 6),
-                new DataPoint(6, 20),
-                new DataPoint(7, 6)
-
-        });
-        seriesHours.setTitle("Hours chosen for run");
-        seriesDays.setTitle("Days chosen for run");
+        graphDays = (GraphView) view.findViewById(R.id.graphDays);
+        graphHours = (GraphView) view.findViewById(R.id.graphHours);
         graphDays.getLegendRenderer().setVisible(true);
         graphDays.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graphHours.getLegendRenderer().setVisible(true);
         graphHours.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-        seriesHours.setColor(Color.parseColor("#FF4081"));
 
-        seriesDays.setDrawValuesOnTop(true);
         graphDays.addSeries(seriesDays);
         graphHours.addSeries(seriesHours);
+
+    }
+
+    @Override
+    public void onChosenPropositionChanged(List<ChosenProposition> allChosenPropositions) {
+
+        List<ChosenProposition> hours = new ArrayList<>();
+        List<ChosenProposition> days = new ArrayList<>();
+
+        for (ChosenProposition hour: allChosenPropositions) {
+            if(hour.getIsHour())
+                hours.add(hour);
+            else
+                days.add(hour);
+        }
+
+        prepareGraphDays(days);
+        prepareGraphHours(hours);
+    }
+
+    private void prepareGraphDays(List<ChosenProposition> chosenPropositions){
+        DataPoint[] points = new DataPoint[7];
+        for(int i  = 0; i < 7; i ++)
+            points[i] = new DataPoint(i+1,0);
+        for(int i = 0; i < chosenPropositions.size(); i ++){
+            Date tempDate = new Date(chosenPropositions.get(i).getDate());
+            points[tempDate.getDay()] = new DataPoint(points[tempDate.getDay()].getX(),points[tempDate.getDay()].getY()+1);
+        }
+        seriesDays = new BarGraphSeries<>(points);
+        seriesDays.setTitle("Days chosen for run");
+        seriesDays.setDrawValuesOnTop(true);
+        if(graphDays != null)
+            graphDays.addSeries(seriesDays);
+    }
+    private void prepareGraphHours(List<ChosenProposition> chosenPropositions){
+        DataPoint[] points = new DataPoint[24];
+        for(int i  = 0; i < 24; i ++)
+            points[i] = new DataPoint(i+1,0);
+        for(int i = 0; i < chosenPropositions.size(); i ++){
+            Date tempDate = new Date(chosenPropositions.get(i).getDate());
+            points[tempDate.getHours()-1] = new DataPoint(points[tempDate.getHours()-1].getX(),points[tempDate.getHours()-1].getY()+1);
+        }
+        seriesHours = new BarGraphSeries<>(points);
+        seriesHours.setTitle("Hours chosen for run");
+        seriesHours.setColor(Color.parseColor("#FF4081"));
+        if(graphHours != null)
+            graphHours.addSeries(seriesHours);
     }
 }

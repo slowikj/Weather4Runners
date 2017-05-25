@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import com.example.annabujak.weather4runners.Objects.BestHour;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
@@ -47,6 +48,12 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
     private static final String KEY_ICON = "icon";
     private static final String KEY_DESCRIPTION = "KEY_DESCRIPTION";
 
+    private static final String PB_KEY_TEMPERATURE = "pbtemperature";
+    private static final String PB_KEY_CLOUDINESS = "pbcloudiness";
+    private static final String PB_KEY_HUMIDITY = "pbhumidity";
+    private static final String PB_KEY_PRECIPITATION = "pbprecipitation";
+    private static final String PB_KEY_WIND_SPEED = "pbwind";
+
     // BEST_HOURS, CHOSEN_HOURS Table - column names
     private static final String KEY_DATE = "date";
     private static final String KEY_HOUR = "hour";
@@ -60,7 +67,10 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
             + TABLE_PREFERENCES_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TEMPERATURE
             + " INTEGER," + KEY_CLOUDINESS + " INTEGER,"+ KEY_START_HOUR + " INTEGER,"
             + KEY_END_HOUR + " INTEGER, "+ KEY_HUMIDITY + " INTEGER, "+KEY_PRECIPITATION + " DOUBLE PRECISION, "
-            +KEY_WIND_SPEED + " DOUBLE PRECISION"+")";
+            +KEY_WIND_SPEED + " DOUBLE PRECISION, "
+            + PB_KEY_CLOUDINESS + " DOUBLE PRECISION, "+ PB_KEY_HUMIDITY + " DOUBLE PRECISION, "
+            + PB_KEY_PRECIPITATION + " DOUBLE PRECISION, "+ PB_KEY_TEMPERATURE + " DOUBLE PRECISION, "
+            + PB_KEY_WIND_SPEED + " DOUBLE PRECISION"+ ")";
 
     private static final String CREATE_TABLE_BEST_HOURS = "CREATE TABLE IF NOT EXISTS "
             + TABLE_BEST_HOURS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE
@@ -78,7 +88,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
             + " INTEGER," + KEY_HUMIDITY + " INTEGER,"+ KEY_CLOUDINESS + " INTEGER,"
             + KEY_PRECIPITATION + " DOUBLE PRECISION, "+ KEY_DATE
             + " LONG, "+KEY_IS_CHECKED + " BOOLEAN, "+ KEY_WIND_SPEED + " DOUBLE PRECISION, "
-            + KEY_ICON+ " TEXT, "+ KEY_DESCRIPTION+ " TEXT" + ")";
+            + KEY_ICON+ " TEXT, "+ KEY_DESCRIPTION+ " TEXT) ";
 
     public DBWeather4Runners(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -116,6 +126,12 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_PRECIPITATION,preference.getPrecipitation());
         values.put(KEY_WIND_SPEED, preference.getWindSpeed());
 
+         values.put(PB_KEY_CLOUDINESS,preference.getPreferenceBalance().GetCloudinessImportance());
+         values.put(PB_KEY_HUMIDITY,preference.getPreferenceBalance().GetHumidityImportance());
+         values.put(PB_KEY_PRECIPITATION,preference.getPreferenceBalance().GetPrecipitationImportance());
+         values.put(PB_KEY_TEMPERATURE,preference.getPreferenceBalance().GetTemperatureImportance());
+         values.put(PB_KEY_WIND_SPEED,preference.getPreferenceBalance().GetWindSpeedImportance());
+
         long id = database.insert(TABLE_PREFERENCES_NAME, null, values);
         preference.setId(id);
     }
@@ -138,6 +154,14 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         preference.setPrecipitation(cursor.getDouble(cursor.getColumnIndex(KEY_PRECIPITATION)));
         preference.setWindSpeed(cursor.getDouble(cursor.getColumnIndex(KEY_WIND_SPEED)));
 
+        PreferenceBalance preferenceBalance = new PreferenceBalance(
+                cursor.getDouble(cursor.getColumnIndex(PB_KEY_TEMPERATURE)),
+                cursor.getDouble(cursor.getColumnIndex(PB_KEY_CLOUDINESS)),
+                cursor.getDouble(cursor.getColumnIndex(PB_KEY_HUMIDITY)),
+                cursor.getDouble(cursor.getColumnIndex(PB_KEY_PRECIPITATION)),
+                cursor.getDouble(cursor.getColumnIndex(PB_KEY_WIND_SPEED)));
+        preference.setPreferenceBalance(preferenceBalance);
+
         return preference;
     }
     public void updatePreference(Preference preference){
@@ -151,6 +175,12 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_HUMIDITY,preference.getHumidity());
         values.put(KEY_PRECIPITATION,preference.getPrecipitation());
         values.put(KEY_WIND_SPEED, preference.getWindSpeed());
+
+        values.put(PB_KEY_CLOUDINESS,preference.getPreferenceBalance().GetCloudinessImportance());
+        values.put(PB_KEY_HUMIDITY,preference.getPreferenceBalance().GetHumidityImportance());
+        values.put(PB_KEY_PRECIPITATION,preference.getPreferenceBalance().GetPrecipitationImportance());
+        values.put(PB_KEY_TEMPERATURE,preference.getPreferenceBalance().GetTemperatureImportance());
+        values.put(PB_KEY_WIND_SPEED,preference.getPreferenceBalance().GetWindSpeedImportance());
 
         // updating row
         database.update(TABLE_PREFERENCES_NAME, values, KEY_ID + " = ?", new String[] { String.valueOf(preference.getId()) });
@@ -223,17 +253,17 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
                 new String[] { String.valueOf(hourId) });
     }
 
-    public void addChosenHour(ChosenHour chosenHour) {
+    public void addChosenHour(ChosenProposition chosenProposition) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DATE, chosenHour.getDate().toString());
-        values.put(KEY_HOUR, chosenHour.getIsHour());
+        values.put(KEY_DATE, chosenProposition.getDate());
+        values.put(KEY_HOUR, chosenProposition.getIsHour());
 
         long id =  database.insert(TABLE_CHOSEN_HOURS, null, values);
-        chosenHour.setId(id);
+        chosenProposition.setId(id);
     }
-    public ChosenHour getChosenHour(long chosenHourId) {
+    public ChosenProposition getChosenHour(long chosenHourId) {
         SQLiteDatabase database = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_CHOSEN_HOURS + " WHERE "
@@ -245,13 +275,13 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
 
         if(cursor.getCount() == 0)
             return null;
-        ChosenHour chosenHour = new ChosenHour(new Date(cursor.getString(cursor.getColumnIndex(KEY_DATE))),cursor.getInt(cursor.getColumnIndex(KEY_HOUR)) > 0);
-        chosenHour.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+        ChosenProposition chosenProposition = new ChosenProposition(cursor.getInt(cursor.getColumnIndex(KEY_DATE)),cursor.getInt(cursor.getColumnIndex(KEY_HOUR)) > 0);
+        chosenProposition.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
 
-        return chosenHour;
+        return chosenProposition;
     }
-    public List<ChosenHour> getAllChosenHours() {
-        List<ChosenHour> allHours = new ArrayList<ChosenHour>();
+    public List<ChosenProposition> getAllChosenHours() {
+        List<ChosenProposition> allHours = new ArrayList<ChosenProposition>();
         String selectQuery = "SELECT  * FROM " + TABLE_CHOSEN_HOURS;
 
         SQLiteDatabase database = this.getReadableDatabase();
@@ -260,7 +290,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                ChosenHour hour = new ChosenHour(new Date(c.getString(c.getColumnIndex(KEY_DATE))),c.getInt(c.getColumnIndex(KEY_HOUR)) > 0);
+                ChosenProposition hour = new ChosenProposition(c.getInt(c.getColumnIndex(KEY_DATE)),c.getInt(c.getColumnIndex(KEY_HOUR)) > 0);
                 hour.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 allHours.add(hour);
             } while (c.moveToNext());
@@ -268,11 +298,11 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
 
         return allHours;
     }
-    public void updateChosenHour(ChosenHour hour){
+    public void updateChosenHour(ChosenProposition hour){
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DATE, hour.getDate().toString());
+        values.put(KEY_DATE, hour.getDate());
         values.put(KEY_HOUR, hour.getIsHour());
 
         // updating row

@@ -1,6 +1,5 @@
 package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
@@ -179,7 +178,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     protected abstract Command<Integer> getChangeIntPrefCommand();
 
-    protected abstract ChosenHour getChosenProposition(long date);
+    protected abstract ChosenProposition getChosenProposition(long date);
 
     private void attachPropositionsClickedListener(PropositionClickedListener context) {
         try {
@@ -199,9 +198,9 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
             holder.getCheckbox().setChecked(!holder.getCheckbox().isChecked());
             Integer pos = recyclerView.getChildAdapterPosition(view);
 
-            // TODO: propositionClickedListener.on...(getChosenProposition(holder.getDate())
+            propositionClickedListener.onPropositionClickedListener(getChosenProposition(holder.getDate()));
 
-            Toast.makeText(getContext(), "you clicked " + pos.toString(), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(getContext(), "you clicked " + pos.toString(), Toast.LENGTH_SHORT).show();
         }
 
         @Override

@@ -45,8 +45,8 @@ public class DBManagerAndWeatherFilterUnitTests {
     @Test
     public void TestAddingJSON() throws Exception{
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
-        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
+      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
+       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
         manager.UpdateWeatherData(weather);
         List<WeatherInfo> newWeather = manager.GetWeatherData();
         assertEquals(newWeather.get(0).getIconName(),"Icon");
@@ -58,9 +58,9 @@ public class DBManagerAndWeatherFilterUnitTests {
         Preference preference = new Preference(15, Cloudiness.Big,10,17,12,12.0,12.0);
 
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
-        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
-        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(2)),18.0,"Icon1","Tomorrow"));
+      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
+       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
+       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(2)),18.0,"Icon1","Tomorrow"));
 
         manager.UpdateWeatherData(weather);
         List<WeatherInfo> newWeather = manager.GetWeatherData();
@@ -74,9 +74,9 @@ public class DBManagerAndWeatherFilterUnitTests {
         Preference preference = new Preference(15, Cloudiness.Big,10,17,12,12.0,12.0);
 
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(3)),14.0,"Icon"));
-        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(4)),18.0,"Icon1","Description"));
-        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(5)),18.0,"Icon1","Tomorrow"));
+      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(3)),14.0,"Icon"));
+       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(4)),18.0,"Icon1","Description"));
+       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(5)),18.0,"Icon1","Tomorrow"));
         manager.UpdateWeatherData(weather);
 
         List<WeatherInfo> newWeather = manager.GetWeatherData();

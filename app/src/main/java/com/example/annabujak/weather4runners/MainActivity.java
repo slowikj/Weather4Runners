@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.location.Location;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,11 +37,12 @@ import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment
 import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.WeatherPreferenceFragment;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.Tracker.GPSTracker;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
@@ -74,13 +76,20 @@ public class MainActivity extends AppCompatActivity
 
     private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
 
+    private ChartFragment chartFragment;
+
     private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
+
+    private GPSTracker gpsTracker;
+    private double xLocation;
+    private double yLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        gpsTracker = new GPSTracker(this);
         setViewReferences();
         restorePreviousStateIfAny(savedInstanceState);
 
@@ -88,6 +97,17 @@ public class MainActivity extends AppCompatActivity
         initEmptyPropositionsList();
 
         this.centralControl = getCentralControl();
+
+        //Using gps tracker
+        if(gpsTracker.canGetLocation()){
+            xLocation = gpsTracker.getLatitude();
+            yLocation = gpsTracker.getLongitude();
+        }
+        else
+            gpsTracker.showSettingsAlert();
+        gpsTracker.stopUsingGPS();
+
+
     }
 
     @Override
@@ -131,7 +151,9 @@ public class MainActivity extends AppCompatActivity
                 returnResult = true;
                 break;
             case R.id.id_nav_charts:
-                setFragment(new ChartFragment(), true);
+                chartFragment = new ChartFragment();
+                setFragment(chartFragment, true);
+                chartFragment.onChosenPropositionChanged(centralControl.getAllChosenHours());
                 returnResult = true;
                 break;
             case R.id.nav_order_of_imporance:
@@ -211,8 +233,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
-        // TODO
-        // convert the argument into PreferenceBalance and update preferenceBalance in database
+        PreferenceBalance Balance = new PreferenceBalance(orderedImportantConditions);
+        centralControl.updatePreferenceBalance(Balance);
     }
 
     @Override
@@ -221,8 +243,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPropositionClickedListener(ChosenHour clickedHour) {
-        // TODO: update database
+    public void onPropositionClickedListener(ChosenProposition clickedHour) {
+        centralControl.addChosenHour(clickedHour);
     }
 
     private void initListenersLists() {
@@ -302,7 +324,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAddedChosenHour(ChosenHour chosenHour) {
-        centralControl.addChosenHour(chosenHour);
+    public void onAddedChosenHour(ChosenProposition chosenProposition) {
+        centralControl.addChosenHour(chosenProposition);
     }
 }

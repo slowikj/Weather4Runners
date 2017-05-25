@@ -6,20 +6,20 @@ import java.util.Date;
  * Created by pawel.bujak on 21.04.2017.
  */
 
-public class ChosenHour {
+public class ChosenProposition {
     long Id;
-    Date Date;
+    long Date;
     Boolean IsHour;
 
-    public ChosenHour(Date _Date, boolean _Hour){
+    public ChosenProposition(long _Date, boolean _Hour){
         Date = _Date;
         IsHour  =_Hour;
     }
-    public void setDayAnIsdHour(Date date, boolean hour){
+    public void setDayAnIsdHour(long date, boolean hour){
         Date = date;
         IsHour = hour;
     }
-    public Date getDate(){
+    public long getDate(){
         return Date;
     }
     public boolean getIsHour(){

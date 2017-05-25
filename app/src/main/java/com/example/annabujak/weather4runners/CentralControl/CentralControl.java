@@ -9,7 +9,7 @@ import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
@@ -22,6 +22,7 @@ import com.example.annabujak.weather4runners.Weather.JSONTransformatorBuilder;
 import com.example.annabujak.weather4runners.Weather.JSONWeatherDownloader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by slowik on 07.05.2017.
@@ -56,9 +57,7 @@ public class CentralControl {
         this.weatherForecastManager = new WeatherForecastManager(
                 getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
-        //TODO
-        PreferenceBalance Balance = new PreferenceBalance(1,0.1,1,1,1);
-        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, Balance);
+        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, databaseManager.GetPreference().getPreferenceBalance());
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
@@ -91,8 +90,12 @@ public class CentralControl {
     public void updateUser(User user){
         databaseManager.UpdateUserDatas(user);
     }
-    public void addChosenHour(ChosenHour hour){databaseManager.AddChosenHour(hour);}
+    public void addChosenHour(ChosenProposition hour){databaseManager.AddChosenHourAndUpdateIsChecked(hour);}
+    public List<ChosenProposition> getAllChosenHours(){
+        return databaseManager.GetChosenHours();
+    }
     public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
+    public void updatePreferenceBalance(PreferenceBalance balance){databaseManager.UpdatePreferenceBalance(balance);}
 
     private void recomputePropositionsAsync(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(

@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
 
@@ -46,8 +46,8 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
     }
 
     @Override
-    protected ChosenHour getChosenProposition(long date) {
-        return null; // TODO: return new ChosenHour(date, false)
+    protected ChosenProposition getChosenProposition(long date) {
+        return new ChosenProposition(date, false);
     }
 
     @Override

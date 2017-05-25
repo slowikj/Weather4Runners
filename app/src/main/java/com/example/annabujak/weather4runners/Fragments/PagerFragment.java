@@ -22,7 +22,7 @@ import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChanged
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
-import com.example.annabujak.weather4runners.Objects.ChosenHour;
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
@@ -153,7 +153,7 @@ public class PagerFragment extends Fragment
     }
 
     @Override
-    public void onPropositionClickedListener(ChosenHour clickedHour) {
+    public void onPropositionClickedListener(ChosenProposition clickedHour) {
         this.propositionClickedListener.onPropositionClickedListener(clickedHour);
     }
 

@@ -7,6 +7,7 @@ import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class WeatherAlgorithm {
         Preference = preference;
         Map<Integer,ArrayList<WeatherInfo>> WeekDays = InitializeWeekDaysMap();
         for (WeatherInfo w:weatherInfo) {
-            WeekDays.get(w.getDate().getDay()%DaysInWeek).add(w);
+            WeekDays.get(new Date(w.getDate()).getDay()%DaysInWeek).add(w);
         }
         ArrayList<WeatherInfo> bestInWeek = new ArrayList<>();
         for(int i = 0; i < DaysInWeek; i ++){
@@ -77,7 +78,8 @@ public class WeatherAlgorithm {
         return finalList;
     }
     private boolean IsInPreferenceTime(WeatherInfo w){
-        return w.getDate().getHours() < Preference.getStartHour() || w.getDate().getHours() > Preference.getEndHour() ? false : true;
+        Date fromW = new Date(w.getDate());
+        return fromW.getHours() < Preference.getStartHour() || fromW.getHours() > Preference.getEndHour() ? false : true;
     }
     private Double CountWeatherPreference(WeatherInfo w){
         Double result = 0.0;

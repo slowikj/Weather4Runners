@@ -61,7 +61,7 @@ public class WeatherInfo {
         return Precipitation;
     }
 
-    public java.util.Date getDate(){ return new java.util.Date(this.longDate);}
+    public long getDate(){ return this.longDate;}
 
     public long getDateLong() { return this.longDate; }
 

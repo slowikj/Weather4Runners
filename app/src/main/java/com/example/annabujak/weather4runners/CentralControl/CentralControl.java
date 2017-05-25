@@ -122,7 +122,7 @@ public class CentralControl {
         PreferenceBalance res;
         try {
             res = databaseManager.GetPreference().getPreferenceBalance();
-        } catch(IllegalStateException e) {
+        } catch(Exception e) {
             res = new PreferenceBalance();
         }
 
@@ -132,7 +132,7 @@ public class CentralControl {
     private Preference getUserWeatherPreferenceOrDefault() {
         try {
             return databaseManager.GetPreference();
-        } catch(IndexOutOfBoundsException e) {
+        } catch(Exception e) {
             return new Preference();
         }
     }

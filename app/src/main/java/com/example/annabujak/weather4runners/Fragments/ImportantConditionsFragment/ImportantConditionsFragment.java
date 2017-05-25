@@ -4,15 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,7 +20,6 @@ import com.example.annabujak.weather4runners.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by slowik on 21.05.2017.
@@ -38,6 +35,8 @@ public class ImportantConditionsFragment extends Fragment{
 
     private ImportantConditionsChangedListener importantConditionsChangedListener;
 
+    private FloatingActionButton mFloatingPointButton;
+
     public static ImportantConditionsFragment Create(
             ArrayList<WeatherConditionsNames> importantWeatherConditionsNames) {
         ImportantConditionsFragment res = new ImportantConditionsFragment();
@@ -50,12 +49,11 @@ public class ImportantConditionsFragment extends Fragment{
         super.onCreate(savedInstanceState);
 
         String str = WeatherConditionsNames.Cloudiness.toString();
-
         this.importantConditionsAdapter = createImportantConditionsAdapter(
-                this.importantWeatherConditionsNames
+                    this.importantWeatherConditionsNames
         );
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
     @Nullable
@@ -69,27 +67,6 @@ public class ImportantConditionsFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         setChildViews(view);
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.menu_important_conditions, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_important_conditions_refresh:
-                this.importantWeatherConditionsNames = new ArrayList<WeatherConditionsNames>(
-                        Arrays.asList(WeatherConditionsNames.values()));
-                this.importantConditionsAdapter.setData(
-                        this.importantWeatherConditionsNames);
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -112,6 +89,7 @@ public class ImportantConditionsFragment extends Fragment{
 
     private void setChildViews(View view) {
         this.mRecyclerView = createRecyclerView(view, this.importantConditionsAdapter);
+        this.mFloatingPointButton = getFloatingPointButton(view);
     }
 
     private RecyclerView createRecyclerView(View parentView, ImportantConditionsAdapter adapter) {
@@ -133,5 +111,21 @@ public class ImportantConditionsFragment extends Fragment{
     private ImportantConditionsAdapter createImportantConditionsAdapter(
             ArrayList<WeatherConditionsNames> importantWeatherConditionsNames) {
         return new ImportantConditionsAdapter(importantWeatherConditionsNames);
+    }
+
+    private FloatingActionButton getFloatingPointButton(View parentView) {
+        FloatingActionButton res = (FloatingActionButton) parentView
+                .findViewById(R.id.important_conditions_reset_button);
+        res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                importantWeatherConditionsNames = new ArrayList<WeatherConditionsNames>(
+                        Arrays.asList(WeatherConditionsNames.values()));
+                importantConditionsAdapter.setData(
+                        importantWeatherConditionsNames);
+            }
+        });
+
+        return res;
     }
 }

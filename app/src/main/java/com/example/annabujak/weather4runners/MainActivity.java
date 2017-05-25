@@ -24,6 +24,7 @@ import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
@@ -34,6 +35,7 @@ import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment
 import com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragment.WeatherPreferenceFragment;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
+import com.example.annabujak.weather4runners.Objects.ChosenHour;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.User;
@@ -55,7 +57,8 @@ public class MainActivity extends AppCompatActivity
             IWeatherPreferenceFragment,
             NavigationView.OnNavigationItemSelectedListener,
             ImportantConditionsChangedListener,
-            WeatherForecastUpdater{
+            WeatherForecastUpdater,
+            PropositionClickedListener {
 
     private ProgressBar mLoadingIndicator;
 
@@ -204,6 +207,22 @@ public class MainActivity extends AppCompatActivity
         centralControl.updateUser(user);
     }
 
+    @Override
+    public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
+        // TODO
+        // convert the argument into PreferenceBalance and update preferenceBalance in database
+    }
+
+    @Override
+    public void onWeatherForecastUpdate() {
+        this.refreshAll();
+    }
+
+    @Override
+    public void onPropositionClickedListener(ChosenHour clickedHour) {
+        // TODO: update database
+    }
+
     private void initListenersLists() {
         this.dailyPropositionsChangedListeners = new LinkedList<>();
         this.weeklyPropositionsChangedListeners = new LinkedList<>();
@@ -277,16 +296,5 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
-    }
-
-    @Override
-    public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
-        // TODO
-        // convert the argument into PreferenceBalance and update preferenceBalance in database
-    }
-
-    @Override
-    public void onWeatherForecastUpdate() {
-        this.refreshAll();
     }
 }

@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +32,11 @@ public class PreferenceBalance {
         HumidityImportance = _humidityImportance;
         PrecipitationImportance = _precipitationImportance;
         WindSpeedImportance = _windSpeedImportance;
+    }
+
+    public PreferenceBalance() {
+        this(new ArrayList<WeatherConditionsNames>(
+                Arrays.asList(WeatherConditionsNames.values())));
     }
 
     public PreferenceBalance(ArrayList<WeatherConditionsNames> conditionsImportanceOrder) {

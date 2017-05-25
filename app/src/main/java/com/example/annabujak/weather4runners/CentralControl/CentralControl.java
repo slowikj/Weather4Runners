@@ -57,7 +57,9 @@ public class CentralControl {
         this.weatherForecastManager = new WeatherForecastManager(
                 getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
-        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, databaseManager.GetPreference().getPreferenceBalance());
+
+        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS,
+                getPreferenceBalanceOrDefault());
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
@@ -116,6 +118,25 @@ public class CentralControl {
         return new JSONWeatherDownloader(cityName, language);
     }
 
+    public PreferenceBalance getPreferenceBalanceOrDefault() {
+        PreferenceBalance res;
+        try {
+            res = databaseManager.GetPreference().getPreferenceBalance();
+        } catch(IllegalStateException e) {
+            res = new PreferenceBalance();
+        }
+
+        return res;
+    }
+
+    private Preference getUserWeatherPreferenceOrDefault() {
+        try {
+            return databaseManager.GetPreference();
+        } catch(IndexOutOfBoundsException e) {
+            return new Preference();
+        }
+    }
+
     class WeatherForecastUpdaterTask extends AsyncTask<Void, Void, ArrayList<WeatherInfo>> {
 
         @Override
@@ -152,14 +173,6 @@ public class CentralControl {
                     .GetWeeklyWeather(weatherForecast, preference);
 
             return new Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>(dailyPropositions, weeklyPropositions);
-        }
-
-        private Preference getUserWeatherPreferenceOrDefault() {
-            try {
-                return databaseManager.GetPreference();
-            } catch(IndexOutOfBoundsException e) {
-                return new Preference();
-            }
         }
 
         @Override

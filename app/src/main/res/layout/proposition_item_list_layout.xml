@@ -15,8 +15,8 @@
         android:longClickable="true"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        card_view:cardCornerRadius="30dp"
-        card_view:contentPadding="10dp">
+        card_view:cardCornerRadius="20dp"
+        card_view:contentPadding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:rowCount="1"
-                android:columnCount="2">
+                android:columnCount="3">
                 <CheckBox android:layout_row="0"
                     android:layout_column="0"
                     android:layout_width="wrap_content"
@@ -37,16 +37,27 @@
                     android:id="@+id/item_proposition_checked"
                     android:checked="@bool/item_proposition_is_checked_default"
                     android:clickable="false"/>
-                <ImageView android:id="@+id/weather_icon"
+                <TextView
                     android:layout_row="0"
-                    android:layout_column="1"/>
-            </GridLayout>
+                    android:layout_column="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_proposition_name"
+                    android:padding="4dp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"/>
 
+                <ImageView android:id="@+id/item_proposition_weather_icon"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_gravity="right"/>
+            </GridLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_proposition_name"
-                android:padding="4dp"
+                android:id="@+id/item_proposition_conditions"
+                android:layout_gravity="left"
+                android:fontFamily="monospace"
                 android:textColor="#000000"/>
             <TextView
                 android:layout_width="wrap_content"

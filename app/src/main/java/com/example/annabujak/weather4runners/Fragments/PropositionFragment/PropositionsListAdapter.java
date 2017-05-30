@@ -44,16 +44,12 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         WeatherInfo elem = propositionsList.get(position);
         holder.getCheckbox().setChecked(elem.getIsChecked());
 
-        holder.getName().setText(
-                String.format("%s; %s C, %s; %s mm; %s km/h",
-                        elem.getFormattedDate(this.dateFormat).toString(),
-                        (new Integer(elem.getTemperature())).toString(),
-                        (new Integer(elem.getHumidity())).toString(),
-                        (new Double(elem.getPrecipitation())).toString(),
-                        (new Double(elem.getWindSpeed())).toString()));
+        holder.name.setText(elem.getFormattedDate(this.dateFormat).toString());
 
-        holder.getShortDescription().setText(elem.getDescription());
-        holder.setDate(elem.getDate());
+        holder.conditionsDescription.setText(elem.getConditionsSummary());
+
+        holder.shortDescription.setText(elem.getDescription());
+        holder.date = elem.getDate();
 
         holder.mImageView.setVisibility(View.VISIBLE);
         holder.mImageView.setImageResource(getIconId("weather_" + elem.getIconName()));
@@ -77,6 +73,8 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private TextView name;
 
+        private TextView conditionsDescription;
+
         private TextView shortDescription;
 
         private long date;
@@ -89,8 +87,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private void setViewReferences(View itemView) {
             this.mCheckbox = (CheckBox)itemView.findViewById(R.id.item_proposition_checked);
-            this.mImageView = (ImageView)itemView.findViewById(R.id.weather_icon);
+            this.mImageView = (ImageView)itemView.findViewById(R.id.item_proposition_weather_icon);
             this.name = (TextView)itemView.findViewById(R.id.item_proposition_name);
+            this.conditionsDescription = (TextView) itemView.findViewById(R.id.item_proposition_conditions);
             this.shortDescription = (TextView)itemView.findViewById(R.id.item_proposition_short_description);
         }
 
@@ -100,10 +99,6 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         public TextView getName() {
             return name;
-        }
-
-        public TextView getShortDescription() {
-            return shortDescription;
         }
 
         public long getDate() { return this.date; }

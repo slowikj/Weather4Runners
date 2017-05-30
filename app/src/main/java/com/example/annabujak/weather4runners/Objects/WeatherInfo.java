@@ -98,5 +98,13 @@ public class WeatherInfo {
     public String getDescription(){return Description;}
     public void setDescription(String _Description){Description = _Description;}
 
+    public String getConditionsSummary() {
+        return (Integer.valueOf(this.getTemperature())).toString() + "°C, "
+                + Long.valueOf(Math.round(this.getWindSpeed())).toString() + " km/h, "
+                + String.format("%.2f", this.getPrecipitation()) + " mm, "
+                + Integer.valueOf(this.getHumidity()).toString() + " %";
+
+    }
+
 
 }

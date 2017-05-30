@@ -23,6 +23,7 @@ import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
+import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
@@ -47,6 +48,7 @@ import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -62,7 +64,8 @@ public class MainActivity extends AppCompatActivity
             ImportantConditionsChangedListener,
             WeatherForecastUpdater,
             PropositionClickedListener,
-        WeatherConditionsImportanceOrderProvider {
+        WeatherConditionsImportanceOrderProvider,
+        ChosenPropositionsProvider {
 
     private ProgressBar mLoadingIndicator;
 
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.id_nav_charts:
                 chartFragment = new ChartFragment();
                 setFragment(chartFragment, true);
-                chartFragment.onChosenPropositionChanged(centralControl.getAllChosenHours());
+                chartFragment.onChosenPropositionChanged(getAllChosenPropositions());
                 returnResult = true;
                 break;
             case R.id.nav_order_of_imporance:
@@ -333,5 +336,10 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
+    }
+
+    @Override
+    public List<ChosenProposition> getAllChosenPropositions() {
+        return this.centralControl.getAllChosenHours();
     }
 }

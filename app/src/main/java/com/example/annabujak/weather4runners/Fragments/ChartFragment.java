@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionListener;
+import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
 import com.jjoe64.graphview.GraphView;
@@ -50,9 +51,6 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         graphHours.getLegendRenderer().setVisible(true);
         graphHours.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        graphDays.addSeries(seriesDays);
-        graphHours.addSeries(seriesHours);
-
         setHasOptionsMenu(false);
     }
 
@@ -71,6 +69,16 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
 
         prepareGraphDays(days);
         prepareGraphHours(hours);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        onChosenPropositionChanged(
+                ((ChosenPropositionsProvider)getActivity())
+                        .getAllChosenPropositions());
+
     }
 
     private void prepareGraphDays(List<ChosenProposition> chosenPropositions){

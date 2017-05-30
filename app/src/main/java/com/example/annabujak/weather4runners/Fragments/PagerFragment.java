@@ -23,11 +23,10 @@ import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsN
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.DailyPropositionsFragment;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.WeeklyPropositionsFragment;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
-import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -61,7 +60,7 @@ public class PagerFragment extends Fragment
 
     private PropositionClickedListener propositionClickedListener;
 
-    private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
+    private PropositionsList dailyPropositions, weeklyPropositions;
 
     private WeatherForecastUpdater weatherForecastUpdater;
 
@@ -141,20 +140,20 @@ public class PagerFragment extends Fragment
     }
 
     @Override
-    public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onDailyPropositionsChanged(PropositionsList propositions) {
         this.dailyPropositions = propositions;
         notifyDailyPropositionsChanged();
     }
 
     @Override
-    public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onWeeklyPropositionsChanged(PropositionsList propositions) {
         this.weeklyPropositions = propositions;
         notifyWeeklyPropositionsChanged();
     }
 
     @Override
-    public void onPropositionClickedListener(ChosenProposition clickedHour) {
-        this.propositionClickedListener.onPropositionClickedListener(clickedHour);
+    public void onPropositionClickedListener(ChosenProposition clickedProposition) {
+        this.propositionClickedListener.onPropositionClickedListener(clickedProposition);
     }
 
     private void initListenersLists() {
@@ -163,8 +162,8 @@ public class PagerFragment extends Fragment
     }
 
     private void initEmptyPropositionsLists() {
-        this.dailyPropositions = new ArrayList<>();
-        this.weeklyPropositions = new ArrayList<>();
+        this.dailyPropositions = new PropositionsList();
+        this.weeklyPropositions = new PropositionsList();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -258,13 +257,13 @@ public class PagerFragment extends Fragment
 
     private void notifyDailyPropositionsChanged() {
         for(DailyPropositionsChangedListener listener: this.dailyPropositionsChangedListeners) {
-            listener.onDailyPropositionsChanged(this.dailyPropositions);
+            listener.onDailyPropositionsChanged(this.dailyPropositions.getDeepCopy());
         }
     }
 
     private void notifyWeeklyPropositionsChanged() {
         for(WeeklyPropositionsChangedListener listener: this.weeklyPropositionsChangedListeners) {
-            listener.onWeeklyPropositionsChanged(this.weeklyPropositions);
+            listener.onWeeklyPropositionsChanged(this.weeklyPropositions.getDeepCopy());
         }
     }
 

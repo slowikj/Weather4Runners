@@ -83,8 +83,8 @@ public class WeatherInfosLinearApproximator extends WeatherInfosApproximator {
 
     private long getApproximatedDateLong(int index) {
         return (long)getApproximatedNumericValue(
-                this.begin.getDateLong(),
-                this.end.getDateLong(),
+                this.begin.getDate(),
+                this.end.getDate(),
                 index,
                 this.allItemsCnt
         );

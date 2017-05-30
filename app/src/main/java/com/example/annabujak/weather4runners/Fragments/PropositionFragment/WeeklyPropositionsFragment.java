@@ -8,11 +8,10 @@ import android.support.annotation.Nullable;
 import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Command.Command;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
-import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositionsNotifier;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 12.05.2017.
@@ -58,7 +57,7 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
     }
 
     @Override
-    public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onWeeklyPropositionsChanged(PropositionsList propositions) {
         this.propositions = propositions;
         updatePropositionsListView();
     }

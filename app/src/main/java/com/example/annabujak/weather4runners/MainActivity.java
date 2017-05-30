@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.location.Location;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,8 +39,8 @@ import com.example.annabujak.weather4runners.Notifiers.WeeklyWeatherPropositions
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
-import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Tracker.GPSTracker;
 import com.facebook.FacebookSdk;
 
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
     private ChartFragment chartFragment;
 
-    private ArrayList<WeatherInfo> dailyPropositions, weeklyPropositions;
+    private PropositionsList dailyPropositions, weeklyPropositions;
 
     private GPSTracker gpsTracker;
     private double xLocation;
@@ -200,18 +199,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onDailyPropositionsChanged(PropositionsList propositions) {
         this.dailyPropositions = propositions;
         for(DailyPropositionsChangedListener listener: this.dailyPropositionsChangedListeners) {
-            listener.onDailyPropositionsChanged(propositions);
+            listener.onDailyPropositionsChanged(propositions.getDeepCopy());
         }
     }
 
     @Override
-    public void onWeeklyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onWeeklyPropositionsChanged(PropositionsList propositions) {
         this.weeklyPropositions = propositions;
         for(WeeklyPropositionsChangedListener listener: this.weeklyPropositionsChangedListeners) {
-            listener.onWeeklyPropositionsChanged(propositions);
+            listener.onWeeklyPropositionsChanged(propositions.getDeepCopy());
         }
     }
 
@@ -243,8 +242,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPropositionClickedListener(ChosenProposition clickedHour) {
-        centralControl.addChosenHour(clickedHour);
+    public void onPropositionClickedListener(ChosenProposition clickedProposition) {
+        centralControl.addChosenHour(clickedProposition);
     }
 
     private void initListenersLists() {
@@ -253,8 +252,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initEmptyPropositionsList() {
-        this.dailyPropositions = new ArrayList<>();
-        this.weeklyPropositions = new ArrayList<>();
+        this.dailyPropositions = new PropositionsList();
+        this.weeklyPropositions = new PropositionsList();
     }
 
     private void restorePreviousStateIfAny(Bundle savedInstanceState) {

@@ -23,6 +23,7 @@ import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Comma
 import com.example.annabujak.weather4runners.Listeners.CustomRecyclerViewOnTouchListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
@@ -39,7 +40,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
 
     protected PropositionsListAdapter propositionsListAdapter;
 
-    protected ArrayList<WeatherInfo> propositions;
+    protected PropositionsList propositions;
 
     protected SimpleDateFormat itemsListDateFormat;
 
@@ -52,6 +53,7 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.propositionsListAdapter = getPropositionsListAdapter(this.itemsListDateFormat);
         setHasOptionsMenu(true);
     }
@@ -157,14 +159,14 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
                         });
     }
 
-    protected ArrayList<WeatherInfo> getFirstNPropositions(int n, ArrayList<WeatherInfo> propositions) {
+    protected PropositionsList getFirstNPropositions(int n, PropositionsList propositions) {
         ArrayList<WeatherInfo> res = new ArrayList<>();
         int cnt = Math.min(n, propositions.size());
         for(int i = 0; i < cnt; ++i) {
             res.add(propositions.get(i));
         }
 
-        return res;
+        return new PropositionsList(res);
     }
 
     protected void updatePropositionsListView() {
@@ -195,12 +197,11 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
         @Override
         public void onClick(View view, int position) {
             PropositionsListAdapter.PropositionsListViewHolder holder = getHolder(position);
-            holder.getCheckbox().setChecked(!holder.getCheckbox().isChecked());
+
             Integer pos = recyclerView.getChildAdapterPosition(view);
 
-            propositionClickedListener.onPropositionClickedListener(getChosenProposition(holder.getDate()));
-
-          //  Toast.makeText(getContext(), "you clicked " + pos.toString(), Toast.LENGTH_SHORT).show();
+            propositionClickedListener.onPropositionClickedListener(
+                    getChosenProposition(holder.getDate()));
         }
 
         @Override

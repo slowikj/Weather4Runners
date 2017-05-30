@@ -1,8 +1,6 @@
 package com.example.annabujak.weather4runners.Listeners;
 
-import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-
-import java.util.ArrayList;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 
 /**
  * Created by slowik on 07.05.2017.
@@ -10,6 +8,6 @@ import java.util.ArrayList;
 
 public interface DailyPropositionsChangedListener {
 
-    void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions);
+    void onDailyPropositionsChanged(PropositionsList propositions);
 
 }

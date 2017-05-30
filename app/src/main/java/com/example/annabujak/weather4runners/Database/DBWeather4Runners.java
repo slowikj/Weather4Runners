@@ -366,7 +366,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_HUMIDITY,weather.getHumidity());
         values.put(KEY_CLOUDINESS, weather.getCloudiness().getValue());
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
-        values.put(KEY_DATE, weather.getDateLong());
+        values.put(KEY_DATE, weather.getDate());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
         values.put(KEY_WIND_SPEED,weather.getWindSpeed());
         values.put(KEY_ICON,weather.getIconName());
@@ -422,7 +422,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         values.put(KEY_HUMIDITY,weather.getHumidity());
         values.put(KEY_CLOUDINESS, weather.getCloudiness().getValue());
         values.put(KEY_PRECIPITATION,weather.getPrecipitation());
-        values.put(KEY_DATE, weather.getDateLong());
+        values.put(KEY_DATE, weather.getDate());
         values.put(KEY_IS_CHECKED,weather.getIsChecked());
         values.put(KEY_WIND_SPEED,weather.getWindSpeed());
         values.put(KEY_ICON,weather.getIconName());

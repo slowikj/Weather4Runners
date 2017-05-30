@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 24.04.2017.
@@ -21,12 +21,12 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     private SimpleDateFormat dateFormat;
 
-    private ArrayList<WeatherInfo> propositionsList;
+    private PropositionsList propositionsList;
 
     public PropositionsListAdapter(SimpleDateFormat dateFormat) {
 
         this.dateFormat = dateFormat;
-        this.propositionsList = new ArrayList<>();
+        this.propositionsList = new PropositionsList();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
                         (new Double(elem.getWindSpeed())).toString()));
 
         holder.getShortDescription().setText(elem.getDescription());
-        holder.setDate(elem.getDateLong());
+        holder.setDate(elem.getDate());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         return this.propositionsList.size();
     }
 
-    public void setPropositionsList(ArrayList<WeatherInfo> propositions) {
+    public void setPropositionsList(PropositionsList propositions) {
         this.propositionsList = propositions;
         notifyDataSetChanged();
     }

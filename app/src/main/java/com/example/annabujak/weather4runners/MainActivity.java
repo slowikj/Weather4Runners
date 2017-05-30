@@ -156,9 +156,8 @@ public class MainActivity extends AppCompatActivity
                 returnResult = true;
                 break;
             case R.id.nav_order_of_imporance:
-                // TODO: get the date from database
                 ArrayList<WeatherConditionsNames> importantConditions = new ArrayList<>(
-                        Arrays.asList(WeatherConditionsNames.values())
+                        centralControl.getPreferenceBalanceOrDefault().getWeatherConditionsOrder()
                 );
                 setFragment(ImportantConditionsFragment.Create(importantConditions), true);
                 returnResult = true;
@@ -234,6 +233,7 @@ public class MainActivity extends AppCompatActivity
     public void onImportantConditionsChangedListener(ArrayList<WeatherConditionsNames> orderedImportantConditions) {
         PreferenceBalance Balance = new PreferenceBalance(orderedImportantConditions);
         centralControl.updatePreferenceBalance(Balance);
+        centralControl.updatePropositionsAsync();
     }
 
     @Override

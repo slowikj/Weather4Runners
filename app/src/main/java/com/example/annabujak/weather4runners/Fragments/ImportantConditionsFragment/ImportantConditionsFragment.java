@@ -48,10 +48,12 @@ public class ImportantConditionsFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String str = WeatherConditionsNames.Cloudiness.toString();
-        this.importantConditionsAdapter = createImportantConditionsAdapter(
+        if(savedInstanceState == null) {
+            String str = WeatherConditionsNames.Cloudiness.toString();
+            this.importantConditionsAdapter = createImportantConditionsAdapter(
                     this.importantWeatherConditionsNames
-        );
+            );
+        }
 
         setHasOptionsMenu(false);
     }

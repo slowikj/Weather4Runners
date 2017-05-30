@@ -3,7 +3,6 @@ package com.example.annabujak.weather4runners.JSONDataUnitTests;
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
 
-import com.example.annabujak.weather4runners.Facebook.FacebookLoginActivity;
 import com.example.annabujak.weather4runners.Weather.JSONWeatherDownloader;
 
 import org.json.JSONArray;

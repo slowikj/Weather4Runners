@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        app:srcCompat="@drawable/ic_autorenew_black_24dp"
+        app:srcCompat="@drawable/ic_update"
         android:clickable="true"/>
 
 </android.support.design.widget.CoordinatorLayout>

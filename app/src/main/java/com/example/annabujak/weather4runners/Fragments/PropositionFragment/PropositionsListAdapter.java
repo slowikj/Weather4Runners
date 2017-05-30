@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
 /**
@@ -52,6 +54,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         holder.getShortDescription().setText(elem.getDescription());
         holder.setDate(elem.getDate());
+
+        holder.mImageView.setVisibility(View.VISIBLE);
+        holder.mImageView.setImageResource(getIconId("weather_" + elem.getIconName()));
     }
 
     @Override
@@ -68,6 +73,8 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private CheckBox mCheckbox;
 
+        private ImageView mImageView;
+
         private TextView name;
 
         private TextView shortDescription;
@@ -82,6 +89,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private void setViewReferences(View itemView) {
             this.mCheckbox = (CheckBox)itemView.findViewById(R.id.item_proposition_checked);
+            this.mImageView = (ImageView)itemView.findViewById(R.id.weather_icon);
             this.name = (TextView)itemView.findViewById(R.id.item_proposition_name);
             this.shortDescription = (TextView)itemView.findViewById(R.id.item_proposition_short_description);
         }
@@ -101,5 +109,19 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         public long getDate() { return this.date; }
 
         public void setDate(long date) { this.date = date; }
+    }
+
+    private int getIconId(String drawableName) {
+        try {
+            Class res = R.drawable.class;
+            Field field = res.getField(drawableName);
+            return field.getInt(null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }

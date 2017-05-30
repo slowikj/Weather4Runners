@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void UpdatePreference(Preference preference) {
+        preference.setBalance(centralControl.getPreferenceBalanceOrDefault());
         centralControl.updatePreference(preference);
         centralControl.updatePropositionsAsync();
     }

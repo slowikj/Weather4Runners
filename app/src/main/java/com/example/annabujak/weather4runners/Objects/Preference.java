@@ -84,4 +84,8 @@ public class Preference {
 
     public PreferenceBalance getPreferenceBalance(){return  Balance;}
     public void setPreferenceBalance(PreferenceBalance _Balance){Balance = _Balance;}
+
+    public void setBalance(PreferenceBalance balance) {
+        Balance = balance;
+    }
 }

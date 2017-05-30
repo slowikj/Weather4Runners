@@ -101,7 +101,10 @@ public class CentralControl {
         return databaseManager.GetChosenHours();
     }
     public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
-    public void updatePreferenceBalance(PreferenceBalance balance){databaseManager.UpdatePreferenceBalance(balance);}
+    public void updatePreferenceBalance(PreferenceBalance balance){
+        databaseManager.UpdatePreferenceBalance(balance);
+        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, balance);
+    }
 
     private void recomputePropositionsAsync(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(

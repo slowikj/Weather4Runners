@@ -77,7 +77,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
             + " INTEGER," + KEY_HOUR +" INTEGER"+ ")";
     private static final String CREATE_TABLE_CHOSEN_HOURS = "CREATE TABLE IF NOT EXISTS "
             + TABLE_CHOSEN_HOURS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE
-            + " TEXT," + KEY_HOUR +" INTEGER"+ ")";
+            + " INTEGER," + KEY_HOUR +" INTEGER"+ ")";
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS "
             + TABLE_USER + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME
@@ -290,7 +290,7 @@ public class DBWeather4Runners extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                ChosenProposition hour = new ChosenProposition(c.getInt(c.getColumnIndex(KEY_DATE)),c.getInt(c.getColumnIndex(KEY_HOUR)) > 0);
+                ChosenProposition hour = new ChosenProposition(c.getLong(c.getColumnIndex(KEY_DATE)),c.getInt(c.getColumnIndex(KEY_HOUR)) > 0);
                 hour.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 allHours.add(hour);
             } while (c.moveToNext());

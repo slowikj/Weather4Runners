@@ -14,6 +14,7 @@ import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -31,6 +32,8 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
     private GraphView graphHours;
     private BarGraphSeries<DataPoint> seriesDays;
     private BarGraphSeries<DataPoint> seriesHours;
+    private StaticLabelsFormatter daysLabel;
+    private StaticLabelsFormatter hoursLabel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,17 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         graphDays.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graphHours.getLegendRenderer().setVisible(true);
         graphHours.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        hoursLabel = new StaticLabelsFormatter(graphHours);
+        daysLabel = new StaticLabelsFormatter(graphDays);
+        daysLabel.setHorizontalLabels(new String[]{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"});
+        graphDays.getGridLabelRenderer().setLabelFormatter(daysLabel);
+
+        String[] hours = new String[13];
+        for(int i = 0; i <= 24; i += 2)
+            hours[i/2] = Integer.toString(i);
+        hoursLabel.setHorizontalLabels(hours);
+        graphHours.getGridLabelRenderer().setLabelFormatter(hoursLabel);
 
         setHasOptionsMenu(false);
     }
@@ -97,7 +111,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
     private void prepareGraphHours(List<ChosenProposition> chosenPropositions){
         DataPoint[] points = new DataPoint[24];
         for(int i  = 0; i < 24; i ++)
-            points[i] = new DataPoint(i+1,0);
+            points[i] = new DataPoint(i,0);
         for(int i = 0; i < chosenPropositions.size(); i ++){
             Date tempDate = new Date(chosenPropositions.get(i).getDate());
             points[tempDate.getHours()] = new DataPoint(points[tempDate.getHours()].getX(),points[tempDate.getHours()].getY()+1);
@@ -105,7 +119,9 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         seriesHours = new BarGraphSeries<>(points);
         seriesHours.setTitle("Hours chosen for run");
         seriesHours.setColor(Color.parseColor("#FF4081"));
-        if(graphHours != null)
+
+        if(graphHours != null) {
             graphHours.addSeries(seriesHours);
+        }
     }
 }

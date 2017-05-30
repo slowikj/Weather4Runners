@@ -92,7 +92,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
             points[i] = new DataPoint(i+1,0);
         for(int i = 0; i < chosenPropositions.size(); i ++){
             Date tempDate = new Date(chosenPropositions.get(i).getDate());
-            points[tempDate.getHours()-1] = new DataPoint(points[tempDate.getHours()-1].getX(),points[tempDate.getHours()-1].getY()+1);
+            points[tempDate.getHours()] = new DataPoint(points[tempDate.getHours()].getX(),points[tempDate.getHours()].getY()+1);
         }
         seriesHours = new BarGraphSeries<>(points);
         seriesHours.setTitle("Hours chosen for run");

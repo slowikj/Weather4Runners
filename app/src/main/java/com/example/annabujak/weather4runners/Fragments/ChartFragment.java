@@ -64,8 +64,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         for (ChosenProposition hour: allChosenPropositions) {
             if(hour.getIsHour())
                 hours.add(hour);
-            else
-                days.add(hour);
+            days.add(hour);
         }
 
         prepareGraphDays(days);

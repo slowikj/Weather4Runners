@@ -21,7 +21,7 @@ public class RenderPreference {
         return result;
     }
     public static int getCloudiness(int i){
-        int result = (int)(((double)i / 100.0) * 4.0);
+        int result = (int)(((double)i / 100.0) * 3.0);
         return result;
     }
     public static int getStartHour(int i){

@@ -9,10 +9,9 @@ import com.example.annabujak.weather4runners.Fragments.PropositionFragment.Comma
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Notifiers.DailyWeatherPropositionsNotifier;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
-import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 12.05.2017.
@@ -87,7 +86,7 @@ public class DailyPropositionsFragment extends AbstractPropositionsFragment
     }
 
     @Override
-    public void onDailyPropositionsChanged(ArrayList<WeatherInfo> propositions) {
+    public void onDailyPropositionsChanged(PropositionsList propositions) {
         this.propositions = propositions;
         updatePropositionsListView();
     }

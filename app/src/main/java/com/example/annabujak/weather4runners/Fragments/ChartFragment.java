@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionListener;
+import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
 import com.jjoe64.graphview.GraphView;
@@ -50,9 +51,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         graphHours.getLegendRenderer().setVisible(true);
         graphHours.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        graphDays.addSeries(seriesDays);
-        graphHours.addSeries(seriesHours);
-
+        setHasOptionsMenu(false);
     }
 
     @Override
@@ -69,6 +68,16 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
 
         prepareGraphDays(days);
         prepareGraphHours(hours);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        onChosenPropositionChanged(
+                ((ChosenPropositionsProvider)getActivity())
+                        .getAllChosenPropositions());
+
     }
 
     private void prepareGraphDays(List<ChosenProposition> chosenPropositions){
@@ -91,7 +100,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
             points[i] = new DataPoint(i+1,0);
         for(int i = 0; i < chosenPropositions.size(); i ++){
             Date tempDate = new Date(chosenPropositions.get(i).getDate());
-            points[tempDate.getHours()-1] = new DataPoint(points[tempDate.getHours()-1].getX(),points[tempDate.getHours()-1].getY()+1);
+            points[tempDate.getHours()] = new DataPoint(points[tempDate.getHours()].getX(),points[tempDate.getHours()].getY()+1);
         }
         seriesHours = new BarGraphSeries<>(points);
         seriesHours.setTitle("Hours chosen for run");

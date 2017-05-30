@@ -8,5 +8,5 @@ import com.example.annabujak.weather4runners.Objects.ChosenProposition;
  */
 
 public interface PropositionClickedListener {
-    void onPropositionClickedListener(ChosenProposition clickedHour);
+    void onPropositionClickedListener(ChosenProposition clickedProposition);
 }

@@ -5,13 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 /**
  * Created by slowik on 24.04.2017.
@@ -21,12 +23,12 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
     private SimpleDateFormat dateFormat;
 
-    private ArrayList<WeatherInfo> propositionsList;
+    private PropositionsList propositionsList;
 
     public PropositionsListAdapter(SimpleDateFormat dateFormat) {
 
         this.dateFormat = dateFormat;
-        this.propositionsList = new ArrayList<>();
+        this.propositionsList = new PropositionsList();
     }
 
     @Override
@@ -42,16 +44,15 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         WeatherInfo elem = propositionsList.get(position);
         holder.getCheckbox().setChecked(elem.getIsChecked());
 
-        holder.getName().setText(
-                String.format("%s; %s C, %s; %s mm; %s km/h",
-                        elem.getFormattedDate(this.dateFormat).toString(),
-                        (new Integer(elem.getTemperature())).toString(),
-                        (new Integer(elem.getHumidity())).toString(),
-                        (new Double(elem.getPrecipitation())).toString(),
-                        (new Double(elem.getWindSpeed())).toString()));
+        holder.name.setText(elem.getFormattedDate(this.dateFormat).toString());
 
-        holder.getShortDescription().setText(elem.getDescription());
-        holder.setDate(elem.getDateLong());
+        holder.conditionsDescription.setText(elem.getConditionsSummary());
+
+        holder.shortDescription.setText(elem.getDescription());
+        holder.date = elem.getDate();
+
+        holder.mImageView.setVisibility(View.VISIBLE);
+        holder.mImageView.setImageResource(getIconId("weather_" + elem.getIconName()));
     }
 
     @Override
@@ -59,7 +60,7 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
         return this.propositionsList.size();
     }
 
-    public void setPropositionsList(ArrayList<WeatherInfo> propositions) {
+    public void setPropositionsList(PropositionsList propositions) {
         this.propositionsList = propositions;
         notifyDataSetChanged();
     }
@@ -68,7 +69,11 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private CheckBox mCheckbox;
 
+        private ImageView mImageView;
+
         private TextView name;
+
+        private TextView conditionsDescription;
 
         private TextView shortDescription;
 
@@ -82,7 +87,9 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
 
         private void setViewReferences(View itemView) {
             this.mCheckbox = (CheckBox)itemView.findViewById(R.id.item_proposition_checked);
+            this.mImageView = (ImageView)itemView.findViewById(R.id.item_proposition_weather_icon);
             this.name = (TextView)itemView.findViewById(R.id.item_proposition_name);
+            this.conditionsDescription = (TextView) itemView.findViewById(R.id.item_proposition_conditions);
             this.shortDescription = (TextView)itemView.findViewById(R.id.item_proposition_short_description);
         }
 
@@ -94,12 +101,22 @@ public class PropositionsListAdapter extends RecyclerView.Adapter<PropositionsLi
             return name;
         }
 
-        public TextView getShortDescription() {
-            return shortDescription;
-        }
-
         public long getDate() { return this.date; }
 
         public void setDate(long date) { this.date = date; }
+    }
+
+    private int getIconId(String drawableName) {
+        try {
+            Class res = R.drawable.class;
+            Field field = res.getField(drawableName);
+            return field.getInt(null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }

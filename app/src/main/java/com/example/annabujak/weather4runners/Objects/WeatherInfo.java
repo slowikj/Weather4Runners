@@ -47,6 +47,21 @@ public class WeatherInfo {
         IconName = _IconName;
     }
 
+    public WeatherInfo getDeepCopy() {
+        WeatherInfo res = new WeatherInfo(this.getTemperature(),
+                this.getHumidity(),
+                this.getCloudiness(),
+                this.getPrecipitation(),
+                this.getDate(),
+                this.getWindSpeed(),
+                this.getIconName(),
+                this.getDescription());
+
+        res.setIsChecked(this.getIsChecked());
+
+        return res;
+    }
+
     public int getTemperature() {
         return Temperature;
     }
@@ -62,8 +77,6 @@ public class WeatherInfo {
     }
 
     public long getDate(){ return this.longDate;}
-
-    public long getDateLong() { return this.longDate; }
 
     public String getFormattedDate(SimpleDateFormat dateFormat) {
         return dateFormat.format(this.getDate());
@@ -84,6 +97,14 @@ public class WeatherInfo {
 
     public String getDescription(){return Description;}
     public void setDescription(String _Description){Description = _Description;}
+
+    public String getConditionsSummary() {
+        return (Integer.valueOf(this.getTemperature())).toString() + "°C, "
+                + Long.valueOf(Math.round(this.getWindSpeed())).toString() + " km/h, "
+                + String.format("%.2f", this.getPrecipitation()) + " mm, "
+                + Integer.valueOf(this.getHumidity()).toString() + " %";
+
+    }
 
 
 }

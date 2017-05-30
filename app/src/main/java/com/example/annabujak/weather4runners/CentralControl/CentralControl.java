@@ -12,6 +12,7 @@ import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChanged
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
+import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
@@ -92,12 +93,18 @@ public class CentralControl {
     public void updateUser(User user){
         databaseManager.UpdateUserDatas(user);
     }
-    public void addChosenHour(ChosenProposition hour){databaseManager.AddChosenHourAndUpdateIsChecked(hour);}
+    public void addChosenHour(ChosenProposition hour){
+        databaseManager.AddChosenHourAndUpdateIsChecked(hour);
+        updatePropositionsAsync();
+    }
     public List<ChosenProposition> getAllChosenHours(){
         return databaseManager.GetChosenHours();
     }
     public void updatePreference(Preference preference){databaseManager.UpdatePreferences(preference);}
-    public void updatePreferenceBalance(PreferenceBalance balance){databaseManager.UpdatePreferenceBalance(balance);}
+    public void updatePreferenceBalance(PreferenceBalance balance){
+        databaseManager.UpdatePreferenceBalance(balance);
+        this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS, balance);
+    }
 
     private void recomputePropositionsAsync(ArrayList<WeatherInfo> weatherForecast) {
         (new PropositionsComputer()).executeOnExecutor(
@@ -179,8 +186,11 @@ public class CentralControl {
         protected void onPostExecute(Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>> propositionsPair) {
             super.onPostExecute(propositionsPair);
 
-            dailyPropositionsChangedListener.onDailyPropositionsChanged(propositionsPair.first);
-            weeklyPropositionsChangedListener.onWeeklyPropositionsChanged(propositionsPair.second);
+            dailyPropositionsChangedListener.onDailyPropositionsChanged(
+                    new PropositionsList(propositionsPair.first));
+            weeklyPropositionsChangedListener.onWeeklyPropositionsChanged(
+                    new PropositionsList(propositionsPair.second));
+
             updatingFinishedListener.onUpdatingFinished();
         }
     }

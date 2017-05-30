@@ -52,7 +52,6 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
 
         graphDays.addSeries(seriesDays);
         graphHours.addSeries(seriesHours);
-
     }
 
     @Override

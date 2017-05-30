@@ -27,6 +27,7 @@ import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedL
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherConditionsImportanceOrderProvider;
 import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Facebook.ILoginFacebook;
@@ -45,7 +46,6 @@ import com.example.annabujak.weather4runners.Tracker.GPSTracker;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity
             NavigationView.OnNavigationItemSelectedListener,
             ImportantConditionsChangedListener,
             WeatherForecastUpdater,
-            PropositionClickedListener {
+            PropositionClickedListener,
+        WeatherConditionsImportanceOrderProvider {
 
     private ProgressBar mLoadingIndicator;
 
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_order_of_imporance:
                 ArrayList<WeatherConditionsNames> importantConditions = new ArrayList<>(
-                        centralControl.getPreferenceBalanceOrDefault().getWeatherConditionsOrder()
+                        getWeatherConditionsImportanceOrder()
                 );
                 setFragment(ImportantConditionsFragment.Create(importantConditions), true);
                 returnResult = true;
@@ -247,6 +248,17 @@ public class MainActivity extends AppCompatActivity
         centralControl.addChosenHour(clickedProposition);
     }
 
+    @Override
+    public void onAddedChosenHour(ChosenProposition chosenProposition) {
+        centralControl.addChosenHour(chosenProposition);
+    }
+
+    @Override
+    public ArrayList<WeatherConditionsNames> getWeatherConditionsImportanceOrder() {
+        return centralControl.getPreferenceBalanceOrDefault()
+                .getWeatherConditionsOrder();
+    }
+
     private void initListenersLists() {
         this.dailyPropositionsChangedListeners = new LinkedList<>();
         this.weeklyPropositionsChangedListeners = new LinkedList<>();
@@ -321,10 +333,5 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
-    }
-
-    @Override
-    public void onAddedChosenHour(ChosenProposition chosenProposition) {
-        centralControl.addChosenHour(chosenProposition);
     }
 }

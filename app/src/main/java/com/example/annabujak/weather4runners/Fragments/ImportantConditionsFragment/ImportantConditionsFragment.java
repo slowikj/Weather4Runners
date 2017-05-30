@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
+import com.example.annabujak.weather4runners.Listeners.WeatherConditionsImportanceOrderProvider;
 import com.example.annabujak.weather4runners.R;
 
 import java.util.ArrayList;
@@ -48,12 +49,9 @@ public class ImportantConditionsFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState == null) {
-            String str = WeatherConditionsNames.Cloudiness.toString();
-            this.importantConditionsAdapter = createImportantConditionsAdapter(
+        this.importantConditionsAdapter = createImportantConditionsAdapter(
                     this.importantWeatherConditionsNames
-            );
-        }
+        );
 
         setHasOptionsMenu(false);
     }
@@ -87,6 +85,15 @@ public class ImportantConditionsFragment extends Fragment{
         this.importantConditionsChangedListener
                 .onImportantConditionsChangedListener(this.importantWeatherConditionsNames);
         super.onDetach();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        this.importantWeatherConditionsNames = ((WeatherConditionsImportanceOrderProvider)getActivity())
+                .getWeatherConditionsImportanceOrder();
+        this.importantConditionsAdapter.setData(this.importantWeatherConditionsNames);
     }
 
     private void setChildViews(View view) {

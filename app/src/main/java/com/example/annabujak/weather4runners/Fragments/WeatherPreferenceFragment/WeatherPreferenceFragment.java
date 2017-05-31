@@ -83,7 +83,23 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
         super.onPause();
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.unregisterOnSharedPreferenceChangeListener(this);
+
+        updatePreference();
     }
+
+    private void updatePreference() {
+        Preference preference = new Preference(
+                RenderPreference.getTemperature(preferences.getInt(SEEK_T,0)),
+                Cloudiness.fromId( RenderPreference.getCloudiness(preferences.getInt(SEEK_C,0))),
+                RenderPreference.getStartHour(preferences.getInt(SEEK_S,0)),
+                RenderPreference.getEndHours(preferences.getInt(SEEK_E,0)),
+                RenderPreference.getHumidity(preferences.getInt(SEEK_H,0)),
+                (double)RenderPreference.getPrecipitation(preferences.getInt(SEEK_P,0)),
+                (double)RenderPreference.getWindSpeed(preferences.getInt(SEEK_W,0)));
+
+        ((MainActivity)getActivity()).UpdatePreference(preference);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -123,21 +139,5 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
             seekEndHour.setSummary(RenderPreference.getEndHours(i)+" ");
         }
 
-    }
-
-    @Override
-    public void onDetach(){
-        super.onDetach();
-
-        Preference preference = new Preference(
-                RenderPreference.getTemperature(preferences.getInt(SEEK_T,0)),
-                Cloudiness.fromId( RenderPreference.getCloudiness(preferences.getInt(SEEK_C,0))),
-                RenderPreference.getStartHour(preferences.getInt(SEEK_S,0)),
-                RenderPreference.getEndHours(preferences.getInt(SEEK_E,0)),
-                RenderPreference.getHumidity(preferences.getInt(SEEK_H,0)),
-                (double)RenderPreference.getPrecipitation(preferences.getInt(SEEK_P,0)),
-                (double)RenderPreference.getWindSpeed(preferences.getInt(SEEK_W,0)));
-
-        ((MainActivity)getActivity()).UpdatePreference(preference);
     }
 }

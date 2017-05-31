@@ -81,10 +81,10 @@ public class ImportantConditionsFragment extends Fragment{
     }
 
     @Override
-    public void onDetach() {
+    public void onPause() {
         this.importantConditionsChangedListener
                 .onImportantConditionsChangedListener(this.importantWeatherConditionsNames);
-        super.onDetach();
+        super.onPause();
     }
 
     @Override

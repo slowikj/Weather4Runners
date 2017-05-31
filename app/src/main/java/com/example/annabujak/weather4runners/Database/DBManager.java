@@ -71,28 +71,33 @@ public class DBManager {
         database.addUser(user);
     }
     public User GetUser(){return database.getUser(1);}
-    public void AddChosenHourAndUpdateIsChecked(ChosenProposition hour){
+    public boolean AddChosenHourAndUpdateIsChecked(ChosenProposition hour){
+        boolean isChecked;
         List<ChosenProposition> chosenPropositions = database.getAllChosenHours();
         for (ChosenProposition fromBase: chosenPropositions) {
             if(fromBase.getDate() == hour.getDate()){
                 fromBase.setDayAnIsdHour(fromBase.getDate(), !fromBase.getIsHour());
                 database.deleteChosenHour(fromBase.getId());
-                updateIsChecked(hour);
-                return;
+                isChecked = updateIsChecked(hour);
+                return isChecked;
             }
         }
-        updateIsChecked(hour);
+        isChecked = updateIsChecked(hour);
         database.addChosenHour(hour);
+        return isChecked;
     }
-    private void updateIsChecked(ChosenProposition hour){
+    private boolean updateIsChecked(ChosenProposition hour){
+        boolean isChecked = false;
         List<WeatherInfo> weatherInfos = database.getAllWeatherInfos();
         for (WeatherInfo fromBase : weatherInfos) {
                 if(fromBase.getDate() == hour.getDate()){
                     fromBase.setIsChecked(!fromBase.getIsChecked());
                     database.updateWeatherInfo(fromBase);
+                    isChecked = fromBase.getIsChecked();
                     break;
                 }
         }
+        return isChecked;
     }
     public List<ChosenProposition> GetChosenHours(){return database.getAllChosenHours();}
 }

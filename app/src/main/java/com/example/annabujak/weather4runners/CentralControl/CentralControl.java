@@ -9,6 +9,7 @@ import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.UpdatingFinishedListener;
 import com.example.annabujak.weather4runners.Listeners.WeeklyPropositionsChangedListener;
+import com.example.annabujak.weather4runners.Notifications.NotificationManager;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
@@ -53,6 +54,8 @@ public class CentralControl {
 
     private AddChosenHourListener addChosenHourListener;
 
+    private NotificationManager notificationManager;
+
     public CentralControl(Context context) {
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
@@ -61,6 +64,7 @@ public class CentralControl {
 
         this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS,
                 getPreferenceBalanceOrDefault());
+        notificationManager = new NotificationManager(context);
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
@@ -94,7 +98,7 @@ public class CentralControl {
         databaseManager.UpdateUserDatas(user);
     }
     public void addChosenHour(ChosenProposition hour){
-        databaseManager.AddChosenHourAndUpdateIsChecked(hour);
+        if(databaseManager.AddChosenHourAndUpdateIsChecked(hour))
         updatePropositionsAsync();
     }
     public List<ChosenProposition> getAllChosenHours(){

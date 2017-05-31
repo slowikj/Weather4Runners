@@ -17,10 +17,12 @@ import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
 import com.example.annabujak.weather4runners.Weather.Filter.WeatherFilter;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherByCoordinatesDownloader;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherByNameDownloader;
 import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONOpenWeatherMapValuesExtractorFactory;
 import com.example.annabujak.weather4runners.Weather.JSONTransformator;
 import com.example.annabujak.weather4runners.Weather.JSONTransformatorBuilder;
-import com.example.annabujak.weather4runners.Weather.JSONWeatherDownloader;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,9 @@ import java.util.List;
 
 public class CentralControl {
 
-    private static final String DEFAULT_CITY_NAME = "Warsaw,Poland";
+    private static final String DEFAULT_CITY_NAME = "Warsaw";
+
+    private static final String DEFAULT_COUNTRY_NAME = "Poland";
 
     private static final String DEFAULT_LANGUAGE = "en";
 
@@ -56,11 +60,23 @@ public class CentralControl {
     public CentralControl(Context context) {
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
-                getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_LANGUAGE),
+                getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_COUNTRY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
 
         this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS,
                 getPreferenceBalanceOrDefault());
+    }
+
+    public void setByCoordinatesWeatherForecastDownloading(double longitute, double latitude) {
+        this.weatherForecastManager.setWeatherDownloader(
+                new JSONWeatherByCoordinatesDownloader(longitute, latitude, DEFAULT_LANGUAGE)
+        );
+    }
+
+    public void setByNameWeatherForecastDownloading(String city, String country) {
+        this.weatherForecastManager.setWeatherDownloader(
+                new JSONWeatherByNameDownloader(city, country, DEFAULT_LANGUAGE)
+        );
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
@@ -76,10 +92,6 @@ public class CentralControl {
 
     public void setUpdatingFinishedListener(UpdatingFinishedListener listener) {
         this.updatingFinishedListener = listener;
-    }
-
-    public void setCityName(String cityName) {
-        this.weatherForecastManager.setLocation(cityName);
     }
 
     public void updateWeatherForecastAsync() {
@@ -121,8 +133,9 @@ public class CentralControl {
     }
 
     private JSONWeatherDownloader getDefaultJSONDownloader(String cityName,
+                                                           String coutryName,
                                                            String language) {
-        return new JSONWeatherDownloader(cityName, language);
+        return new JSONWeatherByNameDownloader(cityName, coutryName, language);
     }
 
     public PreferenceBalance getPreferenceBalanceOrDefault() {
@@ -179,7 +192,7 @@ public class CentralControl {
             ArrayList<WeatherInfo> weeklyPropositions = weatherFilter
                     .GetWeeklyWeather(weatherForecast, preference);
 
-            return new Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>(dailyPropositions, weeklyPropositions);
+            return new Pair<>(dailyPropositions, weeklyPropositions);
         }
 
         @Override

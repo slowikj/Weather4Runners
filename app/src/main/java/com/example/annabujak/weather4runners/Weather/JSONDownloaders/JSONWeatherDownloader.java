@@ -1,4 +1,4 @@
-package com.example.annabujak.weather4runners.Weather;
+package com.example.annabujak.weather4runners.Weather.JSONDownloaders;
 
 import android.net.Uri;
 import android.os.Build;
@@ -21,21 +21,17 @@ import java.net.URL;
  * Created by slowik on 02.05.2017.
  */
 
-public class JSONWeatherDownloader {
+public abstract class JSONWeatherDownloader {
 
-    private final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast";
-    private final String CURRENT_WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
+    protected final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast";
 
-    private final String LOCATION_QUERY = "q";
-    private final String LANGUAGE_QUERY = "lang";
-    private final String APIKEY_QUERY = "APPID";
+    protected final String LANGUAGE_QUERY = "lang";
+    protected final String APIKEY_QUERY = "APPID";
 
-    private String location;
-    private String language;
-    private String apiKey;
+    protected String language;
+    protected String apiKey;
 
-    public JSONWeatherDownloader(String location, String language) {
-        this.location = location;
+    public JSONWeatherDownloader(String language) {
         this.apiKey = "f1154294b86bd13039f99eb045c81e12";
         this.language = language;
     }
@@ -46,19 +42,7 @@ public class JSONWeatherDownloader {
         return (new JSONObject(response)).getJSONArray("list");
     }
 
-    public void setLocation(String cityName) {
-        this.location = cityName;
-    }
-
-    private URL buildURL() throws MalformedURLException {
-        Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                .appendQueryParameter(LOCATION_QUERY, this.location)
-                .appendQueryParameter(LANGUAGE_QUERY, this.language)
-                .appendQueryParameter(APIKEY_QUERY, this.apiKey)
-                .build();
-
-        return new URL(builtUri.toString());
-    }
+    protected abstract URL buildURL() throws MalformedURLException ;
 
     private String getResponseFrom(URL url) throws IOException {
         HttpURLConnection connection = getHttpURLConnection(url);

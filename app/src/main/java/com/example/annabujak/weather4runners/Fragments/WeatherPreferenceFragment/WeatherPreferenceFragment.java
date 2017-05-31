@@ -3,6 +3,8 @@ package com.example.annabujak.weather4runners.Fragments.WeatherPreferenceFragmen
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -61,6 +63,8 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
         seekStartHour = (SeekBarPreference) findPreference(SEEK_S);
         seekEndHour = (SeekBarPreference) findPreference(SEEK_E);
 
+        setHasOptionsMenu(true);
+        setMenuVisibility(false);
     }
     @Override
     public void onResume() {

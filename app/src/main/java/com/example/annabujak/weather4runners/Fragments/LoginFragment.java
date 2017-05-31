@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -47,6 +49,9 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
+
+        setHasOptionsMenu(true);
+        setMenuVisibility(false);
     }
     @Nullable
     @Override
@@ -64,7 +69,7 @@ public class LoginFragment extends Fragment {
         RegisterLogin();
     }
 
-   // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void SetButtons(View parentView) {
 
         loginButton = (LoginButton) parentView.findViewById(R.id.login_button);

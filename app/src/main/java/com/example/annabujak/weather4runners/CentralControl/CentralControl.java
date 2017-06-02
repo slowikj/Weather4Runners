@@ -99,6 +99,9 @@ public class CentralControl {
     }
     public void addChosenHour(ChosenProposition hour){
         if(databaseManager.AddChosenHourAndUpdateIsChecked(hour))
+            notificationManager.AddNotification(hour);
+        else
+            notificationManager.RemoveNotification(hour);
         updatePropositionsAsync();
     }
     public List<ChosenProposition> getAllChosenHours(){

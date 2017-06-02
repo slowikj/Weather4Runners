@@ -7,10 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -19,8 +23,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class NotificationManager {
-    private List<Integer> UserNotifications;
-    private int hourOfNotification = 9;
+    private Map<Long,PendingIntent> PendingIntents;
     private AlarmManager alarmManager;
     private Context context;
     private Intent intent;
@@ -28,27 +31,37 @@ public class NotificationManager {
     public NotificationManager(Context _context){
         context = _context;
         alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
-        intent = new Intent(context , NotificationManager.class);
+        intent = new Intent(context , AlarmReceiver.class);
+        PendingIntents = new HashMap<Long,PendingIntent>();
     }
-    public void AddNotification(Context context, WeatherInfo weatherInfo){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                        .setContentTitle("Remember about your run!")
-                        .setContentText("Remember that your run is today at "+ new Date(weatherInfo.getDate()).getHours() + ": 00");
+    public void AddNotification(ChosenProposition proposition){
 
-        PendingIntent resultPendingIntent = PendingIntent.getService(context,0,intent,0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,GetMilosecondsFromNow(),resultPendingIntent);
-        mBuilder.setContentIntent(resultPendingIntent);
-        @SuppressLint("ServiceCast") NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify();
+        PendingIntent resultPendingIntent = PendingIntent.getService(context,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+       // alarmManager.set(AlarmManager.RTC_WAKEUP,GetMillisecondsFromNow(new Date(weatherInfo.getDate())),resultPendingIntent);
+        PendingIntents.put(GetMillisecondsFromNow(new Date(proposition.getDate())), resultPendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+ 5,resultPendingIntent);
     }
-    private long GetMilosecondsFromNow(){
+    public void RemoveNotification(ChosenProposition proposition){
+        Iterator it = PendingIntents.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            Date current = new Date(proposition.getDate());
+            Date fromMap = new Date(((Long)pair.getKey()));
+            if(GetMillisecondsFromNow(current) == GetMillisecondsFromNow(fromMap)) {
+                alarmManager.cancel((PendingIntent) pair.getValue());
+                it.remove();
+                break;
+            }
+        }
+    }
+
+    private long GetMillisecondsFromNow(Date runDate){
         Date date = new Date();
         long hours;
-        if(date.getHours() > hourOfNotification)
-            hours = date.getHours() + hourOfNotification;
+        if(date.getHours() > runDate.getHours()-1)
+            hours = date.getHours() + runDate.getHours()-1;
         else
-            hours = hourOfNotification - date.getHours();
+            hours = runDate.getHours()-1 - date.getHours();
         return 3600000 * hours;
     }
 

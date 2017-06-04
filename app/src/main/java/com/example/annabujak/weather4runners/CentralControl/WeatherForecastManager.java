@@ -7,6 +7,8 @@ import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeather
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +27,7 @@ public class WeatherForecastManager {
         this.jsonTransformator = jsonTransformator;
     }
 
-    public ArrayList<WeatherInfo> getNewestWeatherForecast() {
+    public ArrayList<WeatherInfo> getNewestWeatherForecast() throws IOException {
         JSONArray jsonWeatherForecasts = getDownloadedWeatherForecasts();
         ArrayList<WeatherInfo> hourlyForecasts = getTransformatedForecast(jsonWeatherForecasts);
         return hourlyForecasts;
@@ -39,10 +41,10 @@ public class WeatherForecastManager {
         this.jsonTransformator = jsonTransformator;
     }
 
-    private JSONArray getDownloadedWeatherForecasts() {
+    private JSONArray getDownloadedWeatherForecasts() throws IOException {
         try {
             return jsonWeatherDownloader.getData();
-        } catch (Exception e) {
+        } catch (MalformedURLException | JSONException e) {
             e.printStackTrace();
             return new JSONArray();
         }

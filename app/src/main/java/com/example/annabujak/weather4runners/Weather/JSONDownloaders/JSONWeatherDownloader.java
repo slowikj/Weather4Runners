@@ -28,6 +28,8 @@ public abstract class JSONWeatherDownloader {
     protected final String LANGUAGE_QUERY = "lang";
     protected final String APIKEY_QUERY = "APPID";
 
+    private int CONNECTION_TIMEOUT = 3000;
+
     protected String language;
     protected String apiKey;
 
@@ -45,7 +47,7 @@ public abstract class JSONWeatherDownloader {
     protected abstract URL buildURL() throws MalformedURLException ;
 
     private String getResponseFrom(URL url) throws IOException {
-        HttpURLConnection connection = getHttpURLConnection(url);
+        HttpURLConnection connection = getHttpURLConnection(url, CONNECTION_TIMEOUT);
         connection.connect();
 
         try {
@@ -56,11 +58,12 @@ public abstract class JSONWeatherDownloader {
     }
 
     @NonNull
-    private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
+    private HttpURLConnection getHttpURLConnection(URL url, int timeout) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setDoInput(true);
         connection.setDoOutput(true);
+        connection.setConnectTimeout(timeout);
 
         return connection;
     }

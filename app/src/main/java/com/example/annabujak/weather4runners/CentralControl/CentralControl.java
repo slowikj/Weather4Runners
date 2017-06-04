@@ -3,6 +3,7 @@ package com.example.annabujak.weather4runners.CentralControl;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
@@ -15,6 +16,7 @@ import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
 import com.example.annabujak.weather4runners.Weather.Filter.WeatherFilter;
 import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherByCoordinatesDownloader;
@@ -24,6 +26,7 @@ import com.example.annabujak.weather4runners.Weather.JSONTransformator;
 import com.example.annabujak.weather4runners.Weather.JSONTransformatorBuilder;
 import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherDownloader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,8 @@ public class CentralControl {
 
     private static final int BEST_WEATHER_PROPOSITIONS = Integer.MAX_VALUE;
 
+    private Context context;
+
     private DBManager databaseManager;
 
     private WeatherForecastManager weatherForecastManager;
@@ -58,6 +63,8 @@ public class CentralControl {
     private AddChosenHourListener addChosenHourListener;
 
     public CentralControl(Context context) {
+        this.context = context;
+
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
                 getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_COUNTRY_NAME, DEFAULT_LANGUAGE),
@@ -161,12 +168,25 @@ public class CentralControl {
 
         @Override
         protected ArrayList<WeatherInfo> doInBackground(Void... params) {
-            ArrayList<WeatherInfo> weatherForecast = weatherForecastManager
-                    .getNewestWeatherForecast();
+            try {
+                ArrayList<WeatherInfo> weatherForecast = weatherForecastManager
+                        .getNewestWeatherForecast();
+                databaseManager.UpdateWeatherData(weatherForecast);
+                return weatherForecast;
+            } catch(IOException e) {
+                this.cancel(true);
+                return new ArrayList<>();
+            }
+        }
 
-            databaseManager.UpdateWeatherData(weatherForecast);
+        @Override
+        protected void onCancelled(ArrayList<WeatherInfo> weatherInfos) {
+            super.onCancelled(weatherInfos);
 
-            return weatherForecast;
+            Toast.makeText(context,
+                    context.getResources().getString(R.string.error_with_internet_con_message),
+                    Toast.LENGTH_LONG).show();
+            updatingFinishedListener.onUpdatingFinished();
         }
 
         @Override

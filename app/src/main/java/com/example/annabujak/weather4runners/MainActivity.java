@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity
 
     private LinkedList<WeeklyPropositionsChangedListener> weeklyPropositionsChangedListeners;
 
-    private ChartFragment chartFragment;
-
     private PropositionsList dailyPropositions, weeklyPropositions;
 
     private LocationManager locationManager;
@@ -175,9 +173,8 @@ public class MainActivity extends AppCompatActivity
                 returnResult = true;
                 break;
             case R.id.id_nav_charts:
-                chartFragment = new ChartFragment();
-                setFragment(chartFragment, true);
-                chartFragment.onChosenPropositionChanged(getAllChosenPropositions());
+                setFragment(ChartFragment.create(getAllChosenPropositions()),
+                        true);
                 returnResult = true;
                 break;
             case R.id.nav_order_of_imporance:

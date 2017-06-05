@@ -37,6 +37,13 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
     private StaticLabelsFormatter daysLabel;
     private StaticLabelsFormatter hoursLabel;
 
+    public static ChartFragment create(List<ChosenProposition> allChosenPropositions) {
+        ChartFragment res = new ChartFragment();
+        res.onChosenPropositionChanged(allChosenPropositions);
+
+        return res;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

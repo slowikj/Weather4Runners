@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class LocationTracker implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.context.startActivity(intent);
     }
 

@@ -170,10 +170,6 @@ public class MainActivity extends AppCompatActivity
                 setFragment(new PagerFragment(), true);
                 returnResult = true;
                 break;
-            case R.id.nav_locations:
-                // TODO
-                returnResult = true;
-                break;
             case R.id.nav_favourite_values:
                 setFragment(new WeatherPreferenceFragment(), true);
                 returnResult = true;

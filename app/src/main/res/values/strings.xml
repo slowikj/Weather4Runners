@@ -37,4 +37,7 @@
     <string name="error_with_internet_con_message">Problem with the Internet connection</string>
 
     <string name="location_updated_message">Location updated</string>
+
+    <string name="item_checked_message"> The item has been checked </string>
+    <string name="item_unchecked_message"> The item has been unchecked </string>
 </resources>

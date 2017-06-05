@@ -14,10 +14,7 @@
                     android:id="@+id/id_nav_charts"
                     android:title="@string/menu_statistics"
                     android:icon="@drawable/ic_charts"/>
-                <item
-                    android:id="@+id/nav_locations"
-                    android:title="@string/menu_your_locations"
-                    android:icon="@drawable/ic_location"/>
+
             </menu>
         </item>
 

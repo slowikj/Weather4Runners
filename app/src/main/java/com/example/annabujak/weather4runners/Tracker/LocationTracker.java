@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.R;
@@ -123,9 +124,11 @@ public class LocationTracker implements LocationListener {
 
     private void showLocationUpdatedMessage() {
         Toast.makeText(this.context,
-                this.context.getResources().getString(R.string.location_updated_message) + String.format(" %f, %f", longitude, latitude),
+                this.context.getResources().getString(R.string.location_updated_message),
                 Toast.LENGTH_LONG)
                 .show();
+
+        Log.i("LOCATION", "Location set to " + String.format(" %f, %f", longitude, latitude));
     }
 
 }

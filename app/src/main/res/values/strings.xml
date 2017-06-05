@@ -19,6 +19,7 @@
     <string name="drawer_close">Close</string>
     <string name="menu_main">Main</string>
     <string name="menu_change_propositions_number_title" > Change items number</string>
+    <string name="menu_set_current_location_title"> Set your location</string>
     <string name="menu_weather_preferences" > Weather conditions preferences </string>
     <string name="menu_show_propositions"> Show propositions </string>
     <string name="menu_update_weather_forecast">Update weather forecast </string>
@@ -34,4 +35,6 @@
 
     <string name="parsing_input_error_message">Cannot parse the input</string>
     <string name="error_with_internet_con_message">Problem with the Internet connection</string>
+
+    <string name="location_updated_message">Location updated</string>
 </resources>

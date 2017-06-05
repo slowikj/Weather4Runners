@@ -35,18 +35,6 @@ public class WeatherInfo {
         Description = _Description;
     }
 
-    public WeatherInfo(int _Temperature, int _Humidity, Cloudiness _Cloudiness, double _Precipitation, long _Date, double _WindSpeed,
-                           String _IconName) {
-        Temperature = _Temperature;
-        Humidity = _Humidity;
-        Cloudiness = _Cloudiness;
-        Precipitation = _Precipitation;
-        longDate = _Date;
-        isChecked = false;
-        WindSpeed = _WindSpeed;
-        IconName = _IconName;
-    }
-
     public WeatherInfo getDeepCopy() {
         WeatherInfo res = new WeatherInfo(this.getTemperature(),
                 this.getHumidity(),

@@ -1,8 +1,16 @@
 package com.example.annabujak.weather4runners;
 
+import android.Manifest;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,7 +51,7 @@ import com.example.annabujak.weather4runners.Objects.Preference;
 import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
-import com.example.annabujak.weather4runners.Tracker.GPSTracker;
+import com.example.annabujak.weather4runners.Tracker.LocationTracker;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
@@ -53,19 +61,25 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements DailyPropositionsChangedListener,
-            WeeklyPropositionsChangedListener,
-            AddChosenHourListener,
-            DailyWeatherPropositionsNotifier,
-            WeeklyWeatherPropositionsNotifier,
-            UpdatingFinishedListener,
-            ILoginFacebook,
-            IWeatherPreferenceFragment,
-            NavigationView.OnNavigationItemSelectedListener,
-            ImportantConditionsChangedListener,
-            WeatherForecastUpdater,
-            PropositionClickedListener,
+        WeeklyPropositionsChangedListener,
+        AddChosenHourListener,
+        DailyWeatherPropositionsNotifier,
+        WeeklyWeatherPropositionsNotifier,
+        UpdatingFinishedListener,
+        ILoginFacebook,
+        IWeatherPreferenceFragment,
+        NavigationView.OnNavigationItemSelectedListener,
+        ImportantConditionsChangedListener,
+        WeatherForecastUpdater,
+        PropositionClickedListener,
         WeatherConditionsImportanceOrderProvider,
         ChosenPropositionsProvider {
+
+    private static final int REQUEST_LOCATION_PERMISSIONS_CODE = 123;
+
+    private static double DEFAULT_LONGITUDE = 21.0042;
+
+    private static double DEFAULT_LATITUDE = 52.1347;
 
     private ProgressBar mLoadingIndicator;
 
@@ -83,16 +97,15 @@ public class MainActivity extends AppCompatActivity
 
     private PropositionsList dailyPropositions, weeklyPropositions;
 
-    private GPSTracker gpsTracker;
-    private double xLocation;
-    private double yLocation;
+    private LocationManager locationManager;
+
+    private LocationTracker locationTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gpsTracker = new GPSTracker(this);
         setViewReferences();
         restorePreviousStateIfAny(savedInstanceState);
 
@@ -100,23 +113,24 @@ public class MainActivity extends AppCompatActivity
         initEmptyPropositionsList();
 
         this.centralControl = getCentralControl();
+        this.locationManager = getLocationManager(getApplicationContext());
+        this.locationTracker = new LocationTracker(getApplicationContext(),
+                DEFAULT_LONGITUDE, DEFAULT_LATITUDE);
+    }
 
-        //Using gps tracker
-        if(gpsTracker.canGetLocation()){
-            xLocation = gpsTracker.getLatitude();
-            yLocation = gpsTracker.getLongitude();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSIONS_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateLocation();
+                }
         }
-        else
-            gpsTracker.showSettingsAlert();
-        gpsTracker.stopUsingGPS();
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         this.centralControl.updatePropositionsAsync();
     }
 
@@ -135,6 +149,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_set_current_location:
+                requestForLocationUpdate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -262,6 +287,11 @@ public class MainActivity extends AppCompatActivity
                 .getWeatherConditionsOrder();
     }
 
+    @Override
+    public List<ChosenProposition> getAllChosenPropositions() {
+        return this.centralControl.getAllChosenHours();
+    }
+
     private void initListenersLists() {
         this.dailyPropositionsChangedListeners = new LinkedList<>();
         this.weeklyPropositionsChangedListeners = new LinkedList<>();
@@ -281,6 +311,10 @@ public class MainActivity extends AppCompatActivity
 
     private void refreshAll() {
         this.mLoadingIndicator.setVisibility(View.VISIBLE);
+        this.centralControl.setByCoordinatesWeatherForecastDownloading(
+                this.locationTracker.getLongitude(),
+                this.locationTracker.getLatitude()
+        );
         this.centralControl.updateWeatherForecastAsync();
     }
 
@@ -317,6 +351,28 @@ public class MainActivity extends AppCompatActivity
         return res;
     }
 
+    private LocationManager getLocationManager(Context context) {
+        return (LocationManager)context
+                .getSystemService(LOCATION_SERVICE);
+    }
+
+    private void requestForLocationUpdate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET}, REQUEST_LOCATION_PERMISSIONS_CODE);
+        } else {
+            updateLocation();
+        }
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void updateLocation() {
+        this.locationTracker.updateLocation(this.locationManager);
+    }
+
     private void setFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -336,10 +392,5 @@ public class MainActivity extends AppCompatActivity
         }
         mFragmentTransaction.replace(android.R.id.content, fragment);
         mFragmentTransaction.commit();
-    }
-
-    @Override
-    public List<ChosenProposition> getAllChosenPropositions() {
-        return this.centralControl.getAllChosenHours();
     }
 }

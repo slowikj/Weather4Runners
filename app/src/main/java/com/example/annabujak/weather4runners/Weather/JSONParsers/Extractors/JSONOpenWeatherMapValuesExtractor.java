@@ -49,7 +49,7 @@ public class JSONOpenWeatherMapValuesExtractor extends JSONWeatherValuesExtracto
         int cloudinessPercentage = Integer.parseInt(strCloudiness);
 
         return Cloudiness.fromId(
-                Cloudiness.values().length - 1 - (cloudinessPercentage / (100 / Cloudiness.values().length)));
+                (100 - cloudinessPercentage) / (100 / Cloudiness.values().length + 1));
     }
 
     @Override

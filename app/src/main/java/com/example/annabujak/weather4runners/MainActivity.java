@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
+import com.example.annabujak.weather4runners.Fragments.CreditsFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
@@ -182,6 +183,10 @@ public class MainActivity extends AppCompatActivity
                         getWeatherConditionsImportanceOrder()
                 );
                 setFragment(ImportantConditionsFragment.Create(importantConditions), true);
+                returnResult = true;
+                break;
+            case R.id.id_nav_info:
+                setFragment(new CreditsFragment(), true);
                 returnResult = true;
                 break;
         }

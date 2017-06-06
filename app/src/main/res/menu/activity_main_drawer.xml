@@ -15,6 +15,11 @@
                     android:title="@string/menu_statistics"
                     android:icon="@drawable/ic_charts"/>
 
+                <item
+                    android:id="@+id/id_nav_info"
+                    android:title="@string/menu_app_info"
+                    android:icon="@drawable/ic_info_outline_black_24dp" />
+
             </menu>
         </item>
 

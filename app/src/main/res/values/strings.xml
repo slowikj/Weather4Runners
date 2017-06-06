@@ -28,6 +28,7 @@
     <string name="menu_favourite_values">Favourite values</string>
     <string name="menu_order_of_importance">Order of importance</string>
     <string name="menu_your_locations">Your locations</string>
+    <string name="menu_app_info">App info</string>
 
     <string name="important_conditions_description">Remove unimportant items and order the rest</string>
 
@@ -50,4 +51,7 @@
     <string name="update_dialog_message">Updating weather forecast will remove all of your declarations. Are you sure?</string>
     <string name="update_dialog_positive">Yes</string>
     <string name="update_dialog_negative">No</string>
+
+    <string name="info_weather_from">Weather forecast from</string>
+    <string name="info_icons_from">Weather icons from</string>
 </resources>

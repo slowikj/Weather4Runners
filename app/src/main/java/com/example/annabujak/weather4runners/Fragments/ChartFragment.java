@@ -106,12 +106,15 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
     }
 
     private void prepareGraphDays(List<ChosenProposition> chosenPropositions){
-        DataPoint[] points = new DataPoint[7];
-        for(int i  = 0; i < 7; i ++)
+        final int DAYS_CNT = 7;
+
+        DataPoint[] points = new DataPoint[DAYS_CNT];
+        for(int i  = 0; i < DAYS_CNT; i ++)
             points[i] = new DataPoint(i+1,0);
         for(int i = 0; i < chosenPropositions.size(); i ++){
             Date tempDate = new Date(chosenPropositions.get(i).getDate());
-            points[tempDate.getDay()] = new DataPoint(points[tempDate.getDay()].getX(),points[tempDate.getDay()].getY()+1);
+            int index = (tempDate.getDay() - 1 + DAYS_CNT) % DAYS_CNT;
+            points[index] = new DataPoint(points[index].getX(),points[index].getY()+1);
         }
         seriesDays = new BarGraphSeries<>(points);
         seriesDays.setTitle("Days chosen for run");

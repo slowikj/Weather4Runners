@@ -1,6 +1,7 @@
 package com.example.annabujak.weather4runners.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,10 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.annabujak.weather4runners.Dialogs.DialogFactory;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
 import com.example.annabujak.weather4runners.Listeners.WeatherForecastUpdater;
@@ -204,7 +207,15 @@ public class PagerFragment extends Fragment
         res.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                weatherForecastUpdater.onWeatherForecastUpdate();
+                DialogFactory.getWeatherUpdatingAlertDialog(
+                        getContext(),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                weatherForecastUpdater.onWeatherForecastUpdate();
+                            }
+                        })
+                .show();
             }
         });
 

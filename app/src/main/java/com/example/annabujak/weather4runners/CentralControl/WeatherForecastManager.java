@@ -1,19 +1,14 @@
 package com.example.annabujak.weather4runners.CentralControl;
 
-import android.content.Context;
-import android.os.AsyncTask;
-
-import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
-import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
-import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONOpenWeatherMapValuesExtractorFactory;
 import com.example.annabujak.weather4runners.Weather.JSONTransformator;
-import com.example.annabujak.weather4runners.Weather.JSONTransformatorBuilder;
-import com.example.annabujak.weather4runners.Weather.JSONWeatherDownloader;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherDownloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -32,20 +27,24 @@ public class WeatherForecastManager {
         this.jsonTransformator = jsonTransformator;
     }
 
-    public ArrayList<WeatherInfo> getNewestWeatherForecast() {
+    public ArrayList<WeatherInfo> getNewestWeatherForecast() throws IOException {
         JSONArray jsonWeatherForecasts = getDownloadedWeatherForecasts();
         ArrayList<WeatherInfo> hourlyForecasts = getTransformatedForecast(jsonWeatherForecasts);
         return hourlyForecasts;
     }
 
-    public void setLocation(String cityName) {
-        this.jsonWeatherDownloader.setLocation(cityName);
+    public void setWeatherDownloader(JSONWeatherDownloader jsonWeatherDownloader) {
+        this.jsonWeatherDownloader = jsonWeatherDownloader;
     }
 
-    private JSONArray getDownloadedWeatherForecasts() {
+    public void setJsonTransformator(JSONTransformator jsonTransformator) {
+        this.jsonTransformator = jsonTransformator;
+    }
+
+    private JSONArray getDownloadedWeatherForecasts() throws IOException {
         try {
             return jsonWeatherDownloader.getData();
-        } catch (Exception e) {
+        } catch (MalformedURLException | JSONException e) {
             e.printStackTrace();
             return new JSONArray();
         }

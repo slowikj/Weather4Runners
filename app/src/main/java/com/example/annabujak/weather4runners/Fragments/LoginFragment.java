@@ -1,5 +1,6 @@
 package com.example.annabujak.weather4runners.Fragments;
 
+import android.content.Intent;
 import android.media.tv.TvInputService;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,11 +63,16 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(!ProfileExists())
+        if(ProfileExists())
             CloseFragment();
 
         SetButtons(view);
         RegisterLogin();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -85,11 +91,13 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 if (Profile.getCurrentProfile() == null) {
+                    //Toast.makeText(getContext(), loginResult.getAccessToken().getUserId(), Toast.LENGTH_LONG).show();
                     mProfileTracker = new ProfileTracker() {
                         @Override
                         protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
                             mProfileTracker.stopTracking();
                             ((MainActivity)getActivity()).AddUser(profile2.getFirstName(),profile2.getLastName());
+                            Toast.makeText(getContext(), profile2.getFirstName(), Toast.LENGTH_LONG).show();
                             CloseFragment();
                         }
                     };

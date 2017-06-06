@@ -31,6 +31,10 @@ public class JSONTransformator {
     }
 
     public ArrayList<WeatherInfo> getHourlyWeatherInfos(JSONArray jsonArray) throws JSONException {
+        if(jsonArray.length() == 0) {
+            return new ArrayList<>();
+        }
+
         ArrayList<WeatherInfo> parsedJson = jsonWeatherParser.getParsed(jsonArray);
         ArrayList<WeatherInfo> res = new ArrayList<>();
         for(int i = 0; i < parsedJson.size() - 1; ++i) {

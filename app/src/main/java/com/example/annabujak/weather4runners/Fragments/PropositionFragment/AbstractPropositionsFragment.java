@@ -1,5 +1,6 @@
 package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -198,10 +199,20 @@ public abstract class AbstractPropositionsFragment extends android.support.v4.ap
         public void onClick(View view, int position) {
             PropositionsListAdapter.PropositionsListViewHolder holder = getHolder(position);
 
+            Activity activity = getActivity();
+            Toast.makeText(activity,
+                    (!holder.getCheckbox().isChecked()
+                            ? activity.getResources().getString(R.string.item_checked_message)
+                            : activity.getResources().getString(R.string.item_unchecked_message)),
+                    Toast.LENGTH_LONG)
+                .show();
+
             Integer pos = recyclerView.getChildAdapterPosition(view);
 
             propositionClickedListener.onPropositionClickedListener(
                     getChosenProposition(holder.getDate()));
+
+
         }
 
         @Override

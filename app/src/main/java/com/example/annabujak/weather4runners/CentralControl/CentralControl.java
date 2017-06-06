@@ -3,6 +3,7 @@ package com.example.annabujak.weather4runners.CentralControl;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
@@ -16,13 +17,17 @@ import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
+import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Weather.Approximators.WeatherInfosLinearApproximatorFactory;
 import com.example.annabujak.weather4runners.Weather.Filter.WeatherFilter;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherByCoordinatesDownloader;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherByNameDownloader;
 import com.example.annabujak.weather4runners.Weather.JSONParsers.Extractors.JSONOpenWeatherMapValuesExtractorFactory;
 import com.example.annabujak.weather4runners.Weather.JSONTransformator;
 import com.example.annabujak.weather4runners.Weather.JSONTransformatorBuilder;
-import com.example.annabujak.weather4runners.Weather.JSONWeatherDownloader;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.JSONWeatherDownloader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +37,17 @@ import java.util.List;
 
 public class CentralControl {
 
-    private static final String DEFAULT_CITY_NAME = "Warsaw,Poland";
+    private static final String DEFAULT_CITY_NAME = "Warsaw";
+
+    private static final String DEFAULT_COUNTRY_NAME = "Poland";
 
     private static final String DEFAULT_LANGUAGE = "en";
 
     private static final int HOURS_PER_FORECAST = 3;
 
     private static final int BEST_WEATHER_PROPOSITIONS = Integer.MAX_VALUE;
+
+    private Context context;
 
     private DBManager databaseManager;
 
@@ -57,14 +66,28 @@ public class CentralControl {
     private NotificationManager notificationManager;
 
     public CentralControl(Context context) {
+        this.context = context;
+
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
-                getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_LANGUAGE),
+                getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_COUNTRY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
 
         this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS,
                 getPreferenceBalanceOrDefault());
         notificationManager = new NotificationManager(context);
+    }
+
+    public void setByCoordinatesWeatherForecastDownloading(double longitute, double latitude) {
+        this.weatherForecastManager.setWeatherDownloader(
+                new JSONWeatherByCoordinatesDownloader(longitute, latitude, DEFAULT_LANGUAGE)
+        );
+    }
+
+    public void setByNameWeatherForecastDownloading(String city, String country) {
+        this.weatherForecastManager.setWeatherDownloader(
+                new JSONWeatherByNameDownloader(city, country, DEFAULT_LANGUAGE)
+        );
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {
@@ -80,10 +103,6 @@ public class CentralControl {
 
     public void setUpdatingFinishedListener(UpdatingFinishedListener listener) {
         this.updatingFinishedListener = listener;
-    }
-
-    public void setCityName(String cityName) {
-        this.weatherForecastManager.setLocation(cityName);
     }
 
     public void updateWeatherForecastAsync() {
@@ -128,8 +147,9 @@ public class CentralControl {
     }
 
     private JSONWeatherDownloader getDefaultJSONDownloader(String cityName,
+                                                           String coutryName,
                                                            String language) {
-        return new JSONWeatherDownloader(cityName, language);
+        return new JSONWeatherByNameDownloader(cityName, coutryName, language);
     }
 
     public PreferenceBalance getPreferenceBalanceOrDefault() {
@@ -155,12 +175,25 @@ public class CentralControl {
 
         @Override
         protected ArrayList<WeatherInfo> doInBackground(Void... params) {
-            ArrayList<WeatherInfo> weatherForecast = weatherForecastManager
-                    .getNewestWeatherForecast();
+            try {
+                ArrayList<WeatherInfo> weatherForecast = weatherForecastManager
+                        .getNewestWeatherForecast();
+                databaseManager.UpdateWeatherData(weatherForecast);
+                return weatherForecast;
+            } catch(IOException e) {
+                this.cancel(true);
+                return new ArrayList<>();
+            }
+        }
 
-            databaseManager.UpdateWeatherData(weatherForecast);
+        @Override
+        protected void onCancelled(ArrayList<WeatherInfo> weatherInfos) {
+            super.onCancelled(weatherInfos);
 
-            return weatherForecast;
+            Toast.makeText(context,
+                    context.getResources().getString(R.string.error_with_internet_con_message),
+                    Toast.LENGTH_LONG).show();
+            updatingFinishedListener.onUpdatingFinished();
         }
 
         @Override
@@ -186,7 +219,7 @@ public class CentralControl {
             ArrayList<WeatherInfo> weeklyPropositions = weatherFilter
                     .GetWeeklyWeather(weatherForecast, preference);
 
-            return new Pair<ArrayList<WeatherInfo>, ArrayList<WeatherInfo>>(dailyPropositions, weeklyPropositions);
+            return new Pair<>(dailyPropositions, weeklyPropositions);
         }
 
         @Override

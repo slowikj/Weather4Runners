@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,7 +55,8 @@ public class ImportantConditionsFragment extends Fragment{
                     this.importantWeatherConditionsNames
         );
 
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
+        setMenuVisibility(false);
     }
 
     @Nullable
@@ -81,10 +84,10 @@ public class ImportantConditionsFragment extends Fragment{
     }
 
     @Override
-    public void onDetach() {
+    public void onPause() {
         this.importantConditionsChangedListener
                 .onImportantConditionsChangedListener(this.importantWeatherConditionsNames);
-        super.onDetach();
+        super.onPause();
     }
 
     @Override

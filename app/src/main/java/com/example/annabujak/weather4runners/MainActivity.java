@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         this.centralControl = getCentralControl();
 
         //Using gps tracker
+<<<<<<< HEAD
         //if(gpsTracker.canGetLocation()){
         //    xLocation = gpsTracker.getLatitude();
         //    yLocation = gpsTracker.getLongitude();
@@ -109,6 +110,15 @@ public class MainActivity extends AppCompatActivity
         //else
         //    gpsTracker.showSettingsAlert();
        // gpsTracker.stopUsingGPS();
+=======
+       // if(gpsTracker.canGetLocation()){
+        //    xLocation = gpsTracker.getLatitude();
+         //   yLocation = gpsTracker.getLongitude();
+      //  }
+      //  else
+       //     gpsTracker.showSettingsAlert();
+      //  gpsTracker.stopUsingGPS();
+>>>>>>> master
 
 
     }

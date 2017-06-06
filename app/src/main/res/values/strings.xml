@@ -40,4 +40,14 @@
 
     <string name="item_checked_message"> The item has been checked </string>
     <string name="item_unchecked_message"> The item has been unchecked </string>
+
+    <string name="gps_dialog_title"> GPS </string>
+    <string name="gps_dialog_message"> GPS is not enabled. Do you want to go to settings menu? </string>
+    <string name="gps_dialog_positive"> Yes</string>
+    <string name="gps_dialog_negative">No</string>
+
+    <string name="update_dialog_title">Updating weather forecast</string>
+    <string name="update_dialog_message">Updating weather forecast will remove all of your declarations. Are you sure?</string>
+    <string name="update_dialog_positive">Yes</string>
+    <string name="update_dialog_negative">No</string>
 </resources>

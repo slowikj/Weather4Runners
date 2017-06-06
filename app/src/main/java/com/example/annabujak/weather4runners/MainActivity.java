@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
         this.centralControl = getCentralControl();
         this.locationManager = getLocationManager(getApplicationContext());
-        this.locationTracker = new LocationTracker(getApplicationContext(),
+        this.locationTracker = new LocationTracker(this,
                 DEFAULT_LONGITUDE, DEFAULT_LATITUDE);
     }
 

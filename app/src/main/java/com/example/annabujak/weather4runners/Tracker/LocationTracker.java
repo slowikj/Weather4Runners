@@ -1,7 +1,9 @@
 package com.example.annabujak.weather4runners.Tracker;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -13,6 +15,7 @@ import android.support.annotation.RequiresPermission;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.annabujak.weather4runners.Dialogs.DialogFactory;
 import com.example.annabujak.weather4runners.R;
 
 import java.util.Calendar;
@@ -53,9 +56,8 @@ public class LocationTracker implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.context.startActivity(intent);
+        DialogFactory.getSettingsAlertDialog(this.context)
+                .show();
     }
 
     public double getLongitude() {
@@ -132,5 +134,4 @@ public class LocationTracker implements LocationListener {
 
         Log.i("LOCATION", "Location set to " + String.format(" %f, %f", longitude, latitude));
     }
-
 }

@@ -1,12 +1,16 @@
 package com.example.annabujak.weather4runners.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,8 +52,24 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setMenuVisibility(false);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_chart_share:
+                //TODO
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.chart_menu, menu);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +80,7 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         super.onViewCreated(view, savedInstanceState);
         graphDays = (GraphView) view.findViewById(R.id.graphDays);
         graphHours = (GraphView) view.findViewById(R.id.graphHours);
+
         graphDays.getLegendRenderer().setVisible(true);
         graphDays.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graphHours.getLegendRenderer().setVisible(true);
@@ -75,8 +96,6 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
             hours[i/2] = Integer.toString(i);
         hoursLabel.setHorizontalLabels(hours);
         graphHours.getGridLabelRenderer().setLabelFormatter(hoursLabel);
-
-        setHasOptionsMenu(false);
     }
 
     @Override
@@ -119,8 +138,9 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         seriesDays = new BarGraphSeries<>(points);
         seriesDays.setTitle("Days chosen for run");
         seriesDays.setDrawValuesOnTop(true);
-        if(graphDays != null)
+        if(graphDays != null) {
             graphDays.addSeries(seriesDays);
+        }
     }
     private void prepareGraphHours(List<ChosenProposition> chosenPropositions){
         DataPoint[] points = new DataPoint[24];
@@ -137,5 +157,18 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         if(graphHours != null) {
             graphHours.addSeries(seriesHours);
         }
+    }
+
+    private static Bitmap getBitmapFromView(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap) {
+            @Override
+            public boolean isHardwareAccelerated() {
+                return true;
+            }
+        };
+        view.draw(canvas);
+
+        return bitmap;
     }
 }

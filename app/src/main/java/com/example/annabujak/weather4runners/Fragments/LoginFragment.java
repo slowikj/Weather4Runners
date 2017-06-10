@@ -85,6 +85,7 @@ public class LoginFragment extends Fragment {
 
     private void RegisterLogin(){
         callbackManager = CallbackManager.Factory.create();
+        loginButton.setPublishPermissions("publish_actions");
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             private ProfileTracker mProfileTracker;
@@ -112,7 +113,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onError(FacebookException exception) {
-                    showAlert();
+                exception.printStackTrace();
+                showAlert();
             }
 
             private void showAlert() {

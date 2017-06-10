@@ -18,6 +18,10 @@ import com.example.annabujak.weather4runners.Listeners.ChosenPropositionListener
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -59,6 +63,20 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
         switch(item.getItemId()) {
             case R.id.menu_chart_share:
                 //TODO
+                FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(getBitmapFromView(graphHours))
+                        .build();
+
+                SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+
+                if(ShareDialog.canShow(SharePhotoContent.class)) {
+                    ShareDialog shareDialog = new ShareDialog(this);
+                    shareDialog.show(sharePhotoContent);
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

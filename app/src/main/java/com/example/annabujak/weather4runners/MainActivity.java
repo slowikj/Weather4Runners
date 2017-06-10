@@ -80,7 +80,13 @@ public class MainActivity extends AppCompatActivity
 
     private static double DEFAULT_LONGITUDE = 21.0042;
 
+    private static String LONGITUTE_SHARED_PREF = "longitude_shared_pref";
+
     private static double DEFAULT_LATITUDE = 52.1347;
+
+    private static String LATITUDE_SHARED_PREF = "latitude_shared_pref";
+
+    private SharedPreferencesHelper sharedPreferencesHelper;
 
     private ProgressBar mLoadingIndicator;
 
@@ -111,10 +117,7 @@ public class MainActivity extends AppCompatActivity
         initListenersLists();
         initEmptyPropositionsList();
 
-        this.centralControl = getCentralControl();
-        this.locationManager = getLocationManager(getApplicationContext());
-        this.locationTracker = new LocationTracker(this,
-                DEFAULT_LONGITUDE, DEFAULT_LATITUDE);
+        createManagers();
     }
 
     @Override
@@ -131,6 +134,21 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         this.centralControl.updatePropositionsAsync();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        this.sharedPreferencesHelper.saveSharedPref(
+                LONGITUTE_SHARED_PREF,
+                (float)this.locationTracker.getLongitude()
+        );
+
+        this.sharedPreferencesHelper.saveSharedPref(
+                LATITUDE_SHARED_PREF,
+                (float)this.locationTracker.getLatitude()
+        );
     }
 
     @Override
@@ -298,6 +316,18 @@ public class MainActivity extends AppCompatActivity
     private void initEmptyPropositionsList() {
         this.dailyPropositions = new PropositionsList();
         this.weeklyPropositions = new PropositionsList();
+    }
+
+    private void createManagers() {
+        this.centralControl = getCentralControl();
+        this.locationManager = getLocationManager(getApplicationContext());
+        this.sharedPreferencesHelper = SharedPreferencesHelper.create(this);
+        this.locationTracker = new LocationTracker(this,
+                this.sharedPreferencesHelper.getSharedPref(LONGITUTE_SHARED_PREF,
+                        (float)DEFAULT_LONGITUDE),
+                this.sharedPreferencesHelper.getSharedPref(LATITUDE_SHARED_PREF,
+                        (float)DEFAULT_LATITUDE)
+        );
     }
 
     private void restorePreviousStateIfAny(Bundle savedInstanceState) {

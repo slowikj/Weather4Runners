@@ -35,6 +35,9 @@ public class LocationTracker implements LocationListener {
         this.context = context;
         this.setLocation(longitude,
                 latitude);
+
+        Log.i("LOCATION_TRACKER",
+                String.format("INIT location to %f %f", longitude, latitude));
     }
 
     @Override
@@ -74,7 +77,7 @@ public class LocationTracker implements LocationListener {
             onProviderDisabled(null);
         }
 
-        final long TIME_DIFF = 3;
+        final long TIME_DIFF = 100;
 
         Location newLocation = getLastKnownLocation(locationManager);
         if(newLocation != null && newLocation.getTime() > Calendar.getInstance().getTimeInMillis() - TIME_DIFF) {

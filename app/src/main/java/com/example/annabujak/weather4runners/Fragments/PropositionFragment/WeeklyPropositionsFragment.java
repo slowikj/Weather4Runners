@@ -37,7 +37,7 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
         return new Command<Integer>() {
             @Override
             public void execute(Integer value) {
-                sharedPreferencesHelper.saveIntSharedPref(
+                sharedPreferencesHelper.saveSharedPref(
                         SHARED_PREF_NUMBER_OF_ITEMS_TAG,
                         value);
             }
@@ -51,7 +51,7 @@ public class WeeklyPropositionsFragment extends AbstractPropositionsFragment
 
     @Override
     protected int getNumberOfItemsToShowOrDefault() {
-        return sharedPreferencesHelper.getIntSharedPref(
+        return sharedPreferencesHelper.getSharedPref(
                 SHARED_PREF_NUMBER_OF_ITEMS_TAG,
                 DEFAULT_NUMBER_OF_ITEMS);
     }

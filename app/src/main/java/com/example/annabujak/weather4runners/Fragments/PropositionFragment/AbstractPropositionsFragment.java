@@ -28,6 +28,7 @@ import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.R;
 import com.example.annabujak.weather4runners.Listeners.RecyclerViewItemClickListener;
+import com.example.annabujak.weather4runners.SharedPreferencesHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

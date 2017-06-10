@@ -1,4 +1,4 @@
-package com.example.annabujak.weather4runners.Fragments.PropositionFragment;
+package com.example.annabujak.weather4runners;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +21,23 @@ public class SharedPreferencesHelper {
         this.sharedPreferences = sharedPreferences;
     }
 
-    public int getIntSharedPref(String tag, Integer defaultValue) {
+    public int getSharedPref(String tag, int defaultValue) {
         return this.sharedPreferences.getInt(tag, defaultValue);
     }
 
-    public void saveIntSharedPref(String tag, int value) {
+    public void saveSharedPref(String tag, int value) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putInt(tag, value);
+        editor.commit();
+    }
+
+    public float getSharedPref(String tag, float defaultValue) {
+        return this.sharedPreferences.getFloat(tag, defaultValue);
+    }
+
+    public void saveSharedPref(String tag, float value) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putFloat(tag, value);
         editor.commit();
     }
 
@@ -37,9 +47,5 @@ public class SharedPreferencesHelper {
 
     public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
         this.sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener);
-    }
-
-    public SharedPreferences getSharedPreferences() {
-        return sharedPreferences;
     }
 }

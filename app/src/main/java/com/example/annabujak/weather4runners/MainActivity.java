@@ -3,11 +3,9 @@ package com.example.annabujak.weather4runners;
 import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -25,14 +23,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.annabujak.weather4runners.CentralControl.CentralControl;
+import com.example.annabujak.weather4runners.Dialogs.DialogFactory;
+import com.example.annabujak.weather4runners.Dialogs.LocationTypeDialog;
 import com.example.annabujak.weather4runners.Enum.WeatherConditionsNames;
 import com.example.annabujak.weather4runners.Fragments.ChartFragment;
 import com.example.annabujak.weather4runners.Fragments.CreditsFragment;
 import com.example.annabujak.weather4runners.Fragments.ImportantConditionsFragment.ImportantConditionsFragment;
 import com.example.annabujak.weather4runners.Listeners.AddChosenHourListener;
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
+import com.example.annabujak.weather4runners.Listeners.CityCountryLocationSetListener;
+import com.example.annabujak.weather4runners.Listeners.CurrentLocationSetListener;
 import com.example.annabujak.weather4runners.Listeners.DailyPropositionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.ImportantConditionsChangedListener;
 import com.example.annabujak.weather4runners.Listeners.PropositionClickedListener;
@@ -74,7 +77,9 @@ public class MainActivity extends AppCompatActivity
         WeatherForecastUpdater,
         PropositionClickedListener,
         WeatherConditionsImportanceOrderProvider,
-        ChosenPropositionsProvider {
+        ChosenPropositionsProvider,
+        CurrentLocationSetListener,
+        CityCountryLocationSetListener {
 
     private static final int REQUEST_LOCATION_PERMISSIONS_CODE = 123;
 
@@ -171,8 +176,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_set_current_location:
-                requestForLocationUpdate();
+            case R.id.menu_set_location:
+                LocationTypeDialog dialog = DialogFactory.getLocationTypeDialog(this, this);
+                dialog.show(getFragmentManager(), "locationTypeDialog");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -306,6 +312,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public List<ChosenProposition> getAllChosenPropositions() {
         return this.centralControl.getAllChosenHours();
+    }
+
+    @Override
+    public void setCityCountryLocation(String city, String country) {
+        this.locationTracker.cancelUpdatingLocation(this.locationManager);
+
+        this.centralControl.setLocation(city, country);
+        this.centralControl.setByNameWeatherDownloader();
+
+        Toast.makeText(getApplicationContext(),
+                getResources().getString(R.string.location_set_message) + String.format(": %s, %s", city, country),
+                Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void setCurrentLocation() {
+        Toast.makeText(getApplicationContext(),
+                getResources().getString(R.string.start_setting_current_location_message),
+                Toast.LENGTH_SHORT)
+                .show();
+
+        requestForLocationUpdate();
     }
 
     private void initListenersLists() {

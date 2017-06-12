@@ -55,4 +55,19 @@
     <string name="info_icons_from">Weather icons from</string>
 
     <string name="menu_chart_share">Share</string>
+
+    <string name="choose_location_type_message">Choose a location type</string>
+    <string name="choose_city_country_message">Location input</string>
+    <string name="city_name">City</string>
+    <string name="country_name">Country</string>
+
+    <string name="incorrect_input_message">Incorrect input</string>
+
+    <string-array name="location_types">
+        <item>Set my current location</item>
+        <item>Other location</item>
+    </string-array>
+
+    <string name="location_set_message">Location set</string>
+    <string name="start_setting_current_location_message"> Start setting your current location</string>
 </resources>

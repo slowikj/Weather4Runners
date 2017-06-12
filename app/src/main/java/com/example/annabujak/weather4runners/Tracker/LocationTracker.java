@@ -94,6 +94,11 @@ public class LocationTracker implements LocationListener {
         }
     }
 
+    @SuppressWarnings("MissingPermission")
+    public void cancelUpdatingLocation(LocationManager locationManager) {
+        locationManager.removeUpdates(this);
+    }
+
     public static Criteria getDefaultCriteria() {
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);

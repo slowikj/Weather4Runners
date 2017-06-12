@@ -1,11 +1,14 @@
 package com.example.annabujak.weather4runners.Dialogs;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
 
+import com.example.annabujak.weather4runners.Listeners.CityCountryLocationSetListener;
+import com.example.annabujak.weather4runners.Listeners.CurrentLocationSetListener;
 import com.example.annabujak.weather4runners.R;
 
 /**
@@ -45,5 +48,11 @@ public class DialogFactory {
                         dialog.cancel();
                     }
                 }).create();
+    }
+
+    public static LocationTypeDialog getLocationTypeDialog(CurrentLocationSetListener currentLocationSetListener,
+                                               CityCountryLocationSetListener cityCountryLocationSetListener) {
+        return LocationTypeDialog.create(currentLocationSetListener,
+                cityCountryLocationSetListener);
     }
 }

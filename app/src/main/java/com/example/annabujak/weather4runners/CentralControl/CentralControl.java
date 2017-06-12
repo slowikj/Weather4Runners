@@ -36,12 +36,6 @@ import java.util.List;
 
 public class CentralControl {
 
-    private static final String DEFAULT_CITY_NAME = "Warsaw";
-
-    private static final String DEFAULT_COUNTRY_NAME = "Poland";
-
-    private static final String DEFAULT_LANGUAGE = "en";
-
     private static final int HOURS_PER_FORECAST = 3;
 
     private static final int BEST_WEATHER_PROPOSITIONS = Integer.MAX_VALUE;
@@ -67,23 +61,26 @@ public class CentralControl {
 
         this.databaseManager = new DBManager(context);
         this.weatherForecastManager = new WeatherForecastManager(
-                getDefaultJSONDownloader(DEFAULT_CITY_NAME, DEFAULT_COUNTRY_NAME, DEFAULT_LANGUAGE),
                 getDefaultJSONTransformator());
 
         this.weatherFilter = new WeatherFilter(BEST_WEATHER_PROPOSITIONS,
                 getPreferenceBalanceOrDefault());
     }
 
-    public void setByCoordinatesWeatherForecastDownloading(double longitute, double latitude) {
-        this.weatherForecastManager.setWeatherDownloader(
-                new JSONWeatherByCoordinatesDownloader(longitute, latitude, DEFAULT_LANGUAGE)
-        );
+    public void setLocation(String city, String country) {
+        this.weatherForecastManager.setLocation(city, country);
     }
 
-    public void setByNameWeatherForecastDownloading(String city, String country) {
-        this.weatherForecastManager.setWeatherDownloader(
-                new JSONWeatherByNameDownloader(city, country, DEFAULT_LANGUAGE)
-        );
+    public void setLocation(double longitude, double latitude) {
+        this.weatherForecastManager.setLocation(longitude, latitude);
+    }
+
+    public void setByCoordinatesWeatherDownloader() {
+        this.weatherForecastManager.setByCoordinatesWeatherDownloader();
+    }
+
+    public void setByNameWeatherDownloader() {
+        this.weatherForecastManager.setByNameWeatherDownloader();
     }
 
     public void setDailyPropositionsChangedListener(DailyPropositionsChangedListener listener) {

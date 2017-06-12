@@ -339,10 +339,6 @@ public class MainActivity extends AppCompatActivity
 
     private void refreshAll() {
         this.mLoadingIndicator.setVisibility(View.VISIBLE);
-        this.centralControl.setByCoordinatesWeatherForecastDownloading(
-                this.locationTracker.getLongitude(),
-                this.locationTracker.getLatitude()
-        );
         this.centralControl.updateWeatherForecastAsync();
     }
 

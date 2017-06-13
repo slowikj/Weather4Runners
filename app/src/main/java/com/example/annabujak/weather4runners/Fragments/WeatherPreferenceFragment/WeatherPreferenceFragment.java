@@ -56,13 +56,13 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
         SEEK_E = getString(R.string.seek_endhour);
 
         SharedPreferences sharedPref = getPreferenceManager().getSharedPreferences();
-        int temperature_ind = sharedPref.getInt(SEEK_T, getDefaultTemperatureIndex());
-        int humidity_ind = sharedPref.getInt(SEEK_H, getDefaultHumidityIndex());
-        int precipitation_ind = sharedPref.getInt(SEEK_P, getDefaultPrecipitationIndex());
-        int wind_ind = sharedPref.getInt(SEEK_W, getDefaultWindSpeedIndex());
-        int cloudiness_ind = sharedPref.getInt(SEEK_C, getDefaultCloudinessIndex());
-        int startHour_ind = sharedPref.getInt(SEEK_S, getDefaultStartHourIndex());
-        int endHour_ind = sharedPref.getInt(SEEK_E, getDefaultEndHourIndex());
+        int temperature_ind = getTemperatureIndexOrDefault(sharedPref);
+        int humidity_ind = getHumidityIndexOrDefault(sharedPref);
+        int precipitation_ind = getPrecipitationIndexOrDefault(sharedPref);
+        int wind_ind = getWindSpeedIndexOrDefault(sharedPref);
+        int cloudiness_ind = getCloudinessIndexOrDefault(sharedPref);
+        int startHour_ind = getStartHourIndexOrDefault(sharedPref);
+        int endHour_ind = getEndHourIndexOrDefault(sharedPref);
 
         seekTemperature =  (SeekBarPreference) findPreference(SEEK_T);
         seekTemperature.setValue(temperature_ind);
@@ -116,13 +116,13 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
 
     private void updatePreference() {
         Preference preference = new Preference(
-                RenderPreference.getTemperature(preferences.getInt(SEEK_T,getDefaultTemperatureIndex())),
-                Cloudiness.fromId( RenderPreference.getCloudiness(preferences.getInt(SEEK_C,getDefaultCloudinessIndex()))),
-                RenderPreference.getStartHour(preferences.getInt(SEEK_S,getDefaultStartHourIndex())),
-                RenderPreference.getEndHours(preferences.getInt(SEEK_E,getDefaultEndHourIndex())),
-                RenderPreference.getHumidity(preferences.getInt(SEEK_H,getDefaultHumidityIndex())),
-                (double)RenderPreference.getPrecipitation(preferences.getInt(SEEK_P,getDefaultPrecipitationIndex())),
-                (double)RenderPreference.getWindSpeed(preferences.getInt(SEEK_W,getDefaultWindSpeedIndex())));
+                RenderPreference.getTemperature(getTemperatureIndexOrDefault(preferences)),
+                Cloudiness.fromId(RenderPreference.getCloudiness(getCloudinessIndexOrDefault(preferences))),
+                RenderPreference.getStartHour(getStartHourIndexOrDefault(preferences)),
+                RenderPreference.getEndHours(getEndHourIndexOrDefault(preferences)),
+                RenderPreference.getHumidity(getHumidityIndexOrDefault(preferences)),
+                (double)RenderPreference.getPrecipitation(getPrecipitationIndexOrDefault(preferences)),
+                (double)RenderPreference.getWindSpeed(getWindSpeedIndexOrDefault(preferences)));
 
         ((MainActivity)getActivity()).UpdatePreference(preference);
     }
@@ -140,40 +140,60 @@ public class WeatherPreferenceFragment extends android.preference.PreferenceFrag
         preferences = prefs;
 
         if (SEEK_T.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultTemperatureIndex());
+            int i = getTemperatureIndexOrDefault(prefs);
             seekTemperature.setSummary(RenderPreference.getTemperature(i)+" ");
         } else if (SEEK_H.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultHumidityIndex());
+            int i = getHumidityIndexOrDefault(prefs);
             seekHumidity.setSummary(RenderPreference.getHumidity(i)+" ");
         }
         else if (SEEK_P.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultPrecipitationIndex());
+            int i = getPrecipitationIndexOrDefault(prefs);
             seekPrecipitation.setSummary(RenderPreference.getPrecipitation(i)+" ");
         }
         else if (SEEK_W.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultWindSpeedIndex());
+            int i = getWindSpeedIndexOrDefault(prefs);
             seekWindSpeed.setSummary(RenderPreference.getWindSpeed(i)+" ");
         }
         else if (SEEK_C.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultCloudinessIndex());
+            int i = getCloudinessIndexOrDefault(prefs);
             seekCloudiness.setSummary(RenderPreference.getCloudiness(i)+" ");
         }
         else if (SEEK_S.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultStartHourIndex());
+            int i = getStartHourIndexOrDefault(prefs);
             seekStartHour.setSummary(RenderPreference.getStartHour(i)+" ");
         }
         else if (SEEK_E.equals(key)) {
-            int i = prefs.getInt(key,
-                    getDefaultEndHourIndex());
+            int i = getEndHourIndexOrDefault(prefs);
             seekEndHour.setSummary(RenderPreference.getEndHours(i)+" ");
         }
+    }
 
+    private int getTemperatureIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_T, getDefaultTemperatureIndex());
+    }
+
+    private int getHumidityIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_H, getDefaultHumidityIndex());
+    }
+
+    private int getPrecipitationIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_P, getDefaultPrecipitationIndex());
+    }
+
+    private int getWindSpeedIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_W, getDefaultWindSpeedIndex());
+    }
+
+    private int getCloudinessIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_C, getDefaultCloudinessIndex());
+    }
+
+    private int getStartHourIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_S, getDefaultStartHourIndex());
+    }
+
+    private int getEndHourIndexOrDefault(SharedPreferences sharedPref) {
+        return sharedPref.getInt(SEEK_E, getDefaultEndHourIndex());
     }
 
     private static int getDefaultTemperatureIndex() {

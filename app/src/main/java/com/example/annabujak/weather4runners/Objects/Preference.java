@@ -7,18 +7,49 @@ import com.example.annabujak.weather4runners.Enum.Cloudiness;
  */
 
 public class Preference {
+
+    public static final int DEFAULT_TEMPERATURE = 20;
+
+    public static final double DEFAULT_PRECIPITATION = 0;
+
+    public static final int DEFAULT_HUMIDITY = 65;
+
+    public static final Cloudiness DEFAULT_CLOUDINESS = com.example.annabujak.weather4runners.Enum.Cloudiness.Sunny;
+
+    public static final int DEFAULT_START_HOUR = 0;
+
+    public static final int DEFAULT_END_HOUR = 23;
+
+    public static final double DEFAULT_WIND_SPEED = 10;
+
     private long Id;
-    private int Temperature = 15;
-    private double Precipitation = 10;
-    private int Humidity = 0;
-    private Cloudiness Cloudiness = com.example.annabujak.weather4runners.Enum.Cloudiness.Sunny;
-    private double WindSpeed = 20.0;
-    private int StartHour = 10;
-    private int EndHour = 17;
+
+    private int Temperature;
+
+    private double Precipitation;
+
+    private int Humidity;
+
+    private Cloudiness Cloudiness;
+
+    private double WindSpeed;
+
+    private int StartHour;
+
+    private int EndHour;
+
     private PreferenceBalance Balance;
 
     public Preference(){
-        Balance = new PreferenceBalance(1,0.1,1,1,1);
+        this.Temperature = DEFAULT_TEMPERATURE;
+        this.Precipitation = DEFAULT_PRECIPITATION;
+        this.Humidity = DEFAULT_HUMIDITY;
+        this.Cloudiness = DEFAULT_CLOUDINESS;
+        this.WindSpeed = DEFAULT_WIND_SPEED;
+        this.StartHour = DEFAULT_START_HOUR;
+        this.EndHour = DEFAULT_END_HOUR;
+
+        Balance = new PreferenceBalance();
     }
     public Preference(int _Temprature, Cloudiness _Cloudiness, int _StartHour, int _EndHour, int _Humidity, double _Precipitation, double _WindSpeed){
         Temperature =_Temprature;

@@ -66,11 +66,11 @@ public class PreferenceBalance {
 
     public ArrayList<WeatherConditionsNames> getWeatherConditionsOrder() {
         ArrayList<Pair<Double, WeatherConditionsNames>> weatherImportance = new ArrayList<>();
-        weatherImportance.add(new Pair<Double, WeatherConditionsNames>(this.CloudinessImportance, WeatherConditionsNames.Cloudiness));
-        weatherImportance.add(new Pair<Double, WeatherConditionsNames>(this.PrecipitationImportance, WeatherConditionsNames.Precipitation));
-        weatherImportance.add(new Pair<Double, WeatherConditionsNames>(this.WindSpeedImportance, WeatherConditionsNames.Wind));
-        weatherImportance.add(new Pair<Double, WeatherConditionsNames>(this.HumidityImportance, WeatherConditionsNames.Humidity));
-        weatherImportance.add(new Pair<Double, WeatherConditionsNames>(this.TemperatureImportance, WeatherConditionsNames.Temperature));
+        weatherImportance.add(new Pair<>(this.CloudinessImportance, WeatherConditionsNames.Cloudiness));
+        weatherImportance.add(new Pair<>(this.PrecipitationImportance, WeatherConditionsNames.Precipitation));
+        weatherImportance.add(new Pair<>(this.WindSpeedImportance, WeatherConditionsNames.Wind));
+        weatherImportance.add(new Pair<>(this.HumidityImportance, WeatherConditionsNames.Humidity));
+        weatherImportance.add(new Pair<>(this.TemperatureImportance, WeatherConditionsNames.Temperature));
 
         Collections.sort(weatherImportance, new Comparator<Pair<Double, WeatherConditionsNames>>() {
             @Override

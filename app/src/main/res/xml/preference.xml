@@ -5,37 +5,30 @@
     <PreferenceCategory />
     <PreferenceCategory />
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_temperature"
         android:title="Temperature">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_humidity"
         android:title="Humidity">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_precipitation"
         android:title="Precipitation">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_windspeed"
         android:title="Wind Speed">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_cloudiness"
         android:title="Cloudiness">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_starthour"
         android:title="Start Hour">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>
     <com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference
-        android:defaultValue="65"
         android:key="@string/seek_endhour"
         android:title="End Hour">
     </com.example.annabujak.weather4runners.SeekSlider.SeekBarPreference>

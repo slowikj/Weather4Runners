@@ -116,7 +116,7 @@ public class PreferenceBalance {
         if (Math.abs(that.HumidityImportance - HumidityImportance) > EPS) return false;
         if (Math.abs(that.PrecipitationImportance - PrecipitationImportance) >  EPS)
             return false;
-        return Math.abs(that.WindSpeedImportance - WindSpeedImportance) > EPS;
+        return Math.abs(that.WindSpeedImportance - WindSpeedImportance) < EPS;
     }
 
     @Override

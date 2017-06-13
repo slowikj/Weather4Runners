@@ -19,7 +19,7 @@ public class TBWeatherInfoTests {
     @Test
     public void getWeather() {
         Date now = new Date();
-        WeatherInfo wf = new WeatherInfo(20,14, Cloudiness.Big,23.0,now.getSeconds() * 1000, 25.0, "NazwaIkony");
+        WeatherInfo wf = new WeatherInfo(20,14, Cloudiness.Big,23.0,now.getSeconds() * 1000, 25.0, "NazwaIkony", "");
         assertEquals(wf.getTemperature(),20);
         assertEquals(wf.getCloudiness().toString(),"Big");
         assertEquals(wf.getDate(),now.getSeconds()*1000);

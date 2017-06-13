@@ -254,7 +254,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void deleteWatherInfo() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon", "");
         database.addWeatherInfo(weatherInfo);
         database.deleteWeatherInfo(weatherInfo.getId());
         WeatherInfo gotten = database.getWeatherInfo(weatherInfo.getId());
@@ -263,7 +263,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void clearWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon", "");
         database.clearWeatherInfo();
         database.addWeatherInfo(weatherInfo);
         assertEquals(1,weatherInfo.getId());
@@ -271,7 +271,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void updateWeatherInfoTest() throws Exception {
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon", "");
         database.addWeatherInfo(weatherInfo);
         weatherInfo.setIsChecked(true);
         weatherInfo.setIconName("NewIcon");
@@ -284,7 +284,7 @@ public class DBWeather4RunnersUnitTest {
 
     @Test
     public void getAllWeatherInfos() throws Exception{
-        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon");
+        WeatherInfo weatherInfo = new WeatherInfo(15,14,Cloudiness.Big,20.0, (new Date()).getSeconds(),22.0,"Icon", "");
         List<WeatherInfo> allWeatherInfos;
         boolean tookAll = false;
 

@@ -1,9 +1,11 @@
 package com.example.annabujak.weather4runners.Fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,9 +18,20 @@ import android.view.ViewGroup;
 
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionListener;
 import com.example.annabujak.weather4runners.Listeners.ChosenPropositionsProvider;
+import com.example.annabujak.weather4runners.MainActivity;
 import com.example.annabujak.weather4runners.Objects.ChosenProposition;
 import com.example.annabujak.weather4runners.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookActivity;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.share.ShareApi;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareOpenGraphAction;
+import com.facebook.share.model.ShareOpenGraphContent;
+import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -66,16 +79,31 @@ public class ChartFragment extends Fragment implements ChosenPropositionListener
                 FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
                 SharePhoto photo = new SharePhoto.Builder()
                         .setBitmap(getBitmapFromView(graphHours))
+                        .setUserGenerated(true)
                         .build();
 
-                SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-                        .addPhoto(photo)
+//                final SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+//                        .addPhoto(photo)
+//                        .build();
+
+                ShareOpenGraphObject object = new ShareOpenGraphObject.Builder()
+                        .putString("og:type", "fitness.course")
+                        .putString("og:description", "aaa")
+                        .putString("og:title", "my run")
+                        //.putPhoto("og:image", photo)
                         .build();
 
-                if(ShareDialog.canShow(SharePhotoContent.class)) {
-                    ShareDialog shareDialog = new ShareDialog(this);
-                    shareDialog.show(sharePhotoContent);
-                }
+                ShareOpenGraphAction action = new ShareOpenGraphAction.Builder()
+                        .setActionType("fitness.runs")
+                        .putObject("course", object)
+                        .build();
+
+                ShareOpenGraphContent content = new ShareOpenGraphContent.Builder()
+                        .setPreviewPropertyName("course")
+                        .setAction(action)
+                        .build();
+
+                ShareDialog.show(this, content);
 
                 return true;
             default:

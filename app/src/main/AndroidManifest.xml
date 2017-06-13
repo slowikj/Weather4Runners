@@ -28,6 +28,10 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" >
         </activity>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1858586351082008"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

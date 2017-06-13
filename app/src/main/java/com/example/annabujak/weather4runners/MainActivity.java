@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity
                 DOWNLOADER_TYPE_SHARED_PREF,
                 WeatherDownloadersManager.BY_COORDINATES_DOWNLOADER
         );
-        
+
         requestForLocationUpdate();
     }
 

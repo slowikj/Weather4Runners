@@ -56,6 +56,7 @@ import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.PropositionsList;
 import com.example.annabujak.weather4runners.Objects.User;
 import com.example.annabujak.weather4runners.Tracker.LocationTracker;
+import com.example.annabujak.weather4runners.Weather.JSONDownloaders.WeatherDownloadersManager;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
@@ -90,6 +91,18 @@ public class MainActivity extends AppCompatActivity
     private static double DEFAULT_LATITUDE = 52.1347;
 
     private static String LATITUDE_SHARED_PREF = "latitude_shared_pref";
+
+    private static String CITY_NAME_SHARED_PREF = "city_name_shared_pref";
+
+    private static String DEFAULT_CITY_NAME = "Warsaw";
+
+    private static String COUNTRY_NAME_SHARED_PREF = "country_name_shared_pref";
+
+    private static String DEFAULT_COUNTRY_NAME = "Poland";
+
+    private static String DOWNLOADER_TYPE_SHARED_PREF = "location_type_shared_pref";
+
+    private static String DEFAULT_DOWNLOADER_TYPE = WeatherDownloadersManager.BY_NAME_DOWNLOADER;
 
     private SharedPreferencesHelper sharedPreferencesHelper;
 
@@ -325,6 +338,20 @@ public class MainActivity extends AppCompatActivity
                 getResources().getString(R.string.location_set_message) + String.format(": %s, %s", city, country),
                 Toast.LENGTH_LONG)
                 .show();
+
+        this.sharedPreferencesHelper.saveSharedPref(
+                CITY_NAME_SHARED_PREF,
+                city);
+
+        this.sharedPreferencesHelper.saveSharedPref(
+                COUNTRY_NAME_SHARED_PREF,
+                country
+        );
+
+        this.sharedPreferencesHelper.saveSharedPref(
+                DOWNLOADER_TYPE_SHARED_PREF,
+                WeatherDownloadersManager.BY_NAME_DOWNLOADER
+        );
     }
 
     @Override
@@ -336,6 +363,11 @@ public class MainActivity extends AppCompatActivity
 
         this.centralControl.setByCoordinatesWeatherDownloader();
 
+        this.sharedPreferencesHelper.saveSharedPref(
+                DOWNLOADER_TYPE_SHARED_PREF,
+                WeatherDownloadersManager.BY_COORDINATES_DOWNLOADER
+        );
+        
         requestForLocationUpdate();
     }
 
@@ -350,9 +382,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createManagers() {
-        this.centralControl = getCentralControl();
-        this.locationManager = getLocationManager(getApplicationContext());
         this.sharedPreferencesHelper = SharedPreferencesHelper.create(this);
+        this.centralControl = getCentralControl(this.sharedPreferencesHelper);
+        this.locationManager = getLocationManager(getApplicationContext());
         this.locationTracker = new LocationTracker(this,
                 this.sharedPreferencesHelper.getSharedPref(LONGITUTE_SHARED_PREF,
                         (float)DEFAULT_LONGITUDE),
@@ -401,12 +433,27 @@ public class MainActivity extends AppCompatActivity
         return drawer;
     }
 
-    private CentralControl getCentralControl() {
+    private CentralControl getCentralControl(SharedPreferencesHelper sharedPreferencesHelper) {
         CentralControl res = new CentralControl(getApplicationContext());
         res.setDailyPropositionsChangedListener(this);
         res.setWeeklyPropositionsChangedListener(this);
         res.setAddChosenHourListener(this);
         res.setUpdatingFinishedListener(this);
+
+        res.setLocation(sharedPreferencesHelper.getSharedPref(LONGITUTE_SHARED_PREF, (float)DEFAULT_LONGITUDE),
+                sharedPreferencesHelper.getSharedPref(LATITUDE_SHARED_PREF, (float)DEFAULT_LATITUDE));
+        res.setLocation(sharedPreferencesHelper.getSharedPref(CITY_NAME_SHARED_PREF, DEFAULT_CITY_NAME),
+                sharedPreferencesHelper.getSharedPref(COUNTRY_NAME_SHARED_PREF, DEFAULT_COUNTRY_NAME));
+
+        switch(sharedPreferencesHelper.getSharedPref(DOWNLOADER_TYPE_SHARED_PREF, DEFAULT_DOWNLOADER_TYPE)) {
+            case WeatherDownloadersManager.BY_COORDINATES_DOWNLOADER:
+                res.setByCoordinatesWeatherDownloader();
+                break;
+            case WeatherDownloadersManager.BY_NAME_DOWNLOADER:
+                res.setByNameWeatherDownloader();
+                break;
+
+        }
 
         return res;
     }

@@ -41,6 +41,16 @@ public class SharedPreferencesHelper {
         editor.commit();
     }
 
+    public String getSharedPref(String tag, String defaultValue) {
+        return this.sharedPreferences.getString(tag, defaultValue);
+    }
+
+    public void saveSharedPref(String tag, String value) {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putString(tag, value);
+        editor.commit();
+    }
+
     public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
         this.sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }

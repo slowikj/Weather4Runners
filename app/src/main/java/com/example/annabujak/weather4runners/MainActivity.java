@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
 
         this.sharedPreferencesHelper.saveSharedPref(
                 LONGITUTE_SHARED_PREF,
@@ -334,6 +334,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.LENGTH_SHORT)
                 .show();
 
+        this.centralControl.setByCoordinatesWeatherDownloader();
+
         requestForLocationUpdate();
     }
 
@@ -367,6 +369,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void refreshAll() {
+        this.centralControl.setLocation(
+                this.locationTracker.getLongitude(),
+                this.locationTracker.getLatitude()
+        );
+
         this.mLoadingIndicator.setVisibility(View.VISIBLE);
         this.centralControl.updateWeatherForecastAsync();
     }

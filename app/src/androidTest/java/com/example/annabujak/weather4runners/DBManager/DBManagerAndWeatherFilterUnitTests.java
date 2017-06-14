@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.example.annabujak.weather4runners.Database.DBManager;
 import com.example.annabujak.weather4runners.Enum.Cloudiness;
 import com.example.annabujak.weather4runners.Objects.Preference;
+import com.example.annabujak.weather4runners.Objects.PreferenceBalance;
 import com.example.annabujak.weather4runners.Objects.WeatherInfo;
 import com.example.annabujak.weather4runners.Weather.Filter.WeatherFilter;
 
@@ -34,7 +35,7 @@ public class DBManagerAndWeatherFilterUnitTests {
     public void setUp() throws Exception {
         appContext = InstrumentationRegistry.getTargetContext();
         manager = new DBManager(appContext);
-       // filter = new WeatherFilter(Cloudiness.Big)
+        filter = new WeatherFilter(4, new PreferenceBalance(1,1,1,1,1));
     }
 
     @After
@@ -45,8 +46,8 @@ public class DBManagerAndWeatherFilterUnitTests {
     @Test
     public void TestAddingJSON() throws Exception{
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
-       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
+        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,(new Date()).getTime() + TimeUnit.HOURS.toMillis(1),14.0,"Icon", "Desc"));
+        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,(new Date()).getTime() + TimeUnit.HOURS.toMillis(1),18.0,"Icon1","Description"));
         manager.UpdateWeatherData(weather);
         List<WeatherInfo> newWeather = manager.GetWeatherData();
         assertEquals(newWeather.get(0).getIconName(),"Icon");
@@ -55,12 +56,12 @@ public class DBManagerAndWeatherFilterUnitTests {
     }
     @Test
     public void TestAddingDifferentDay() throws Exception{
-        Preference preference = new Preference(15, Cloudiness.Big,10,17,12,12.0,12.0);
+        Preference preference = new Preference(15, Cloudiness.Big,0,24,12,12.0,12.0);
 
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),14.0,"Icon"));
-       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.HOURS.toMillis(1)),18.0,"Icon1","Description"));
-       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(2)),18.0,"Icon1","Tomorrow"));
+        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,(new Date()).getTime() + TimeUnit.HOURS.toMillis(1),14.0,"Icon", "Desc"));
+        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,(new Date()).getTime() + TimeUnit.HOURS.toMillis(1),18.0,"Icon1","Description"));
+        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,(new Date()).getTime() + TimeUnit.DAYS.toMillis(2),18.0,"Icon1","Tomorrow"));
 
         manager.UpdateWeatherData(weather);
         List<WeatherInfo> newWeather = manager.GetWeatherData();
@@ -71,12 +72,12 @@ public class DBManagerAndWeatherFilterUnitTests {
     }
     @Test
     public void GetWeeklyWeatherTest() throws Exception{
-        Preference preference = new Preference(15, Cloudiness.Big,10,17,12,12.0,12.0);
+        Preference preference = new Preference(15, Cloudiness.Big,0,24,12,12.0,12.0);
 
         List<WeatherInfo> weather = new ArrayList<WeatherInfo>();
-      //  weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(3)),14.0,"Icon"));
-       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(4)),18.0,"Icon1","Description"));
-       // weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,new Date((new Date()).getTime() + TimeUnit.DAYS.toMillis(5)),18.0,"Icon1","Tomorrow"));
+        weather.add(new WeatherInfo(11,12, Cloudiness.Big,13.0,(new Date()).getTime() + TimeUnit.DAYS.toMillis(3),14.0,"Icon", "Desc"));
+        weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,(new Date()).getTime() + TimeUnit.DAYS.toMillis(4),18.0,"Icon1","Description"));
+         weather.add(new WeatherInfo(15,16, Cloudiness.Medium,17.0,(new Date()).getTime() + TimeUnit.DAYS.toMillis(5),18.0,"Icon1","Tomorrow"));
         manager.UpdateWeatherData(weather);
 
         List<WeatherInfo> newWeather = manager.GetWeatherData();

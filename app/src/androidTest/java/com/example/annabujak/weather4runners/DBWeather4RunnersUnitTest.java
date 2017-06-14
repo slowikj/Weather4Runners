@@ -63,26 +63,6 @@ public class DBWeather4RunnersUnitTest {
     }
 
     @Test
-    public void addBestHourTest() throws Exception {
-        Date current = new Date();
-        BestHour bestHour = new BestHour(current,18);
-        database.addBestHour(bestHour);
-        BestHour actualBestHour = database.getBestHour(bestHour.getId());
-        assertEquals(current.toString(),actualBestHour.getDate().toString());
-        assertEquals(18,actualBestHour.getHour());
-    }
-
-    @Test
-    public void addChosenHourTest() throws Exception {
-        Date current = new Date();
-        ChosenProposition chosenProposition = new ChosenProposition(current.getSeconds(),false);
-        database.addChosenHour(chosenProposition);
-        ChosenProposition actualChosenProposition = database.getChosenHour(chosenProposition.getId());
-        assertEquals(current.getSeconds(), actualChosenProposition.getDate());
-        assertEquals(false, actualChosenProposition.getIsHour());
-    }
-
-    @Test
     public void addUserTest() throws Exception {
         User user = new User("Ania","Bujak");
         long id = database.addUser(user);
@@ -109,26 +89,6 @@ public class DBWeather4RunnersUnitTest {
         assertTrue(tookAll);
     }
 
-
-    @Test
-    public void getAllBestHoursTest() throws Exception {
-
-        final BestHour bestToAdd = new BestHour(new Date(),12);
-        List<BestHour> allBestHours;
-        boolean tookAll = false;
-
-        database.addBestHour(bestToAdd);
-        allBestHours = database.getAllBestHours();
-
-        for(BestHour hour : allBestHours) {
-            if(new Long(hour.getId()).toString().equals(new Long(bestToAdd.getId()).toString())) {
-                tookAll = true;
-            }
-        }
-        assertTrue(tookAll);
-    }
-
-
     @Test
     public void updateUserTest() throws Exception {
         User ania = new User("Ania","Bujak");
@@ -138,19 +98,6 @@ public class DBWeather4RunnersUnitTest {
         User currentAnia = database.getUser(id);
         assertEquals("Mazurkiewicz",currentAnia.getSurname());
     }
-
-
-    @Test
-    public void updateBestHourTest() throws Exception {
-        Date current = new Date();
-        BestHour hour = new BestHour(current,12);
-        database.addBestHour(hour);
-        hour.setDayAndHour(current,13);
-        database.updateBestHour(hour);
-        BestHour currentHour = database.getBestHour(hour.getId());
-        assertEquals(13,currentHour.getHour());
-    }
-
 
     @Test
     public void updateChosenHourTest() throws Exception {
